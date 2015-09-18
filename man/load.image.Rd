@@ -2,7 +2,7 @@
 % Please edit documentation in R/cimg_class.R
 \name{load.image}
 \alias{load.image}
-\title{Load image from file}
+\title{Load image from file or URL}
 \usage{
 load.image(file)
 }
@@ -13,7 +13,7 @@ load.image(file)
 an object of class 'cimg'
 }
 \description{
-You'll need ImageMagick for formats other than PNG and JPEG. If the image is actually a video, you'll need ffmpeg.
+You'll need ImageMagick for formats other than PNG and JPEG. If the image is actually a video, you'll need ffmpeg. If the path is actually a URL, it should start with http(s) or ftp(s).
 }
 \examples{
 #Find path to example file from package

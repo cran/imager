@@ -1,7 +1,7 @@
 Package: imager
 Type: Package
 Title: Image Processing Library Based on CImg
-Version: 0.13
+Version: 0.14
 Date: 2015-08-25
 Author: Simon Barthelme [aut, cre], 
     Antoine Cecchi [ctb]
@@ -16,7 +16,7 @@ SystemRequirements: fftw3
 Enhances: spatstat
 LinkingTo: Rcpp
 LazyData: true
-Packaged: 2015-08-26 07:10:20 UTC; barthesi
 NeedsCompilation: yes
+Packaged: 2015-09-17 09:22:32 UTC; simon
 Repository: CRAN
-Date/Publication: 2015-08-26 14:43:02
+Date/Publication: 2015-09-18 09:13:50

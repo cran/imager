@@ -2,16 +2,19 @@ Imager is an image/video processing package for R, based on [CImg](http://cimg.e
 
 ## Installing the package
 
-Install the devtools package if you haven't already. On Linux or OS X run:
+Imager is now on CRAN, so
+
+	install.packages("imager")
+
+should do the trick. You may also want to install ImageMagick and ffmpeg, see "External Dependencies" below. 
+
+The version of CRAN will often lag the one on github. If you'd like to install the latest and newest version, you'll have to build the package from source. 
+
+Install the devtools package if you haven't already. Run:
 
 	devtools::install_github("dahtah/imager")
 
 If that doesn't work then you're probably missing a build environment or a library, see below.
-
-On Windows you can grab a binary package (it's possibly outdated, see below)
-
-	devtools::install_url("https://github.com/dahtah/imager/releases/download/snapshot_080815/imager_win.zip")
-
 
 
 ### OS X
@@ -26,9 +29,10 @@ Building R packages on Windows is a bit of a pain so you're probably better off 
 - Install [Rtools](https://cran.r-project.org/bin/windows/Rtools/index.html)
 - Install [additional libraries](http://www.stats.ox.ac.uk/pub/Rtools/libs.html) for Rtools. You want the package that's called "local tree". Put those libraries somewhere gcc can find them. 
 
+### Linux
 
+To build under Linux make sure you have the headers for libX11 and libfftw3. On my Ubuntu system this seems to be enough:
 
-To build under Linux make sure you have the headers for libX11 and libfftw3.
 	sudo apt-get install libfftw3-dev libX11-dev
 
 

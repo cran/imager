@@ -6,18 +6,41 @@
 ##' 
 ##' @param x an image of class cimg
 ##' @param ... arguments passed to pixel.grid
+##' @param wide if "c" or "d" return a data.frame that is wide along colour or depth (for example with rgb values along columns). The default is FALSE, with each pixel forming a seperate entry. 
 ##' @return a data.frame
 ##' @author Simon Barthelme
 ##' @examples
-##' im <- matrix(1:16,4,4) %>% as.cimg
-##' as.data.frame(im) %>% head
+##'
+##' #First five pixels
+##' as.data.frame(boats) %>% head(5)
+##' #Wide format along colour axis
+##' as.data.frame(boats,wide="c") %>% head(5)
 ##' @export
-as.data.frame.cimg <- function(x,...)
+as.data.frame.cimg <- function (x, ...,wide=c(FALSE,"c","d"))
+{
+    wide <- match.arg(wide)
+    if (wide=="c")
     {
-        gr <- pixel.grid(x,...)
+        gr <- pixel.grid(R(x),...)
+        cc <- channels(x) %>% do.call('cbind',.)
+        cbind(gr,cc)
+    }
+    else if (wide=="d")
+    {
+        gr <- pixel.grid(frame(x,1),...)
+        ff <- frames(x) %>% do.call('cbind',.)
+        cbind(gr,ff)
+    }
+    else
+    {
+        gr <- pixel.grid(x, ...)
         gr$value <- c(x)
         gr
     }
+}
+
+
+
 ##' Convert a cimg object to a raster object
 ##'
 ##' raster objects are used by R's base graphics for plotting
@@ -37,7 +60,8 @@ as.raster.cimg <- function(x,frames,rescale.color=TRUE,...)
 
         if (dim(im)[3] == 1)
             {
-                if (rescale.color & !all(im==0))  im <- (im-min(im))/diff(range(im))
+                if (rescale.color) im <- renorm(im,0,1)
+#                if (rescale.color & !all(im==0))  im <- (im-min(im))/diff(range(im))
                 dim(im) <- dim(im)[-3]
                 if (dim(im)[3] == 1) #BW
                     {
@@ -125,12 +149,14 @@ as.cimg.im <- im2cimg
 ##' @param y height
 ##' @param z depth
 ##' @param cc spectrum
+##' @param dim a vector of dimensions (optional, use instead of xyzcc)
 ##' @param ... optional arguments
 ##' @seealso as.cimg.array, as.cimg.function, as.cimg.data.frame
 ##' @export
 ##' @examples
 ##' as.cimg(1:100,x=10,y=10) #10x10, grayscale image
 ##' as.cimg(rep(1:100,3),x=10,y=10,cc=3) #10x10 RGB
+##' as.cimg(1:100,dim=c(10,10,1,1))
 ##' as.cimg(1:100) #Guesses dimensions, warning is issued
 ##' as.cimg(rep(1:100,3)) #Guesses dimensions, warning is issued
 ##' @author Simon Barthelme
@@ -147,8 +173,12 @@ as.cimg.double <- function(obj,...) as.cimg.vector(obj,...)
 
 ##' @describeIn as.cimg convert vector
 ##' @export
-as.cimg.vector <- function(obj,x=NA,y=NA,z=NA,cc=NA,...)
+as.cimg.vector <- function(obj,x=NA,y=NA,z=NA,cc=NA,dim=NULL,...)
     {
+        if (!is.null(dim))
+        {
+            x <- dim[1];y <- dim[2];z <- dim[3];cc <- dim[4]
+        }
         args <- list(x=x,y=y,z=z,cc=cc)
         if (any(!is.na(args)))
             {

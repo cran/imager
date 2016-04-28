@@ -1,5 +1,5 @@
-[![Linux Build Status](https://travis-ci.org/dahtah/imager.png?branch=master)](https://travis-ci.org/dahtah/imager)
-[![CRAN Version](http://www.r-pkg.org/badges/version/imager)](http://cran.rstudio.com/web/packages/imager)
+[![Linux Build Status](https://travis-ci.org/dahtah/imager.png?branch=master)](https://travis-ci.org/dahtah/imager/)
+[![CRAN Version](http://www.r-pkg.org/badges/version/imager)](https://cran.r-project.org/package=imager)
 
 Imager is an image/video processing package for R, based on [CImg](http://cimg.eu/), a C++ library by David Tschumperlé. CImg provides an easy-to-use and consistent API for image processing, which imager largely replicates. CImg supports images in up to four dimensions, which makes it suitable for applications like video processing/hyperspectral imaging/MRI.
 
@@ -11,7 +11,7 @@ Imager is now on CRAN, so
 
 should do the trick. You may also want to install ImageMagick and ffmpeg, see "External Dependencies" below. 
 
-The version of CRAN will often lag the one on github. If you'd like to install the latest and newest version, you'll have to build the package from source. 
+The version of CRAN will often lag the one on github. If you'd like to install the latest version, you'll have to build the package from source. 
 
 Install the devtools package if you haven't already. Run:
 
@@ -41,7 +41,7 @@ To build under Linux make sure you have the headers for libX11 and libfftw3. On 
 
 ### External dependencies
 
-On its own imager only supports JPEG and PNG formats. If you need support for other file types install [ImageMagick](http://www.imagemagick.org/script/binary-releases.php).
+On its own imager only supports JPEG, PNG and BMP formats. If you need support for other file types install [ImageMagick](http://www.imagemagick.org/script/binary-releases.php).
 To load videos you'll need [ffmpeg](http://ffmpeg.org/download.html), no file formats are supported natively.
 
 
@@ -70,4 +70,5 @@ Imager is fully functional but still young, so the API might change. Open an iss
 
 ## Test pictures
 
-Imager ships with three test pictures and a video. Two (parrots and boats) come from the [Kodak set](http://r0k.us/graphics/kodak/). Another is a sketch of birds by Leonardo, from Wikimedia. The test video comes from [xiph.org](https://media.xiph.org/video/derf/)'s collection.
+Imager ships with four test pictures and a video. Two (parrots and boats) come from the [Kodak set](http://r0k.us/graphics/kodak/). Another is a sketch of birds by Leonardo, from Wikimedia. Also from Wikimedia: the Hubble Deep field. 
+The test video comes from [xiph.org](https://media.xiph.org/video/derf/)'s collection.

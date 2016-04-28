@@ -9,8 +9,7 @@
 ##' @param im an image
 ##' @return an image
 ##' @examples
-##' imname <- system.file('extdata/parrots.png',package='imager')
-##' im <- load.image(imname) %>% subim(x <= 512)
+##' im <- load.example("parrots") %>% subim(x <= 512)
 ##' layout(t(1:3))
 ##' plot(im,main="Original image")
 ##' periodic.part(im) %>% plot(main="Periodic part")
@@ -82,8 +81,7 @@ FFT <- function(im.real,im.imag,inverse=FALSE)
 ##' For double-scale, half-scale, triple-scale, etc. uses an anisotropic scaling algorithm described in: \url{http://scale2x.sourceforge.net/algorithm.html}.
 ##' @seealso resize
 ##' @examples
-##' imname <- system.file('extdata/parrots.png',package='imager')
-##' im <- load.image(imname)
+##' im <- load.example("parrots")
 ##' imresize(im,1/4) #Quarter size
 ##' liply(2:4,function(ind) imresize(im,1/ind),"x") %>%  plot
 ##' @author Simon Barthelme
@@ -110,7 +108,8 @@ imresize <- function(im,scale=1)
             }
         else
             {
-                resize(im,-scale*100,-scale*100,-scale*100,interpolation_type=3)
+                scale.z <- if (depth(im) > 1) -scale*100 else -100
+                resize(im,-scale*100,-scale*100,scale.z,interpolation_type=3)
             }
     }
 
@@ -146,8 +145,7 @@ imhessian <- function(im,axes=c("xx","xy","yy"))
 ##' @param opacity transparency level (default 1)
 ##' @author Simon Barthelme
 ##' @examples
-##' imname <- system.file('extdata/parrots.png',package='imager')
-##' im <- load.image(imname)
+##' im <- load.example("parrots")
 ##' boats.small <- imresize(boats,.5)
 ##' #I'm aware the result is somewhat ugly 
 ##' imdraw(im,boats.small,x=400,y=10,opacity=.7) %>% plot
@@ -188,10 +186,11 @@ imdraw <- function(im,sprite,x=1,y=1,z=1,opacity=1)
 ##' renorm(-5:5) #Same as above
 renorm <- function(x,min=0,max=255)
     {
-        r <- diff(range(x))
-        if (r!=0)
+        rg <- range(x)
+        dr <- diff(rg)
+        if (dr!=0)
             {
-                min+(max-min)*(x-min(x))/diff(range(x))
+                min+(max-min)*(x-rg[1])/dr
             }
         else
             {
@@ -273,7 +272,7 @@ imgradient <- function(im,axes,scheme=3)
 ##' @param interpolation "nearest", "linear", "cubic" (default "linear")
 ##' @return a warped image
 ##' @examples
-##' im <- load.image(system.file('extdata/parrots.png',package='imager'))
+##' im <- load.example("parrots")
 ##' #Shift image
 ##' map.shift <- function(x,y) list(x=x+10,y=y+30)
 ##' imwarp(im,map=map.shift) %>% plot
@@ -399,7 +398,7 @@ imdirac <- function(dims,x,y,z=1,cc=1)
 ##' @param approx Skip pixels when computing quantiles in large images (default TRUE)
 ##' @return a thresholded image
 ##' @examples
-##' im <- load.image(system.file('extdata/Leonardo_Birds.jpg',package='imager'))
+##' im <- load.example("birds")
 ##' im.g <- grayscale(im)
 ##' threshold(im.g,"15%") %>% plot
 ##' threshold(im.g,"auto") %>% plot
@@ -443,4 +442,126 @@ cut.kmeans <- function(x)
     km <- kmeans(x,2)
     m <- which.min(km$center)
     max(x[km$cluster==m])
+}
+
+##' Return information on image file
+##'
+##' This function calls ImageMagick's "identify" utility on an image file to get some information. You need ImageMagick on your path for this to work. 
+##' @param fname path to a file
+##' @return a list with fields name, format, width (pix.), height (pix.), size (bytes)
+##' @author Simon Barthelme
+##' @examples
+##' \dontrun{
+##' someFiles <- dir("*.png") #Find all PNGs in directory
+##' iminfo(someFiles[1])
+##' #Get info on all files, as a data frame
+##' info <- plyr::ldply(someFiles,function(v) iminfo(v) %>% as.data.frame) 
+##'}
+##' @export
+iminfo <- function(fname)
+{
+    if (!is.character(fname))
+    {
+        stop('Please provide a filename')
+    }
+    else if (!file.exists(fname))
+    {
+        stop('File does not exist')
+    }
+    
+    if (has.magick())
+    {
+        cmd <- "identify -format  \"%f;%m;%w;%h;%b  \""
+        fname <- paste0("\"",fname,"\"")
+        out <- try(system(paste(cmd,fname),intern=TRUE))
+        if (class(out) != "try-error")
+        {
+            if (length(out) > 0)
+            {
+                dat <- stringr::str_trim(out) %>% stringr::str_split(";")
+                dat <- dat[[1]]
+                names(dat) <- c("name","format","width","height","size")
+                size <- NULL #pointless, only here to make CRAN happy
+                plyr::mutate(as.list(dat),width=as.numeric(width),height=as.numeric(height),size=as.numeric(stringr::str_sub(size,end=-2)))
+            }
+            else
+            {
+                warning("identify failed")
+                NULL
+            }
+        }
+        else
+        {
+            browser()
+            NULL
+        }
+    }
+    else
+    {
+        stop("You don't appear to have ImageMagick on your path. Please install")
+    }
+}
+
+##' Load example image
+##'
+##' Imager ships with four test pictures and a video. Two (parrots and boats) come from the [Kodak set](http://r0k.us/graphics/kodak/). Another (birds) is a sketch of birds by Leonardo, from Wikimedia. Also from Wikimedia: the Hubble Deep field (hubble).
+##' The test video ("tennis") comes from [xiph.org](https://media.xiph.org/video/derf/)'s collection.
+##' @param name name of the example
+##' @return an image
+##' @author Simon Barthelme
+##' @examples
+##' load.example("hubble") %>% plot
+##' load.example("birds") %>% plot
+##' load.example("parrots") %>% plot
+##' @export
+load.example <- function(name)
+{
+    fnames <- list(parrots="parrots.png",hubble="HubbleDeepField.jpg",
+                   tennis="tennis_sif.mpeg",birds="Leonardo_Birds.jpg")
+    if (name %in% names(fnames))
+    {
+        paste0('extdata/',fnames[name]) %>% system.file(package='imager') %>% load.image
+    }
+    else
+    {
+        msg <- 'Unknown example picture. Available: %s'
+        msg <- sprintf(msg,paste(names(fnames),collapse=","))
+        stop(msg)
+    }
+}
+
+##' Crop the outer margins of an image 
+##'
+##' This function crops pixels on each side of an image. This function is a kind of inverse (centred) padding, and is useful e.g. when you want to get only the valid part of a convolution. 
+##' @param im an image
+##' @param nx number of pixels to crop along horizontal axis
+##' @param ny number of pixels to crop along vertical axis
+##' @param nz number of pixels to crop along depth axis
+##' @param nPix optional: crop the same number of pixels along all dimensions
+##' @return an image
+##' @author Simon Barthelme
+##' @examples
+##' #These two versions are equivalent
+##' imfill(10,10) %>% crop.borders(nx=1,ny=1)
+##' imfill(10,10) %>% crop.borders(nPix=1)
+##' 
+##' #Filter, keep valid part
+##' correlate(boats,imfill(3,3)) %>% crop.borders(nPix=2)
+##' @export
+crop.borders <- function(im,nx=0,ny=0,nz=0,nPix)
+{
+    if (!missing(nPix))
+    {
+        nx <- nPix
+        ny <- nPix
+        if (depth(im) > 1) nz <- nPix
+    }
+    if (depth(im) > 1)
+    {
+        imsub(im,(x > nx) & (x <= width - nx),(y > ny) & (y <= height - ny),(z > nz) & (z <= depth - nz))
+    }
+    else
+    {
+        imsub(im,(x > nx) & (x <= width - nx),(y > ny) & (y <= height - ny))
+    }
 }

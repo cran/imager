@@ -9,11 +9,13 @@ NULL
 
 #' @useDynLib imager
 #' @importFrom grDevices as.raster col2rgb dev.capture
+#' @importFrom utils file_test
 #' @importFrom graphics axis plot rasterImage
 #' @importFrom stats quantile rnorm kmeans
 #' @importFrom plyr llply laply ldply ddply dlply ldply rename mutate
 #' @importFrom png readPNG writePNG
 #' @importFrom jpeg writeJPEG readJPEG
+#' @importFrom readbitmap read.bitmap
 #' @importFrom methods is
 #' @importFrom stringr str_match str_split str_sub
 #' @importFrom Rcpp sourceCpp
@@ -22,7 +24,9 @@ NULL
 
 names.coords <- c('x','y','z','c','cc')
 index.coords <- list("x"=1,"y"=2,"z"=3,"c"=4,"cc"=4)
-utils::globalVariables(c(".", "%>%"))
+
+## CRAN sometimes issues spurious warnings about undefined variables
+utils::globalVariables(c(".", "%>%","x","y","z","cc"))
 
 ##' cimg is a class for storing image or video/hyperspectral data.  It is designed to provide easy interaction with the CImg library, but in order to use it you need to be aware of how CImg wants its image data stored. 
 ##' Images have up to 4 dimensions, labelled x,y,z,c. x and y are the usual spatial dimensions, z is a depth dimension (which would correspond to time in a movie), and c is a colour dimension. Images are stored linearly in that order, starting from the top-left pixel and going along *rows* (scanline order).
@@ -77,13 +81,11 @@ NULL
 plot.cimg <- function(x,frame,rescale.color=TRUE,...)
     {
         im <- x
-        w <- width(im)
-        h <- height(im)
-        if (rescale.color & (diff(range(im)) > 0))  im <- (im-min(im))/diff(range(im))
         if (dim(im)[3] == 1) #Single image (depth=1)
             {
-                
-                
+                w <- width(im)
+                h <- height(im)
+                if (rescale.color & (diff(range(im)) > 0))  im <- (im-min(im))/diff(range(im))
                 plot(c(1,w),c(1,h),type="n",xlab="x",ylab="y",...,ylim=c(h,1))
                 as.raster(im) %>% rasterImage(1,height(im),width(im),1)
 #                rasterImage(im,1,1,w,h)
@@ -95,7 +97,7 @@ plot.cimg <- function(x,frame,rescale.color=TRUE,...)
                         warning("Showing first frame")
                         frame <- 1
                     }
-                plot.cimg(im[,,frame,],rescale.color=rescale.color,...)
+                plot.cimg(frame(im,frame),rescale.color=rescale.color,...)
             }
     }
 
@@ -106,8 +108,9 @@ plot.cimg <- function(x,frame,rescale.color=TRUE,...)
 print.cimg <- function(x,...)
     {
         d <- dim(x)
-        msg <- sprintf("Image. Width: %i pix Height %i pix Depth %i Colour channels %i",d[1],d[2],d[3],d[4])
-        print(msg)
+        msg <- sprintf("Image. Width: %i pix Height: %i pix Depth: %i Colour channels: %i \n",d[1],d[2],d[3],d[4])
+        cat(msg)
+        invisible(x)
     }
 
 ##' Image dimensions
@@ -156,8 +159,8 @@ frames <- function(im,index,drop=FALSE)
             {
                 index <- 1:depth(im)
             }
-        res <- imsplit(im[,,index,],"z")
-        nm <- paste('Frame',index)
+        res <- imsplit(im[,,index,,drop=FALSE],"z")
+        nm <- paste('d.',index,sep=".")
         names(res) <- nm
         if (drop)
             {
@@ -173,7 +176,7 @@ frames <- function(im,index,drop=FALSE)
 ##' @export
 frame <- function(im,index)
     {
-        im[,,index,]
+        im[,,index,,drop=FALSE]
     }
 
 
@@ -195,8 +198,8 @@ channels <- function(im,index,drop=FALSE)
             {
                 index <- 1:spectrum(im)
             }
-        res <- imsplit(im[,,,index],"c")
-        nm <- paste('Channel ',index)
+        res <- imsplit(im[,,,index,drop=FALSE],"c")
+        nm <- paste('c',index,sep=".")
         names(res) <- nm
         if (drop)
             {
@@ -257,7 +260,7 @@ imrow <- function(im,y)
 ##' @export
 channel <- function(im,ind)
     {
-        im[,,,ind] 
+        im[,,,ind,drop=FALSE] 
     }
 
 ##' @describeIn cimg.extract Extract red channel
@@ -338,7 +341,7 @@ all.names <- function(cl)
 ##' @return an image with some parts cut out
 ##' @author Simon Barthelme
 ##' @examples
-##' parrots <- load.image(system.file('extdata/parrots.png',package='imager'))
+##' parrots <- load.example("parrots")
 ##' imsub(parrots,x < 30) #Only the first 30 columns
 ##' imsub(parrots,y < 30) #Only the first 30 rows
 ##' imsub(parrots,x < 30,y < 30) #First 30 columns and rows
@@ -352,20 +355,21 @@ all.names <- function(cl)
 imsub <- function(im,...)
     {
         l <- as.list(substitute(list(...))[-1])
-        consts <- data.frame(width=width(im),height=height(im),depth=depth(im),spectrum=spectrum(im))
-        consts <- mutate(consts,cx=width/2,cy=height/2,cz=depth/2)
-        Reduce(function(a,b) subs(a,b,consts),l,init=im)
+        consts <- list(width=width(im),height=height(im),depth=depth(im),spectrum=spectrum(im))
+        consts <- plyr::mutate(consts,cx=width/2,cy=height/2,cz=depth/2)
+        env <- parent.frame()
+        Reduce(function(a,b) subs(a,b,consts,envir=env),l,init=im)
     }
 
 ##' @describeIn imsub alias for imsub 
 ##' @export
 subim <- imsub
 
-subs <- function(im,cl,consts)
+subs <- function(im,cl,consts,envir=parent.frame())
     {
         if (missing(consts))
             {
-               consts <- data.frame(width=width(im),height=height(im),depth=depth(im),spectrum=spectrum(im))
+               consts <- list(width=width(im),height=height(im),depth=depth(im),spectrum=spectrum(im))
             }
         vl <- intersect(all.names(cl),c("x","y","z","cc"))
         if (length(vl)>1)
@@ -377,10 +381,8 @@ subs <- function(im,cl,consts)
                 vname <- vl
                 mval <- list(x=width(im),y=height(im),z=depth(im),cc=spectrum(im))
                 maxval <- mval[[vl]]
-                df <- data.frame(v=1:maxval)
-                df <- cbind(df,consts)
-                names(df)[1] <- vname
-                inds <- eval(cl,df)
+                consts[[vname]] <- 1:maxval
+                inds <- eval(cl,list2env(consts,envir))
                 #Should find a better way to implement what follows
                 if (vname == "x")
                     {
@@ -401,73 +403,70 @@ subs <- function(im,cl,consts)
             }
     }
 
-##' Array subset operator for cimg objects
-##'
-##' Works mostly just like the regular array version of x[...], the only difference being that it returns cimg objects when it makes sense to do so. For example im[,,,1] is just like as.array(im)[,,,1] except it returns a cimg object (containing only the first colour channel)
-##' 
-##' @param x an image (cimg object)
-##' @param ... subsetting arguments
-##' @seealso imsub, which provides a more convenient interface, crop
-##' @export
-`[.cimg` <- function(x,...)
-    {
-        y <- NextMethod("[",drop=FALSE)
-        if (is.vector(y))
-            {
-                y
-            }
-        else
-            {
-                cimg(y)
-            }
-    }
-
 
 
 ##' Load image from file or URL
 ##'
-##' You'll need ImageMagick for formats other than PNG and JPEG. If the image is actually a video, you'll need ffmpeg. If the path is actually a URL, it should start with http(s) or ftp(s). 
+##'
+##' PNG, JPEG and BMP are supported via the readbitmap package. You'll need to install ImageMagick for other formats. If the image is actually a video, you'll need ffmpeg. If the path is actually a URL, it should start with http(s) or ftp(s). 
 ##' 
-##' @param file path to file
+##' @param file path to file or URL
 ##' @return an object of class 'cimg'
 ##' @examples
 ##' #Find path to example file from package
 ##' fpath <- system.file('extdata/Leonardo_Birds.jpg',package='imager') 
-##' im <- load.image(fpath) 
+##' im <- load.image(fpath)
 ##' plot(im)
+##' #Load the R logo directly from the CRAN webpage
+##' #load.image("https://cran.r-project.org/Rlogo.jpg") %>% plot
 ##' @export
 load.image <- function(file)
     {
-        has.magick <- Sys.which("convert") %>% { length(.) > 0 }
-        if (has.magick)
+        is.url <- grepl("^(http|ftp)s?://", file)
+        if (!file_test("-f",file) & !is.url)
+        {
+            stop("File not found")
+        }
+        bmp <- try(read.bitmap(file),silent=TRUE)
+        if (class(bmp) != "try-error") #Loaded succesfully
+        {
+            if (length(dim(bmp)) == 3) #Has colour
             {
-                if (grepl("^(http|ftp)s?://", file)) #URL, regex from libXML2 package
-                    {
-                        load_image(file)
-                    }
-                else
-                    {
-                        normalizePath(file,mustWork=TRUE) %>% load_image
-                    }
+                dim(bmp) <- c(dim(bmp)[1:2],1,dim(bmp)[3]) #Make array 4D
             }
-        else
+            else 
             {
-                ftype <- stringr::str_match(file,"\\.(.+)$")[1,2]
-                if (ftype == "png")
-                    {
-                        load.png(file)
-                    }
-                else if (ftype == "jpeg" | ftype == "jpg")
-                    {
-                        load.jpeg(file)
-                    }
-                else
-                    {
-                        stop("Unsupported file format. Please convert to jpg/png or install image magick")
-                    }
+                dim(bmp) <- c(dim(bmp),1,1)
             }
-
+            bmp <- cimg(bmp) %>% mirror("x") %>% imrotate(-90)
+            bmp
+        }
+        else #Loading with read.bitmap has failed, try with ImageMagick
+        {
+            if (has.magick())
+            {
+                if (is.url)
+                {
+                    load_image(file)
+                }
+                else
+                {
+                    file <- normalizePath(file,mustWork=TRUE)
+                    load_image(file)
+                }
+            }
+            else
+            {
+                stop("Unsupported file format. Please convert to jpeg/png/bmp or install image magick")
+            }
+        }
     }
+
+has.magick <- function()
+{
+    test.magick <- c('conjure','montage') %>% Sys.which %>% Filter(function(v) nchar(v) > 0,.) %>% length
+    test.magick == 2
+}
 
 convert.im.fromPNG <- function(A)
     {
@@ -504,29 +503,35 @@ load.jpeg <- function(file)
 ##' @param file path to file. The format is determined by the file's name
 ##' @return nothing
 ##' @export
+##' @examples
+##' #Create temporary file
+##' tmpF <- tempfile(fileext=".png")
+##' #Save boats image
+##' save.image(boats,tmpF)
+##' #Read back and display
+##' load.image(tmpF) %>% plot
 save.image <- function(im,file)
     {
-        has.magick <- Sys.which("convert") %>% { length(.) > 0 }
-        if (has.magick)
+        ftype <- stringr::str_match(file,"\\.(.+)$")[1,2]
+        if (ftype == "png")
+        {
+            save.png(im,file)
+        }
+        else if (ftype == "jpeg" | ftype == "jpg")
+        {
+            save.jpeg(im,file)
+        }
+        else
+        {
+            if (has.magick())
             {
                 save_image(im,path.expand(file))
             }
-        else
+            else
             {
-                ftype <- stringr::str_match(file,"\\.(.+)$")[1,2]
-                if (ftype == "png")
-                    {
-                        save.png(im,file)
-                    }
-                else if (ftype == "jpeg" | ftype == "jpg")
-                    {
-                        save.jpeg(im,file)
-                    }
-                else
-                    {
-                        stop("Unsupported file format. Please convert to jpg/png or install image magick")
-                    }
+                stop("Unsupported output file format. Use jpg/png or install ImageMagick")
             }
+        }
     }
 
 save.png <- function(im,file)
@@ -793,4 +798,112 @@ NULL
         {
             depth(x) %>% sprintf('Image only has %i frame(s)',.) %>% stop()
         }
+}
+
+##' Array subset operator for cimg objects
+##'
+##' Internally cimg objects are 4D arrays (stored in x,y,z,c mode) but often one doesn't need all dimensions. This is the case for instance when working on grayscale images, which use only two. The array subset operator works like the regular array [] operator, but it won't force you to use all dimensions.
+##' There are easier ways of accessing image data, for example imsub, channels, R, G, B, and the like. 
+##' @param x an image (cimg object)
+##' @param drop if true return an array, otherwise return an image object (default FALSE)
+##' @param ... subsetting arguments
+##' @name imager.subset
+##' @seealso imsub, which provides a more convenient interface, autocrop, imdraw
+##' @examples
+##' im <- imfill(4,4)
+##' dim(im) #4 dimensional, but the last two ones are singletons
+##' im[,1,,] <- 1:4 #Assignment the standard way
+##' im[,1] <- 1:4 #Shortcut
+##' as.matrix(im)
+##' im[1:2,]
+##' dim(boats)
+##' #Arguments will be recycled, as in normal array operations
+##' boats[1:2,1:3,] <- imnoise(2,3) #The same noise array is replicated over the three channels
+NULL
+
+##' @export
+`[.cimg` <- function(x,...) {
+    args <- as.list(substitute(list(...)))[-1L];
+    drop <- TRUE
+    
+    hasdrop <- ("drop"%in%names(args))
+    if (hasdrop)
+    {
+        drop <- args$drop
+    }
+    l <- length(args) -hasdrop
+
+
+        #Call default method for arrays
+    if (l==1 | l ==4)
+    {
+        out <- NextMethod()
+    }
+    else if (l<=4)
+    {
+        d <- dim(x)
+        
+        ar <- list(1,1,1,1)
+        nsd <- which(dim(x) > 1)
+        if (l == length(nsd))
+        {
+            ar[nsd] <- args[1:length(nsd)]
+            if (!drop) ar$drop <- FALSE
+            out <- do.call('[',c(list(x),c(ar)))
+        }
+        else
+        {
+            stop('Ambiguous call to .subset')
+        }
+    }
+    else
+    {
+        stop('Too many arguments')
+    }
+    if (hasdrop)
+    {
+        if (!args$drop)
+        {
+            cimg(out)
+        }
+    }
+    else
+    {
+        out
+    }
+}
+
+##' @export
+`[<-.cimg` <- function(x,...,value) {
+    args <- as.list(substitute(list(...)))[-1L];
+    l <- length(args) 
+
+    #Call default method for arrays
+    if (l==1 | l ==4)
+    {
+            out <- NextMethod()
+    }
+    else if (l<=4)
+    {
+        d <- dim(x)
+        
+        ar <- list(1,1,1,1)
+        nsd <- which(dim(x) > 1)
+        if (l == length(nsd))
+        {
+            ar[nsd] <- args[1:length(nsd)]
+            ar$value <- value
+#            browser()
+            out <- do.call('[<-',c(list(x),c(ar)))
+        }
+        else
+        {
+            stop('Ambiguous call to .subset')
+        }
+    }
+    else
+    {
+        stop('Too many arguments')
+    }
+    cimg(out)
 }

@@ -8,11 +8,12 @@
 NULL
 
 #' @useDynLib imager
-#' @importFrom grDevices as.raster col2rgb dev.capture
+#' @importFrom grDevices as.raster col2rgb dev.capture gray rgb
 #' @importFrom utils file_test
-#' @importFrom graphics axis plot rasterImage
-#' @importFrom stats quantile rnorm kmeans
+#' @importFrom graphics axis plot rasterImage layout
+#' @importFrom stats quantile rnorm kmeans setNames
 #' @importFrom plyr llply laply ldply ddply dlply ldply rename mutate
+#' @importFrom purrr map map_dbl map_lgl map_df map2
 #' @importFrom png readPNG writePNG
 #' @importFrom jpeg writeJPEG readJPEG
 #' @importFrom readbitmap read.bitmap
@@ -32,7 +33,7 @@ utils::globalVariables(c(".", "%>%","x","y","z","cc"))
 ##' Images have up to 4 dimensions, labelled x,y,z,c. x and y are the usual spatial dimensions, z is a depth dimension (which would correspond to time in a movie), and c is a colour dimension. Images are stored linearly in that order, starting from the top-left pixel and going along *rows* (scanline order).
 ##' A colour image is just three R,G,B channels in succession. A sequence of N images is encoded as R1,R2,....,RN,G1,...,GN,B1,...,BN where R_i is the red channel of frame i.
 ##' The number of pixels along the x,y,z, and c axes is called (in that order), width, height, depth and spectrum. 
-##' 
+##' NB: Logical and integer values are automatically converted to type double. NAs are not supported by CImg, so you should manage them on the R end of things. 
 ##' @title Create a cimg object 
 ##' @param X a four-dimensional numeric array
 ##' @return an object of class cimg
@@ -42,9 +43,20 @@ utils::globalVariables(c(".", "%>%","x","y","z","cc"))
 ##' @export
 cimg <- function(X)
     {
+        if (is.logical(X) | is.integer(X))
+            {
+                X <- X+0.0
+            }
         class(X) <-c("cimg","numeric")
         X
     }
+
+##' Checks that an object is a cimg object
+##' @param x an object
+##' @return logical
+##' @export
+is.cimg <- function(x) is(x,"cimg")
+
 
 ##' Various shortcuts for extracting colour channels, frames, etc
 ##'
@@ -72,37 +84,101 @@ NULL
 
 ##' Display an image using base graphics
 ##'
+##' If you want to control precisely how numerical values are turned into colours for plotting, you need to specify a colour scale using the colourscale argument (see examples). Otherwise the default is "gray" for grayscale images, "rgb" for colour. These expect values in [0..1], so the default is to rescale the data to [0..1]. If you wish to over-ride that behaviour, set rescale=FALSE.
+##' See examples for an explanation.
+##' If the image is one dimensional (i.e., a simple row or column image), then pixel values will be plotted as a line.
 ##' @param x the image 
 ##' @param frame which frame to display, if the image has depth > 1
-##' @param rescale.color rescale channels so that the values are in [0,1] 
+##' @param rescale rescale pixel values so that their range is [0,1]
+##' @param colourscale,colorscale an optional colour scale (default is gray or rgb)
+##' @param xlim x plot limits (default: 1 to width)
+##' @param ylim y plot limits (default: 1 to height)
+##' @param xlab x axis label
+##' @param ylab y axis label
 ##' @param ... other parameters to be passed to plot.default (eg "main")
-##' @seealso display, which is much faster
+##' @seealso display, which is much faster, as.raster, which converts images to R raster objects
 ##' @export
-plot.cimg <- function(x,frame,rescale.color=TRUE,...)
+##' @examples
+##' plot(boats,main="Boats") #extra arguments are passed to default plot function
+##' plot(boats,axes=FALSE,xlab="",ylab="")
+##'
+##' #Pixel values are rescaled to 0-1 by default, so that the following two plots are identical
+##' plot(boats)
+##' plot(boats/2,main="Rescaled")
+##' #If you don't want that behaviour, you can set rescale to FALSE, but
+##' #then you need to make sure values are in [0,1]
+##' try(plot(boats,rescale=FALSE)) #Error!
+##' try(plot(boats/255,rescale=FALSE)) #Works
+##' #You can specify a colour scale if you don't want the default one.
+##' #A colour scale is a function that takes pixels values and return an RGB code,
+##' #like R's rgb function,e.g.
+##' rgb(0,1,0)
+##' #Let's switch colour channels
+##' cscale <- function(r,g,b) rgb(b,g,r)
+##' plot(boats/255,rescale=FALSE,colourscale=cscale)
+##' #Display slice of HSV colour space
+##' im <- imfill(255,255,val=1)
+##' im <- list(Xc(im)/255,Yc(im)/255,im) %>% imappend("c")
+##' plot(im,colourscale=hsv,rescale=FALSE,
+##'      xlab="Hue",ylab="Saturation")
+##' #In grayscale images, the colourscale function should take in a single value
+##' #and return an RGB code
+##' boats.gs <- grayscale(boats)
+##' #We use an interpolation function from package scales
+##' cscale <- scales::gradient_n_pal(c("red","purple","lightblue"),c(0,.5,1))
+##' plot(boats.gs,rescale=FALSE,colourscale=cscale)
+##' #Plot a one-dimensional image
+##' imsub(boats,x==1) %>% plot(main="Image values along first column")
+plot.cimg <- function(x,frame,xlim=c(1,width(x)),ylim=c(height(x),1),xlab="x",ylab="y",rescale=TRUE,colourscale=NULL,colorscale=NULL,...)
     {
         im <- x
-        if (dim(im)[3] == 1) #Single image (depth=1)
+        if (depth(im) > 1)
+        {
+            if (missing(frame))
             {
-                w <- width(im)
-                h <- height(im)
-                if (rescale.color & (diff(range(im)) > 0))  im <- (im-min(im))/diff(range(im))
-                plot(c(1,w),c(1,h),type="n",xlab="x",ylab="y",...,ylim=c(h,1))
-                as.raster(im) %>% rasterImage(1,height(im),width(im),1)
-#                rasterImage(im,1,1,w,h)
+                warning("Showing first frame")
+                frame <- 1
             }
+            im <- frame(x,frame)
+        }
+        if (1 %in% dim(im)[1:2]) #Image has a single spatial dimension
+        {
+            plot.singleton(im,...)
+        }
         else
-            {
-                if (missing(frame))
-                    {
-                        warning("Showing first frame")
-                        frame <- 1
-                    }
-                plot.cimg(frame(im,frame),rescale.color=rescale.color,...)
-            }
+        {
+            plot(1,1,xlim=xlim,ylim=ylim,xlab=xlab,ylab=ylab,type="n",...)
+            as.raster(im,rescale=rescale,colorscale=colorscale,colourscale=colourscale) %>% rasterImage(1,height(im),width(im),1)
+        }
     }
 
+#Plots one-dimensional images
+plot.singleton <- function(im,...)
+{
+    varying <- if (width(im) == 1) "y" else "x"
+    l <- max(dim(im)[1:2])
+    if (spectrum(im) == 1)
+    {
+        plot(1:l,as.vector(im),xlab=varying,ylab="Pixel value",type="l",...)
+    }
+    else if (spectrum(im) ==3)
+    {
+        ylim <- range(im)
+        
+        plot(1:l,1:l,type="n",xlab=varying,ylim=ylim,ylab="Pixel value",...)
+        cols <- c("red","green","blue")
 
+        for (i in 1:3)
+        {
 
+            graphics::lines(1:l,as.vector(channel(im,i)),type="l",col=cols[i])
+        }
+    }
+    else
+    {
+        stop("Unsupported image format")
+    }
+}
 
 ##' @export
 print.cimg <- function(x,...)
@@ -275,7 +351,7 @@ G <- function(im) { channel(im,2) }
 ##' @export
 B <- function(im) { channel(im,3) }
 
-##' Return pixel value at coordinates
+##' Return or set pixel value at coordinates
 ##'
 ##' @param im an image (cimg object)
 ##' @param x x coordinate (vector)
@@ -289,12 +365,22 @@ B <- function(im) { channel(im,3) }
 ##' at(im,10,1)
 ##' at(im,10:12,1)
 ##' at(im,10:12,1:3)
+##' at(im,1,2) <- 10
+##' at(im,1,2)
 ##' @export
 at <- function(im,x,y,z=1,cc=1)
     {
         as.array(im)[x,y,z,cc]
     }
 
+##' @describeIn at set value of pixel at a location
+##' @param value replacement
+##' @export
+`at<-` <- function(im,x,y,z=1,cc=1,value)
+    {
+        im[x,y,z,cc] <- value
+        im
+    }
 
 ##' @describeIn at return value of all colour channels at a location
 ##' @examples
@@ -304,6 +390,20 @@ color.at <- function(im,x,y,z=1)
     {
         at(im,x,y,z,cc=1:spectrum(im))
     }
+
+##' @describeIn at set value of all colour channels at a location
+##' @examples
+##' im <- boats
+##' color.at(im,x=10,y=10) <- c(255,0,0)
+##' #There should now be a red dot
+##' imsub(im, x %inr% c(1,100), y %inr% c(1,100)) %>% plot
+##' @export
+`color.at<-` <- function(im,x,y,z=1,value)
+    {
+        at(im,x,y,z,cc=1:spectrum(im)) <- value
+        im
+    }
+
 
 all.names <- function(cl)
     {
@@ -347,6 +447,9 @@ all.names <- function(cl)
 ##' imsub(parrots,x < 30,y < 30) #First 30 columns and rows
 ##' imsub(parrots, sqrt(x) > 8) #Can use arbitrary expressions
 ##' imsub(parrots,x > height/2,y > width/2)  #height and width are defined based on the image
+##' #Using the %inr% operator, which is like %in% but for a numerical range
+##' all.equal(imsub(parrots,x %inr% c(1,10)),
+##'   imsub(parrots,x >= 1,x <= 10))
 ##' imsub(parrots,cc==1) #Colour axis is "cc" not "c" here because "c" is an important R function
 ##' ##Not run
 ##' ##imsub(parrots,x+y==1)
@@ -617,35 +720,48 @@ inda <- list('x'=1,'y'=2,'z'=3,'c'=4)
 ##' pad(boats,20,pos=1,"xy") %>% plot
 ##' @export
 pad <- function(im,nPix,axes,pos=0,val=0)
+{
+    if (nPix > 0)
     {
-        if (nchar(axes) > 1)
+        if (nPix > 0)
             {
-                im <- pad(im,nPix,str_sub(axes,2),pos,val)
-                axes <- str_sub(axes,1,1)
-            }
-        if (pos==0)
-            {
-                d <- rep(1,4)
-                d[inda[[axes]]] <- round(nPix/2)
+                if (nchar(axes) > 1)
+                {
+                    im <- pad(im,nPix,str_sub(axes,2),pos,val)
+                    axes <- str_sub(axes,1,1)
+                }
+                if (pos==0)
+                {
+                    d <- rep(1,4)
+                    d[inda[[axes]]] <- round(nPix/2)
+                    pdIm <- cimg(array(val,d))
+                    imappend(list(pdIm,im,pdIm),axes)
+                }
+                else if (pos == -1)
+                {
+                    d <- rep(1,4)
+                    d[inda[[axes]]] <- nPix
+                    pdIm <- cimg(array(val,d))
+                    imappend(list(pdIm,im),axes)
+                }
+                else if (pos == 1)
+                {
+                    d <- rep(1,4)
+                    d[inda[[axes]]] <- nPix
                 pdIm <- cimg(array(val,d))
-                imappend(list(pdIm,im,pdIm),axes)
+                    imappend(list(im,pdIm),axes)
+                }
             }
-        else if (pos == -1)
+        else
             {
-                d <- rep(1,4)
-                d[inda[[axes]]] <- nPix
-                pdIm <- cimg(array(val,d))
-                imappend(list(pdIm,im),axes)
+                im
             }
-        else if (pos == 1)
-            {
-                d <- rep(1,4)
-                d[inda[[axes]]] <- nPix
-                pdIm <- cimg(array(val,d))
-                imappend(list(im,pdIm),axes)
-            }
-        
     }
+    else
+    {
+        im
+    }
+}
 
 
 .onUnload <- function (libpath) {
@@ -700,7 +816,7 @@ capture.plot <- function()
         }
     }
 
-is.cimg <- function(a) is(a,"cimg")
+
 
 
 
@@ -907,3 +1023,33 @@ NULL
     }
     cimg(out)
 }
+
+#' Display image using CImg library
+#'
+#' Press escape or close the window to exit.
+#'
+#' @param x an image (cimg object)
+#' @param rescale if true pixel values are rescaled to 0...255 (default TRUE)
+#' @param ... ignored
+#' @export
+#' @examples
+#' ##Not run: interactive only 
+#' ##display(boats,TRUE) #Normalisation on 
+#' ##display(boats/2,TRUE) #Normalisation on, so same as above
+#' ##display(boats,FALSE) #Normalisation off
+#' ##display(boats/2,FALSE) #Normalisation off, so different from above
+display.cimg <- function(x,...,rescale=TRUE)
+{
+    display_(x,rescale)
+}
+
+##' Display object using CImg library
+##'
+##' CImg has its own functions for fast, interactive image plotting. Use this if you get frustrated with slow rendering in Rstudio.
+##' @param x an image or a list of images
+##' @param ... ignored
+##' @seealso display.cimg, display.imlist
+##' @export
+display <- function (x, ...) {
+   UseMethod("display", x)
+ }

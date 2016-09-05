@@ -4,25 +4,12 @@
 using namespace Rcpp;
 using namespace cimg_library;
 
-//' Display image using CImg library
-//'
-//' Press escape or close the window to exit.
-//'
-//' @param im an image (cimg object)
-//' @param normalise if true pixel values are rescaled to 0...255 (default TRUE)
-//' @export
-//' @examples
-//' ##Not run: interactive only 
-//' ##display(boats,TRUE) #Normalisation on 
-//' ##display(boats/2,TRUE) #Normalisation on, so same as above
-//' ##display(boats,FALSE) #Normalisation off
-//' ##display(boats/2,FALSE) #Normalisation off, so different from above
 // [[Rcpp::export]]
-void display(NumericVector im,bool normalise=true)
+void display_(NumericVector im,bool rescale=true)
 {
    CId img = as<CId >(im);
    int norm;
-   if (normalise)
+   if (rescale)
      {
        norm = 3;
      }
@@ -43,10 +30,6 @@ void display(NumericVector im,bool normalise=true)
    return;
 }
 
-//' Display image list using CImg library
-//'
-//' @param imlist a list of cimg objects
-//' @export
 // [[Rcpp::export]]
 void display_list(List imlist)
 {
@@ -120,4 +103,13 @@ void play(NumericVector vid,bool loop=false,unsigned long delay=30,bool normalis
       }
 
     return;
+}
+
+// [[Rcpp::export]]
+NumericVector select(NumericVector im,int type=2)
+{
+CImg<double> img = as<CImg<double> >(im);
+CImg<double> out;
+out = img.get_select("",type);
+return wrap(out);
 }

@@ -83,27 +83,26 @@ grayscale <- function(im) {
     .Call('imager_grayscale', PACKAGE = 'imager', im)
 }
 
-#' Display image using CImg library
-#'
-#' Press escape or close the window to exit.
-#'
-#' @param im an image (cimg object)
-#' @param normalise if true pixel values are rescaled to 0...255 (default TRUE)
-#' @export
-#' @examples
-#' ##Not run: interactive only 
-#' ##display(boats,TRUE) #Normalisation on 
-#' ##display(boats/2,TRUE) #Normalisation on, so same as above
-#' ##display(boats,FALSE) #Normalisation off
-#' ##display(boats/2,FALSE) #Normalisation off, so different from above
-display <- function(im, normalise = TRUE) {
-    invisible(.Call('imager_display', PACKAGE = 'imager', im, normalise))
+getXc <- function(x, y, z, c) {
+    .Call('imager_getXc', PACKAGE = 'imager', x, y, z, c)
 }
 
-#' Display image list using CImg library
-#'
-#' @param imlist a list of cimg objects
-#' @export
+getYc <- function(x, y, z, c) {
+    .Call('imager_getYc', PACKAGE = 'imager', x, y, z, c)
+}
+
+getZc <- function(x, y, z, c) {
+    .Call('imager_getZc', PACKAGE = 'imager', x, y, z, c)
+}
+
+getCc <- function(x, y, z, c) {
+    .Call('imager_getCc', PACKAGE = 'imager', x, y, z, c)
+}
+
+display_ <- function(im, rescale = TRUE) {
+    invisible(.Call('imager_display_', PACKAGE = 'imager', im, rescale))
+}
+
 display_list <- function(imlist) {
     invisible(.Call('imager_display_list', PACKAGE = 'imager', imlist))
 }
@@ -120,6 +119,10 @@ play <- function(vid, loop = FALSE, delay = 30L, normalise = TRUE) {
     invisible(.Call('imager_play', PACKAGE = 'imager', vid, loop, delay, normalise))
 }
 
+select <- function(im, type = 2L) {
+    .Call('imager_select', PACKAGE = 'imager', im, type)
+}
+
 bucket_fill <- function(im, x, y, z, color, opacity = 1, sigma = 0, high_connexity = FALSE) {
     .Call('imager_bucket_fill', PACKAGE = 'imager', im, x, y, z, color, opacity, sigma, high_connexity)
 }
@@ -130,23 +133,33 @@ bucket_select <- function(im, x, y, z, sigma = 0, high_connexity = FALSE) {
 
 #' Apply recursive Deriche filter.
 #'
+#' The Deriche filter is a fast approximation to a Gaussian filter (order = 0), or Gaussian derivatives (order = 1 or 2).   
+#' 
 #' @param im an image
 #' @param sigma Standard deviation of the filter.
-#' @param order Order of the filter. Can be <tt>{ 0=smooth-filter | 1=1st-derivative | 2=2nd-derivative }</tt>.
-#' @param axis Axis along which the filter is computed. Can be <tt>{ 'x' | 'y' | 'z' | 'c' }</tt>.
-#' @param boundary_conditions Boundary conditions. Can be <tt>{ 0=dirichlet | 1=neumann }</tt>.
+#' @param order Order of the filter. 0 for a smoothing filter, 1 for first-derivative, 2 for second.
+#' @param axis Axis along which the filter is computed ( 'x' , 'y', 'z' or 'c').
+#' @param neumann If true, use Neumann boundary conditions (default false, Dirichlet)
 #' @export
 #' @examples
 #' deriche(boats,sigma=2,order=0) %>% plot("Zeroth-order Deriche along x")
 #' deriche(boats,sigma=2,order=1) %>% plot("First-order Deriche along x")
 #' deriche(boats,sigma=2,order=1) %>% plot("Second-order Deriche along x")
 #' deriche(boats,sigma=2,order=1,axis="y") %>% plot("Second-order Deriche along y")
-deriche <- function(im, sigma, order = 0L, axis = 'x', boundary_conditions = 0L) {
-    .Call('imager_deriche', PACKAGE = 'imager', im, sigma, order, axis, boundary_conditions)
+deriche <- function(im, sigma, order = 0L, axis = 'x', neumann = FALSE) {
+    .Call('imager_deriche', PACKAGE = 'imager', im, sigma, order, axis, neumann)
 }
 
 #' Young-Van Vliet recursive Gaussian filter.
 #'
+#' The Young-van Vliet filter is a fast approximation to a Gaussian filter (order = 0), or Gaussian derivatives (order = 1 or 2).   
+#'
+#' @param im an image
+#' @param sigma standard deviation of the Gaussian filter
+#' @param order the order of the filter 0,1,2,3
+#' @param axis  Axis along which the filter is computed. Can be <tt>{ 'x' | 'y' | 'z' | 'c' }</tt>.
+#' @param neumann If true, use Neumann boundary conditions (default false, Dirichlet)
+#' @references
 #'       From: I.T. Young, L.J. van Vliet, M. van Ginkel, Recursive Gabor filtering.
 #'       IEEE Trans. Sig. Proc., vol. 50, pp. 2799-2805, 2002.
 #'       (this is an improvement over Young-Van Vliet, Sig. Proc. 44, 1995)
@@ -155,64 +168,59 @@ deriche <- function(im, sigma, order = 0L, axis = 'x', boundary_conditions = 0L)
 #'       B. Triggs and M. Sdika. Boundary conditions for Young-van Vliet
 #'       recursive filtering. IEEE Trans. Signal Processing,
 #'       vol. 54, pp. 2365-2367, 2006.
-#'
-#' @param im an image
-#' @param sigma standard deviation of the Gaussian filter
-#' @param order the order of the filter 0,1,2,3
-#' @param axis  Axis along which the filter is computed. Can be <tt>{ 'x' | 'y' | 'z' | 'c' }</tt>.
-#' @param boundary_conditions Boundary conditions. Can be <tt>{ 0=dirichlet | 1=neumann }</tt>.
-#'       (Dirichlet boundary condition has a strange behavior)
 #' @examples
 #' vanvliet(boats,sigma=2,order=0) %>% plot("Zeroth-order Young-van Vliet along x")
 #' vanvliet(boats,sigma=2,order=1) %>% plot("First-order Young-van Vliet along x")
 #' vanvliet(boats,sigma=2,order=1) %>% plot("Second-order Young-van Vliet along x")
 #' vanvliet(boats,sigma=2,order=1,axis="y") %>% plot("Second-order Young-van Vliet along y")
 #' @export
-vanvliet <- function(im, sigma, order = 0L, axis = 'x', boundary_conditions = 0L) {
-    .Call('imager_vanvliet', PACKAGE = 'imager', im, sigma, order, axis, boundary_conditions)
+vanvliet <- function(im, sigma, order = 0L, axis = 'x', neumann = FALSE) {
+    .Call('imager_vanvliet', PACKAGE = 'imager', im, sigma, order, axis, neumann)
 }
 
 #' Blur image isotropically.
 #' @param im an image
 #' @param sigma Standard deviation of the blur.
-#' @param boundary_conditions Boundary conditions. Can be <tt>{ 0=dirichlet | 1=neumann }
-#' @param gaussian Use a Gaussian filter (default FALSE). Default: O-order Deriche filter.
-#' @seealso deriche
+#' @param neumann If true, use Neumann boundary conditions, Dirichlet otherwise  (default true, Neumann)
+#' @param gaussian Use a Gaussian filter (actually vanVliet-Young). Default: 0th-order Deriche filter.
+#' @seealso deriche,vanvliet
 #' @export
 #' @examples
 #' isoblur(boats,3) %>% plot(main="Isotropic blur, sigma=3")
 #' isoblur(boats,3) %>% plot(main="Isotropic blur, sigma=10")
 #' @seealso medianblur
-isoblur <- function(im, sigma, boundary_conditions = TRUE, gaussian = FALSE) {
-    .Call('imager_isoblur', PACKAGE = 'imager', im, sigma, boundary_conditions, gaussian)
+isoblur <- function(im, sigma, neumann = TRUE, gaussian = FALSE) {
+    .Call('imager_isoblur', PACKAGE = 'imager', im, sigma, neumann, gaussian)
 }
 
 #' Blur image with the median filter.
 #'    
+#' In a window of size n x n centered at pixel (x,y), compute median pixel value over the window. Optionally, ignore values that are too far from the value at current pixel.  
+#'
 #' @param im an image
 #' @param n Size of the median filter.
-#' @param threshold Threshold used to discard pixels too far from the current pixel value in the median computation. Can be used for edge-preserving smoothing. 
+#' @param threshold Threshold used to discard pixels too far from the current pixel value in the median computation. Can be used for edge-preserving smoothing. Default 0 (include all pixels in window).
 #' @export
 #' @examples
-#' medianblur(boats,5,Inf) %>% plot(main="Median blur, 5 pixels")
-#' medianblur(boats,10,Inf) %>% plot(main="Median blur, 10 pixels")
+#' medianblur(boats,5) %>% plot(main="Median blur, 5 pixels")
+#' medianblur(boats,10) %>% plot(main="Median blur, 10 pixels")
 #' medianblur(boats,10,8) %>% plot(main="Median blur, 10 pixels, threshold = 8")
 #' @seealso isoblur, boxblur
-medianblur <- function(im, n, threshold) {
+medianblur <- function(im, n, threshold = 0) {
     .Call('imager_medianblur', PACKAGE = 'imager', im, n, threshold)
 }
 
 #' Blur image with a box filter (square window)
 #' @param im an image
 #' @param sigma Size of the box window.
-#' @param boundary_conditions Boundary conditions. FALSE: Dirichlet TRUE: Neumann.
+#' @param neumann If true, use Neumann boundary conditions, Dirichlet otherwise  (default true, Neumann)
 #' @seealso deriche(), vanvliet().
 #' @examples
 #' boxblur(boats,5) %>% plot(main="Dirichlet boundary")
 #' boxblur(boats,5,TRUE) %>% plot(main="Neumann boundary")
 #' @export
-boxblur <- function(im, sigma, boundary_conditions = TRUE) {
-    .Call('imager_boxblur', PACKAGE = 'imager', im, sigma, boundary_conditions)
+boxblur <- function(im, sigma, neumann = TRUE) {
+    .Call('imager_boxblur', PACKAGE = 'imager', im, sigma, neumann)
 }
 
 #' Blur image with a box filter.
@@ -222,14 +230,14 @@ boxblur <- function(im, sigma, boundary_conditions = TRUE) {
 #' @param im an image
 #' @param sx Size of the box window, along the X-axis.
 #' @param sy Size of the box window, along the Y-axis.
-#' @param boundary_conditions Boundary conditions. FALSE=Dirichlet, TRUE=Neumann.
+#' @param neumann If true, use Neumann boundary conditions, Dirichlet otherwise  (default true, Neumann)
 #' @seealso blur().
 #'
 #' @export
 #' @examples
 #' boxblur_xy(boats,20,5) %>% plot(main="Anisotropic blur")
-boxblur_xy <- function(im, sx, sy, boundary_conditions = TRUE) {
-    .Call('imager_boxblur_xy', PACKAGE = 'imager', im, sx, sy, boundary_conditions)
+boxblur_xy <- function(im, sx, sy, neumann = TRUE) {
+    .Call('imager_boxblur_xy', PACKAGE = 'imager', im, sx, sy, neumann)
 }
 
 #' Correlation of image by filter
@@ -238,9 +246,9 @@ boxblur_xy <- function(im, sx, sy, boundary_conditions = TRUE) {
 #'  \eqn{res(x,y,z) = sum_{i,j,k} im(x + i,y + j,z + k)*flt(i,j,k).}
 #'
 #' @param im an image
-#' @param filter = the correlation kernel.
-#' @param boundary_conditions = the border condition type (0=zero, 1=dirichlet)
-#' @param normalise  = normalise filter (default FALSE)
+#' @param filter the correlation kernel.
+#' @param dirichlet boundary condition (FALSE=zero padding, TRUE=dirichlet). Default FALSE
+#' @param normalise normalise filter (default FALSE)
 #'      
 #'
 #' @export
@@ -251,8 +259,8 @@ boxblur_xy <- function(im, sx, sy, boundary_conditions = TRUE) {
 #' #Convolution vs. correlation 
 #' correlate(boats,filter) %>% plot(main="Correlation")
 #' convolve(boats,filter) %>% plot(main="Convolution")
-correlate <- function(im, filter, boundary_conditions = TRUE, normalise = FALSE) {
-    .Call('imager_correlate', PACKAGE = 'imager', im, filter, boundary_conditions, normalise)
+correlate <- function(im, filter, dirichlet = FALSE, normalise = FALSE) {
+    .Call('imager_correlate', PACKAGE = 'imager', im, filter, dirichlet, normalise)
 }
 
 #' Convolve image by filter.
@@ -262,8 +270,8 @@ correlate <- function(im, filter, boundary_conditions = TRUE, normalise = FALSE)
 #'
 #' @param im an image
 #' @param filter a filter (another image)
-#' @param boundary_conditions = the border condition type (0=zero, 1=dirichlet)
-#' @param normalise = normalise filter (default FALSE)
+#' @param dirichlet boundary condition (FALSE=zero padding, TRUE=dirichlet). Default FALSE
+#' @param normalise normalise filter (default FALSE)
 #' @export
 #' @seealso correlate
 #' @examples
@@ -273,27 +281,12 @@ correlate <- function(im, filter, boundary_conditions = TRUE, normalise = FALSE)
 #' #Convolution vs. correlation 
 #' correlate(boats,filter) %>% plot(main="Correlation")
 #' convolve(boats,filter) %>% plot(main="Convolution")
-convolve <- function(im, filter, boundary_conditions = TRUE, normalise = FALSE) {
-    .Call('imager_convolve', PACKAGE = 'imager', im, filter, boundary_conditions, normalise)
+convolve <- function(im, filter, dirichlet = FALSE, normalise = FALSE) {
+    .Call('imager_convolve', PACKAGE = 'imager', im, filter, dirichlet, normalise)
 }
 
-#' Sharpen image.
-#'
-#' @param im an image
-#' @param amplitude Sharpening amplitude
-#' @param sharpen_type Select sharpening method. Can be <tt>{ false=inverse diffusion | true=shock filters }</tt>.
-#' @param edge Edge threshold (shock filters only).
-#' @param alpha Gradient smoothness (shock filters only).
-#' @param sigma Tensor smoothness (shock filters only).
-#'
-#' @export
-#' @examples
-#' layout(t(1:2))
-#' plot(boats,main="Original")
-#' imsharpen(boats,150)  %>% plot(main="Sharpened")
-#' 
-imsharpen <- function(im, amplitude, sharpen_type = FALSE, edge = 1, alpha = 0, sigma = 0) {
-    .Call('imager_imsharpen', PACKAGE = 'imager', im, amplitude, sharpen_type, edge, alpha, sigma)
+sharpen <- function(im, amplitude, sharpen_type = FALSE, edge = 1, alpha = 0, sigma = 0) {
+    .Call('imager_sharpen', PACKAGE = 'imager', im, amplitude, sharpen_type, edge, alpha, sigma)
 }
 
 #' Compute image gradient.
@@ -379,6 +372,9 @@ displacement <- function(sourceIm, destIm, smoothness = 0.1, precision = 5.0, nb
 }
 
 #' Blur image anisotropically, in an edge-preserving way.
+#' 
+#' Standard blurring removes noise from images, but tends to smooth away edges in the process. This anisotropic filter preserves edges better. 
+#' 
 #' @param im an image
 #' @param amplitude Amplitude of the smoothing.
 #' @param sharpness Sharpness.
@@ -390,14 +386,14 @@ displacement <- function(sourceIm, destIm, smoothness = 0.1, precision = 5.0, nb
 #' @param gauss_prec Precision of the diffusion process.
 #' @param interpolation_type Interpolation scheme.
 #'  Can be 0=nearest-neighbor | 1=linear | 2=Runge-Kutta 
-#' @param is_fast_approx Determines if a fast approximation of the gaussian function is used or not.
+#' @param fast_approx If true, use fast approximation (default TRUE)
 #' @export
 #' @examples
 #' im <- load.image(system.file('extdata/Leonardo_Birds.jpg',package='imager'))
 #' im.noisy <- (im + 80*rnorm(prod(dim(im)))) 
 #' blur_anisotropic(im.noisy,ampl=1e4,sharp=1) %>% plot
-blur_anisotropic <- function(im, amplitude, sharpness = 0.7, anisotropy = 0.6, alpha = 0.6, sigma = 1.1, dl = 0.8, da = 30, gauss_prec = 2, interpolation_type = 0L, is_fast_approx = TRUE) {
-    .Call('imager_blur_anisotropic', PACKAGE = 'imager', im, amplitude, sharpness, anisotropy, alpha, sigma, dl, da, gauss_prec, interpolation_type, is_fast_approx)
+blur_anisotropic <- function(im, amplitude, sharpness = 0.7, anisotropy = 0.6, alpha = 0.6, sigma = 1.1, dl = 0.8, da = 30, gauss_prec = 2, interpolation_type = 0L, fast_approx = TRUE) {
+    .Call('imager_blur_anisotropic', PACKAGE = 'imager', im, amplitude, sharpness, anisotropy, alpha, sigma, dl, da, gauss_prec, interpolation_type, fast_approx)
 }
 
 periodic_part <- function(im) {
@@ -576,20 +572,8 @@ mclosing <- function(im, mask, boundary_conditions = TRUE, normalise = FALSE) {
     .Call('imager_mclosing', PACKAGE = 'imager', im, mask, boundary_conditions, normalise)
 }
 
-#' Autocrop image region 
-#'
-#' @param im an image
-#' @param color Color used for the crop. If  0, color is guessed.
-#' @param axes Axes used for the crop.
-#' @export
-#' @examples
-#' #Add pointless padding
-#' padded <- pad(boats,30,"xy")
-#' plot(padded)
-#' #Remove padding
-#' autocrop(padded,color=c(0,0,0)) %>% plot
-autocrop <- function(im, color, axes = "zyx") {
-    .Call('imager_autocrop', PACKAGE = 'imager', im, color, axes)
+autocrop_ <- function(im, color, axes = "zyx") {
+    .Call('imager_autocrop_', PACKAGE = 'imager', im, color, axes)
 }
 
 #' Rotate image by an arbitrary angle.
@@ -764,20 +748,73 @@ imappend <- function(imlist, axis) {
     .Call('imager_imappend', PACKAGE = 'imager', imlist, axis)
 }
 
-#' Return image patches 
+#' Pixel-wise evaluation of a CImg expression
 #'
-#' Patches are rectangular (cubic) image regions centered at cx,cy (cz) with width wx and height wy (opt. depth wz)
-#'
+#' This function provides experimental support for CImg's "math expression parser", a byte-compiled mini-language. 
 #' @param im an image
+#' @param expr an expression (as string)
+#' @examples
+#' imfill(10,10) %>% imeval('x+y') %>% plot
+#' # Box filter
+#' boxf = "v=0;for(iy=y-3,iy<y+3,iy++,for(ix=x-3,ix< x+3,ix++,v+=i(ix,iy)));v"
+#' imeval(boats,boxf) %>% plot
+#' # Example by D. Tschumperle: Julia set
+#' julia <-  "
+#'    zr = -1.2 + 2.4*x/w;
+#'    zi = -1.2 + 2.4*y/h;
+#'    for (iter = 0, zr^2+zi^2<=4 && iter<256, iter++,
+#'      t = zr^2 - zi^2 + 0.5;
+#'      (zi *= 2*zr) += 0.2;
+#'      zr = t
+#'    );
+#'    iter"
+#' imfill(500,500) %>% imeval(julia) %>% plot
+#' @export
+imeval <- function(im, expr) {
+    .Call('imager_imeval', PACKAGE = 'imager', im, expr)
+}
+
+#' Extract a numerical summary from image patches, using CImg's mini-language
+#' Experimental feature. 
+#' @param im an image
+#' @param expr a CImg expression (as a string)
 #' @param cx vector of x coordinates for patch centers 
 #' @param cy vector of y coordinates for patch centers 
 #' @param wx vector of coordinates for patch width 
 #' @param wy vector of coordinates for patch height 
+#' @examples
+#' #Example: median filtering using patch_summary_cimg
+#' #Center a patch at each pixel
+#' im <- grayscale(boats)
+#' patches <- pixel.grid(im)  %>% mutate(w=3,h=3)
+#' #Extract patch summary
+#' out <- mutate(patches,med=patch_summary_cimg(im,"ic",x,y,w,h))
+#' as.cimg(out,v.name="med") %>% plot
+#' @export
+patch_summary_cimg <- function(im, expr, cx, cy, wx, wy) {
+    .Call('imager_patch_summary_cimg', PACKAGE = 'imager', im, expr, cx, cy, wx, wy)
+}
+
+extract_fast <- function(im, fun, cx, cy, wx, wy) {
+    .Call('imager_extract_fast', PACKAGE = 'imager', im, fun, cx, cy, wx, wy)
+}
+
+#' Extract image patches and return a list
+#'
+#' Patches are rectangular (cubic) image regions centered at cx,cy (cz) with width wx and height wy (opt. depth wz)
+#' WARNINGS: 
+#' - values outside of the image region are considered to be 0.
+#' - widths and heights should be odd integers (they're rounded up otherwise). 
+#' @param im an image
+#' @param cx vector of x coordinates for patch centers 
+#' @param cy vector of y coordinates for patch centers 
+#' @param wx vector of patch widths (or single value)
+#' @param wy vector of patch heights (or single value)
 #' @return a list of image patches (cimg objects)
 #' @export
 #' @examples
 #' #2 patches of size 5x5 located at (10,10) and (10,20)
-#' extract_patches(boats,c(10,10),c(10,20),rep(5,2),rep(5,2)) 
+#' extract_patches(boats,c(10,10),c(10,20),5,5)
 extract_patches <- function(im, cx, cy, wx, wy) {
     .Call('imager_extract_patches', PACKAGE = 'imager', im, cx, cy, wx, wy)
 }
@@ -792,5 +829,25 @@ extract_patches3D <- function(im, cx, cy, cz, wx, wy, wz) {
 
 draw_image <- function(im, sprite, x = 0L, y = 0L, z = 0L, opacity = 1) {
     .Call('imager_draw_image', PACKAGE = 'imager', im, sprite, x, y, z, opacity)
+}
+
+do_patchmatch <- function(im1, im2, patch_width, patch_height, patch_depth, nb_iterations, nb_randoms, guide) {
+    .Call('imager_do_patchmatch', PACKAGE = 'imager', im1, im2, patch_width, patch_height, patch_depth, nb_iterations, nb_randoms, guide)
+}
+
+checkcoords <- function(x, y, z, c, d) {
+    .Call('imager_checkcoords', PACKAGE = 'imager', x, y, z, c, d)
+}
+
+cimg_omp <- function() {
+    .Call('imager_cimg_omp', PACKAGE = 'imager')
+}
+
+set_cimg_omp <- function(mode) {
+    .Call('imager_set_cimg_omp', PACKAGE = 'imager', mode)
+}
+
+has_omp <- function() {
+    .Call('imager_has_omp', PACKAGE = 'imager')
 }
 

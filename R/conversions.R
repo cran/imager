@@ -41,46 +41,80 @@ as.data.frame.cimg <- function (x, ...,wide=c(FALSE,"c","d"))
 
 
 
-##' Convert a cimg object to a raster object
+##' Convert a cimg object to a raster object for plotting
 ##'
-##' raster objects are used by R's base graphics for plotting
+##' raster objects are used by R's base graphics for plotting. R wants hexadecimal RGB values for plotting, e.g. gray(0) yields #000000, meaning black. If you want to control precisely how numerical values are turned into colours for plotting, you need to specify a colour scale using the colourscale argument (see examples). Otherwise the default is "gray" for grayscale images, "rgb" for colour. These expect values in [0..1], so the default is to rescale the data to [0..1]. If you wish to over-ride that behaviour, set rescale=FALSE.  
+##' 
 ##' @param x an image (of class cimg)
 ##' @param frames which frames to extract (in case depth > 1)
-##' @param rescale.color rescale so that pixel values are in [0,1]? (subtract min and divide by range). default TRUE
+##' @param rescale rescale so that pixel values are in [0,1]? (subtract min and divide by range). default TRUE
+##' @param colourscale a function that returns RGB values in hexadecimal
+##' @param colorscale same as above in American spelling
 ##' @param ... ignored
 ##' @return a raster object
 ##' @seealso plot.cimg, rasterImage
 ##' @author Simon Barthelme
+##' @examples
+##' #A raster is a simple array of RGB values
+##' as.raster(boats) %>% str
+##' #By default as.raster rescales input values, so that:
+##' all.equal(as.raster(boats),as.raster(boats/2)) #TRUE
+##' #Setting rescale to FALSE changes that
+##' try(as.raster(boats,rescale=FALSE))
+##' #The above fails because the pixel values are in the wrong range
+##' boats <- boats/255 #Rescale to 0..1
+##' as.raster(boats,rescale=FALSE) %>% plot
+##' as.raster(boats/2,rescale=FALSE) %>% plot
+##' #For grayscale images, a colourmap should take a single value and
+##' #return  an RGB code
+##' #Example: mapping grayscale value to saturation
+##' cscale <- function(v) hsv(.5,v,1)
+##' grayscale(boats) %>% as.raster(colourscale=cscale) %>% plot
 ##' @export
-as.raster.cimg <- function(x,frames,rescale.color=TRUE,...)
+as.raster.cimg <- function(x,frames,rescale=TRUE,colourscale=NULL,colorscale=NULL,...)
+{
+    if (is.null(colorscale) && is.null(colourscale))
     {
-        im <- x
-        w <- width(im)
-        h <- height(im)
-
-        if (dim(im)[3] == 1)
-            {
-                if (rescale.color) im <- renorm(im,0,1)
-#                if (rescale.color & !all(im==0))  im <- (im-min(im))/diff(range(im))
-                dim(im) <- dim(im)[-3]
-                if (dim(im)[3] == 1) #BW
-                    {
-                        dim(im) <- dim(im)[1:2]
-                        im <- t(im)
-                        class(im) <- "matrix"
-                    }
-                else{
-                    im <- aperm(im,c(2,1,3))
-                    class(im) <- "array"
-                }
-                as.raster(im)
-            }
-        else
-            {
-                if (missing(frames)) frames <- 1:depth(im)
-                imager::frames(im,frames) %>% llply(as.raster.cimg)
-            }
+        colourscale <- if (spectrum(x) == 1) gray else rgb
     }
+    else
+    {
+        if (is.null(colourscale))
+        {
+            colourscale <- colorscale
+        }
+        if (rescale)
+        {
+            warning("You've specified a colour scale, but rescale is set to TRUE. You may get unexpected results")
+        }
+    }
+    im <- x
+    w <- width(im)
+    h <- height(im)
+    if (depth(im) == 1)
+    {
+        if (rescale) im <- renorm(im,0,1)
+        if (spectrum(im) == 1) #BW
+        {
+            dim(im) <- dim(im)[1:2]
+            r <- im %>%  colourscale
+            dim(r) <- dim(im)[2:1]
+            class(r) <- "raster"
+        }
+        else{
+            v <- channels(im) %>% lapply(as.matrix)
+            r <- colourscale(v[[1]],v[[2]],v[[3]])
+            dim(r) <- dim(im)[2:1]
+            class(r) <- "raster"
+        }
+        r
+    }
+    else
+    {
+        if (missing(frames)) frames <- 1:depth(im)
+        imager::frames(im,frames) %>% llply(as.raster.cimg)
+    }
+}
 
 ##' Convert cimg to spatstat im object
 ##'
@@ -167,6 +201,10 @@ as.cimg <- function(obj,...) UseMethod("as.cimg")
 ##' @export
 as.cimg.numeric <- function(obj,...) as.cimg.vector(obj,...)
 
+##' @describeIn as.cimg convert logical
+##' @export
+as.cimg.logical <- function(obj,...) as.cimg.vector(as.numeric(obj),...)
+
 ##' @describeIn as.cimg convert double
 ##' @export
 as.cimg.double <- function(obj,...) as.cimg.vector(obj,...)
@@ -244,6 +282,10 @@ as.cimg.vector <- function(obj,x=NA,y=NA,z=NA,cc=NA,dim=NULL,...)
 as.cimg.array <- function(obj,...)
     {
         d <- dim(obj)
+        if (is.logical(obj) | is.integer(obj))
+            {
+                obj <- obj+0.0
+            }
         if (length(d)==4)
             {
                 cimg(obj)
@@ -287,7 +329,7 @@ as.cimg.matrix <- function(obj,...)
 
 ##' Create an image from a data.frame
 ##'
-##' The data frame must be of the form (x,y,value) or (x,y,z,value), or (x,y,z,cc,value). The coordinates must be valid image coordinates (i.e., positive integers). 
+##' This function is meant to be just like as.cimg.data.frame, but in reverse. Each line in the data frame must correspond to a pixel. For example, the data fame can be of the form (x,y,value) or (x,y,z,value), or (x,y,z,cc,value). The coordinates must be valid image coordinates (i.e., positive integers). 
 ##' 
 ##' @param obj a data.frame
 ##' @param v.name name of the variable to extract pixel values from (default "value")
@@ -302,32 +344,38 @@ as.cimg.matrix <- function(obj,...)
 ##' @author Simon Barthelme
 ##' @export
 as.cimg.data.frame <- function(obj,v.name="value",dims,...)
+{
+    nm <- names(obj) %>% tolower
+    names(obj) <- nm
+    if (!any(c("x","y","z","c","cc") %in% nm))
     {
-        which.v <- (names(obj) == v.name) %>% which
-        col.coord <- (names(obj) %in% names.coords) %>% which
-        coords <- names(obj)[col.coord]
-        if (length(which.v) == 0)
-            {
-                sprintf("Variable %s is missing",v.name) %>% stop
-            }
-        if (any(sapply(obj[,-which.v],min) <= 0))
-            {
-                stop('Indices must be positive')
-            }
-        if (missing(dims))
-            {
-                warning('Guessing dimension from maximum coordinate values')
-                dims <- rep(1,4)
-                for (n in coords)
-                    {
-                        dims[index.coords[[n]]] <- max(obj[[n]])
-                    }
-            }
-        im <- as.cimg(array(0,dims))
-        ind <- pixel.index(im,obj[,col.coord])
-        im[ind] <- obj[[v.name]]
-        im
+        stop('input must have (x,y,value) format or similar, see help')
     }
+    which.v <- (names(obj) == v.name) %>% which
+    col.coord <- (names(obj) %in% names.coords) %>% which
+    coords <- names(obj)[col.coord]
+    if (length(which.v) == 0)
+    {
+        sprintf("Variable %s is missing",v.name) %>% stop
+    }
+    if (any(sapply(obj[,-which.v],min) <= 0))
+    {
+        stop('Indices must be positive')
+    }
+    if (missing(dims))
+    {
+        warning('Guessing image dimensions from maximum coordinate values')
+        dims <- rep(1,4)
+        for (n in coords)
+        {
+            dims[index.coords[[n]]] <- max(obj[[n]])
+        }
+    }
+    im <- as.cimg(array(0,dims))
+    ind <- index.coord(im,obj[,col.coord,drop=FALSE])
+    im[ind] <- obj[[v.name]]
+    im
+}
 
 ##' @export
 as.matrix.cimg <- function(x,...) {
@@ -338,6 +386,11 @@ as.matrix.cimg <- function(x,...) {
             class(x) <- "matrix"
             x
         }
+    else if (sum(d > 1) == 1)
+    {
+        warning("Image is one-dimensional")
+        as.vector(x) %>% as.matrix
+    }
     else
         {
             stop("Too many non-empty dimensions")

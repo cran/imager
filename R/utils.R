@@ -313,7 +313,7 @@ imwarp <- function(im,map,direction="forward",coordinates="absolute",boundary="d
             }
         wf <- llply(out,function(v) array(v,c(dim(im)[1:3],1))) %>% imappend("c")
         mode <- (direction=="forward")*2+(coordinates=="relative")
-        warp(im,wf-1,mode=mode,interpolation=switch(interpolation,nearest=0,linear=1,cubic=2),boundary_conditions=switch(boundary,dirichlet=0,neumann=1,periodic=2))
+        warp(im,wf,mode=mode,interpolation=switch(interpolation,nearest=0,linear=1,cubic=2),boundary_conditions=switch(boundary,dirichlet=0,neumann=1,periodic=2))
     }
 
 
@@ -532,7 +532,7 @@ load.example <- function(name)
 
 ##' Crop the outer margins of an image 
 ##'
-##' This function crops pixels on each side of an image. This function is a kind of inverse (centred) padding, and is useful e.g. when you want to get only the valid part of a convolution. 
+##' This function crops pixels on each side of an image. This function is a kind of inverse (centred) padding, and is useful e.g. when you want to get only the valid part of a convolution
 ##' @param im an image
 ##' @param nx number of pixels to crop along horizontal axis
 ##' @param ny number of pixels to crop along vertical axis
@@ -564,4 +564,167 @@ crop.borders <- function(im,nx=0,ny=0,nz=0,nPix)
     {
         imsub(im,(x > nx) & (x <= width - nx),(y > ny) & (y <= height - ny))
     }
+}
+
+
+patchmatch <- function(im1,im2,sx=1,sy=1,sz=1,nIter=10,nRad=10,init)
+{
+    if (missing(init)) #Initialise to identity mapping
+    {
+        if (depth(im1)==1)
+        {
+            init <- list(Xc(im1),Yc(im1)) %>% imappend("c")
+        }
+        else
+        {
+            init <- list(Xc(im1),Yc(im1),Zc(im1)) %>% imappend("c")
+        }
+    }
+    do_patchmatch(im1,im2,sx,sy,sz,nIter,nRad,init)
+}
+
+#' Return image patch summary 
+#'
+#' Patches are rectangular image regions centered at cx,cy with width wx and height wy. This function provides a fast way of extracting a statistic over image patches (for example, their mean).  
+#' Supported functions: sum,mean,min,max,median,var,sd, or any valid CImg expression.
+#' WARNINGS: 
+#' - values outside of the image region are considered to be 0.
+#' - widths and heights should be odd integers (they're rounded up otherwise). 
+#' @param im an image
+#' @param expr statistic to extract. a string, either one of the usual statistics like "mean","median", or a CImg expression.
+#' @param cx vector of x coordinates for patch centers 
+#' @param cy vector of y coordinates for patch centers 
+#' @param wx vector of patch widths (or single value)
+#' @param wy vector of patch heights (or single value)
+#' @return a numeric vector
+#' @examples
+#' im <- grayscale(boats)
+#' #Mean of an image patch centered at (10,10) of size 3x3
+#' patchstat(im,'mean',10,10,3,3)
+#' #Mean of image patches centered at (10,10) and (20,4) of size 2x2
+#' patchstat(im,'mean',c(10,20),c(10,4),5,5)
+#' #Sample 10 random positions
+#' ptch <- pixel.grid(im) %>% dplyr::sample_n(10)
+#' #Compute median patch value
+#' with(ptch,patchstat(im,'median',x,y,3,3))
+#' @export
+#' @seealso extract_patches
+patchstat <- function(im,expr,cx,cy,wx,wy)
+    {
+        expr.predef <- c('sum','mean','min','max','median','var','sd')
+        cx <- cx-1
+        cy <- cy-1
+        if (length(cx) != length(cy))
+            {
+                stop('cx and cy must have equal length')
+            }
+        if (length(cx) != length(wx))
+            {
+                if (length(wx) == 1)
+                {
+                    wx <- rep(wx,length(cx))
+                }
+                else
+                {
+                    stop('cx and wx have incompatible lengths')
+                }
+            }
+        if (length(cy) != length(wy))
+            {
+                if (length(wy) == 1)
+                {
+                    wy <- rep(wy,length(cy))
+                }
+                else
+                {
+                    stop('cy and wy have incompatible lengths')
+                }
+            }
+        if (expr %in% expr.predef)
+            {
+                extract_fast(im,which(expr==expr.predef)-1,cx,cy,wx,wy)
+            }
+        else
+            {
+                patch_summary_cimg(im,expr,cx,cy,wx,wy)
+            }
+    }
+
+##' Check that value is in a range
+##'
+##' A shortcut for x >= a | x <= b. 
+##' @param x numeric values
+##' @param range a vector of length two, of the form c(a,b)
+##' @return a vector of logicals
+##' 1:10 %inr% c(0,5)
+##' @author Simon Barthelme
+##' @export
+`%inr%` <- function(x,range)
+{
+    if (!is.numeric(range) || length(range) != 2)
+    {
+        stop("Range must be a vector of 2 numeric values")
+    }
+    if (!is.numeric(x))
+    {
+        stop("x must be numeric")
+    }
+    else
+    {
+        if (diff(range) < 0)
+        {
+            stop('Range must be increasing')
+        }
+
+        x >= range[1] & x <= range[2]
+    }
+}
+
+#' Autocrop image region 
+#'
+#' @param im an image
+#' @param color Color used for the crop. If  0, color is guessed.
+#' @param axes Axes used for the crop.
+#' @export
+#' @examples
+#' #Add pointless padding
+#' padded <- pad(boats,30,"xy")
+#' plot(padded)
+#' #Remove padding
+#' autocrop(padded,color=c(0,0,0)) %>% plot
+autocrop <- function(im,color=c(0,0,0),axes="zyx")
+{
+    autocrop_(im,color,axes)
+}
+
+##' Control CImg's parallelisation
+##'
+##' On supported architectures CImg can parallelise many operations using OpenMP. 
+##' Use this function to turn parallelisation on or off.
+##' 
+##' @param mode Either "adaptive","always" or "none". The default is adaptive (parallelisation for large images only). 
+##' @return NULL (function is used for side effects)
+##' @author Simon Barthelme
+##' @examples
+##' cimg.use.openmp("never") #turn off parallelisation
+##' @export
+cimg.use.openmp <- function(mode="adaptive")
+{
+    if (mode=="never")
+        {
+            set_cimg_omp(0)
+        }
+    else if (mode=="always")
+        {
+            set_cimg_omp(1)
+        }
+    else if (mode=="adaptive")
+        {
+            set_cimg_omp(2)
+        }
+    else
+        {
+            stop("Unknown mode, should be one of 'never','adaptive', or 'always'")
+        }
+    NULL
 }

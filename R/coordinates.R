@@ -51,7 +51,7 @@ pixel.grid <- function(im,standardise=FALSE,drop.unused=TRUE,dim=NULL)
             }
         if (drop.unused)
             {
-                res[,d > 1]
+                res[,d > 1,drop=FALSE]
             }
         else
             {
@@ -59,76 +59,121 @@ pixel.grid <- function(im,standardise=FALSE,drop.unused=TRUE,dim=NULL)
             }
     }
 
+##' Coordinates as images
+##'
+##' These functions return pixel coordinates for an image, as an image. All is made clear in the examples (hopefully)
+##' @param im an image
+##' @name imcoord
+##' @return another image of the same size, containing pixel coordinates
+##' @seealso as.cimg.function, pixel.grid
+##' @examples
+##' im <- imfill(5,5) #An image
+##' Xc(im) #An image of the same size, containing the x coordinates of each pixel
+##' Xc(im) %>% imrow(1)
+##' Yc(im) %>% imrow(3) #y is constant along rows
+##' Yc(im) %>% imcol(1)
+##' #Mask bits of the boats image:
+##' plot(boats*(Xc(boats) < 100))
+##' plot(boats*(dnorm(Xc(boats),m=100,sd=30))) #Gaussian window
+NULL
+
+##' @describeIn imcoord X coordinates 
+##' @export
+Xc <- function(im) coordImage(im,"x")
+##' @describeIn imcoord Y coordinates 
+##' @export
+Yc <- function(im) coordImage(im,"y")
+##' @describeIn imcoord Z coordinates 
+##' @export
+Zc <- function(im) coordImage(im,"z")
+##' @describeIn imcoord C coordinates 
+##' @export
+Cc <- function(im) coordImage(im,"c")
+
+coordImage <- function(im,channel)
+{
+    d <- dim(im)
+    fun <- list(x=getXc,y=getYc,z=getZc,c=getCc)
+    fun[[channel]](d[1],d[2],d[3],d[4])+1
+}
+
+
+
 
 ##' Linear index in internal vector from pixel coordinates
 ##'
 ##' Pixels are stored linearly in (x,y,z,c) order. This function computes the vector index of a pixel given its coordinates
 ##' @param im an image
 ##' @param coords a data.frame with values x,y,z (optional), c (optional)
+##' @param outside what to do if some coordinates are outside the image: "stop" issues error, "NA" replaces invalid coordinates with NAs. Default: "stop". 
 ##' @return a vector of indices (NA if the indices are invalid)
 ##' @examples
 ##' im <- as.cimg(function(x,y) x+y,100,100)
-##' px <- pixel.index(im,data.frame(x=c(3,3),y=c(1,2)))
+##' px <- index.coord(im,data.frame(x=c(3,3),y=c(1,2)))
 ##' im[px] #Values should be 3+1=4, 3+2=5
 ##' @author Simon Barthelme
+##' @seealso coord.index, the reverse operation
 ##' @export
-pixel.index <- function(im,coords)
-    {
-        d <- dim(im)
-        if ("c" %in% names(im))
+index.coord <- function(im,coords,outside="stop")
+{
+    if ("c" %in% names(coords))
             {
                 coords <- rename(coords,list("c"="cc")) #Safer
             }
-        if (setequal(names(coords),c("x","y")))
-            {
-                if (depth(im) > 1)
-                    {
-                        stop("Coordinates are ambiguous, must specify frame")
-                    }
-                else if (spectrum(im) > 1)
-                    {
-                        stop("Coordinates are ambiguous, must specify channel")
-                    }
-                else
-                    {
-                        out <- check.x(im,coords$x)+d[1]*(check.y(im,coords$y)-1)
-                    }
-            }
-        else if (setequal(names(coords),c("x","y","z")))
-            {
-                if (spectrum(im) > 1)
-                    {
-                        stop("Coordinates are ambiguous, must specify channel")
-                    }
-                else
-                    {
-                        out <- check.x(im,coords$x)+d[1]*(check.y(im,coords$y)-1)+(d[1]*d[2])*(check.z(im,coords$z)-1)
-                    }
-            }
-        else if (setequal(names(coords),c("x","y","cc")))
-            {
-                if (depth(im) > 1)
-                    {
-                        stop("Coordinates are ambiguous, must specify frame")
-                    }
-                else
-                    {
-                        out <- check.x(im,coords$x)+d[1]*(check.y(im,coords$y)-1)+(d[1]*d[2])*(check.cc(im,coords$cc)-1)
-                    }
-            }
-        else if (setequal(names(coords),c("x","y","cc","z")))
-            {
-                out <- check.x(im,coords$x)+d[1]*(check.y(im,coords$y)-1)+(d[1]*d[2])*(check.z(im,coords$z)-1)+prod(d[1:3])*(check.cc(im,coords$cc)-1)
-            }
+    nc <- setdiff(names.coords,"c")
+    ms <- setdiff(nc,names(coords))
+    for (m in ms) #Add missing coordinates
+    {
+        if (dimn(im,m) == 1)
+        {
+            #Check singleton oth. ambiguous
+            coords[[m]] <- 1
+        }
         else
-            {
-                stop("Unrecognised coordinates")
-            }
-        out[out < 0] <- NA
-        out[out > prod(dim(im))] <- NA
-        out
+        {
+            stop(paste0("Ambiguous coordinates: missing ",m))
+        }
     }
+    if (prod(dim(im)) == 1) #Edge case
+    {
+        ind <- rowSums(as.matrix(coords[,c("x","y","z","cc")])-1)+1
+    }
+    else
+    {
+        ns <- nc[dim(im) > 1]
+        ws <- (c(1,cumprod(dim(im))[1:3]))[dim(im) > 1]
+        ind <- 1+(as.matrix(coords[,ns])-1)%*%ws
+    }
+    check <- with(coords,checkcoords(x,y,z,cc,dim(im)))
+    if (!all(check))
+    {
+        if (outside=="stop")
+        {
+            stop("Some coordinates are outside the image")
+        }
+        else if (outside == "NA")
+        {
+            ind[!check] <- NA
+        }
+    }
+    as.vector(ind)
+}
 
+##' Coordinates from pixel index
+##'
+##' Compute (x,y,z,cc) coordinates from linear pixel index. 
+##' @param im an image
+##' @param index a vector of indices
+##' @return a data.frame of coordinate values
+##' @seealso index.coord for the reverse operation
+##' @examples
+##' cind <- coord.index(boats,33)
+##' #Returns (x,y,z,c) coordinates of the 33rd pixel in the array
+##' cind
+##' all.equal(boats[33],with(cind,at(boats,x,y,z,cc)))
+##' all.equal(33,index.coord(boats,cind))
+##' @author Simon Barthelme
+##' @export
 coord.index <- function(im,index)
     {
         index <- index-1
@@ -148,6 +193,8 @@ coord.index <- function(im,index)
         as.data.frame(V+1)
     }
 
+
+pixel.index <- coord.index
 
 ##' Return coordinates of subset of pixels
 ##'
@@ -171,3 +218,6 @@ get.locations <- function(im,condition)
             }
         coord.index(im,which(condition(im)))
     }
+
+
+dimn <- function(im,v) dim(im)[index.coords[[v]]]

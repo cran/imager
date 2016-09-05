@@ -1,15 +1,16 @@
-#define cimg_use_fftw3
 #include <imager.h>
 using namespace Rcpp;
 using namespace cimg_library;
 
 //' Apply recursive Deriche filter.
 //'
+//' The Deriche filter is a fast approximation to a Gaussian filter (order = 0), or Gaussian derivatives (order = 1 or 2).   
+//' 
 //' @param im an image
 //' @param sigma Standard deviation of the filter.
-//' @param order Order of the filter. Can be <tt>{ 0=smooth-filter | 1=1st-derivative | 2=2nd-derivative }</tt>.
-//' @param axis Axis along which the filter is computed. Can be <tt>{ 'x' | 'y' | 'z' | 'c' }</tt>.
-//' @param boundary_conditions Boundary conditions. Can be <tt>{ 0=dirichlet | 1=neumann }</tt>.
+//' @param order Order of the filter. 0 for a smoothing filter, 1 for first-derivative, 2 for second.
+//' @param axis Axis along which the filter is computed ( 'x' , 'y', 'z' or 'c').
+//' @param neumann If true, use Neumann boundary conditions (default false, Dirichlet)
 //' @export
 //' @examples
 //' deriche(boats,sigma=2,order=0) %>% plot("Zeroth-order Deriche along x")
@@ -17,16 +18,31 @@ using namespace cimg_library;
 //' deriche(boats,sigma=2,order=1) %>% plot("Second-order Deriche along x")
 //' deriche(boats,sigma=2,order=1,axis="y") %>% plot("Second-order Deriche along y")
 // [[Rcpp::export]]
-NumericVector deriche(NumericVector im,float sigma,int order=0,char axis = 'x',bool boundary_conditions=0)
+NumericVector deriche(NumericVector im,float sigma,int order=0,char axis = 'x',bool neumann=false)
 {
   CId img = as<CId >(im);
-  img.deriche(sigma,order,axis,boundary_conditions);
+  try{
+      img.deriche(sigma,order,axis,neumann);
+    }
+  catch(CImgException &e){
+    forward_exception_to_r(e);
+    
+  }
+
   return wrap(img);
 }
 
 
 //' Young-Van Vliet recursive Gaussian filter.
 //'
+//' The Young-van Vliet filter is a fast approximation to a Gaussian filter (order = 0), or Gaussian derivatives (order = 1 or 2).   
+//'
+//' @param im an image
+//' @param sigma standard deviation of the Gaussian filter
+//' @param order the order of the filter 0,1,2,3
+//' @param axis  Axis along which the filter is computed. Can be <tt>{ 'x' | 'y' | 'z' | 'c' }</tt>.
+//' @param neumann If true, use Neumann boundary conditions (default false, Dirichlet)
+//' @references
 //'       From: I.T. Young, L.J. van Vliet, M. van Ginkel, Recursive Gabor filtering.
 //'       IEEE Trans. Sig. Proc., vol. 50, pp. 2799-2805, 2002.
 //'       (this is an improvement over Young-Van Vliet, Sig. Proc. 44, 1995)
@@ -35,13 +51,6 @@ NumericVector deriche(NumericVector im,float sigma,int order=0,char axis = 'x',b
 //'       B. Triggs and M. Sdika. Boundary conditions for Young-van Vliet
 //'       recursive filtering. IEEE Trans. Signal Processing,
 //'       vol. 54, pp. 2365-2367, 2006.
-//'
-//' @param im an image
-//' @param sigma standard deviation of the Gaussian filter
-//' @param order the order of the filter 0,1,2,3
-//' @param axis  Axis along which the filter is computed. Can be <tt>{ 'x' | 'y' | 'z' | 'c' }</tt>.
-//' @param boundary_conditions Boundary conditions. Can be <tt>{ 0=dirichlet | 1=neumann }</tt>.
-//'       (Dirichlet boundary condition has a strange behavior)
 //' @examples
 //' vanvliet(boats,sigma=2,order=0) %>% plot("Zeroth-order Young-van Vliet along x")
 //' vanvliet(boats,sigma=2,order=1) %>% plot("First-order Young-van Vliet along x")
@@ -49,10 +58,16 @@ NumericVector deriche(NumericVector im,float sigma,int order=0,char axis = 'x',b
 //' vanvliet(boats,sigma=2,order=1,axis="y") %>% plot("Second-order Young-van Vliet along y")
 //' @export
 // [[Rcpp::export]]
-NumericVector vanvliet(NumericVector im,float sigma,int order=0,char axis = 'x',bool boundary_conditions=0)
+NumericVector vanvliet(NumericVector im,float sigma,int order=0,char axis = 'x',bool neumann=false)
 {
   CId img = as<CId >(im);
-  img.vanvliet(sigma,order,axis,boundary_conditions);
+  try{
+    img.vanvliet(sigma,order,axis,neumann);
+    }
+  catch(CImgException &e){
+    forward_exception_to_r(e);
+    
+  }
   return wrap(img);
 }
 
@@ -60,53 +75,73 @@ NumericVector vanvliet(NumericVector im,float sigma,int order=0,char axis = 'x',
 //' Blur image isotropically.
 //' @param im an image
 //' @param sigma Standard deviation of the blur.
-//' @param boundary_conditions Boundary conditions. Can be <tt>{ 0=dirichlet | 1=neumann }
-//' @param gaussian Use a Gaussian filter (default FALSE). Default: O-order Deriche filter.
-//' @seealso deriche
+//' @param neumann If true, use Neumann boundary conditions, Dirichlet otherwise  (default true, Neumann)
+//' @param gaussian Use a Gaussian filter (actually vanVliet-Young). Default: 0th-order Deriche filter.
+//' @seealso deriche,vanvliet
 //' @export
 //' @examples
 //' isoblur(boats,3) %>% plot(main="Isotropic blur, sigma=3")
 //' isoblur(boats,3) %>% plot(main="Isotropic blur, sigma=10")
 //' @seealso medianblur
 // [[Rcpp::export]]
-NumericVector isoblur(NumericVector im,float sigma,bool boundary_conditions=true,bool gaussian=false) {
+NumericVector isoblur(NumericVector im,float sigma,bool neumann=true,bool gaussian=false) {
   CId img = as< CId >(im);
-  img.blur(sigma,boundary_conditions,gaussian);
+  try{
+    img.blur(sigma,neumann,gaussian);
+    }
+  catch(CImgException &e){
+    forward_exception_to_r(e);
+    
+  }
   return wrap(img);
 }
 
 
 //' Blur image with the median filter.
 //'    
+//' In a window of size n x n centered at pixel (x,y), compute median pixel value over the window. Optionally, ignore values that are too far from the value at current pixel.  
+//'
 //' @param im an image
 //' @param n Size of the median filter.
-//' @param threshold Threshold used to discard pixels too far from the current pixel value in the median computation. Can be used for edge-preserving smoothing. 
+//' @param threshold Threshold used to discard pixels too far from the current pixel value in the median computation. Can be used for edge-preserving smoothing. Default 0 (include all pixels in window).
 //' @export
 //' @examples
-//' medianblur(boats,5,Inf) %>% plot(main="Median blur, 5 pixels")
-//' medianblur(boats,10,Inf) %>% plot(main="Median blur, 10 pixels")
+//' medianblur(boats,5) %>% plot(main="Median blur, 5 pixels")
+//' medianblur(boats,10) %>% plot(main="Median blur, 10 pixels")
 //' medianblur(boats,10,8) %>% plot(main="Median blur, 10 pixels, threshold = 8")
 //' @seealso isoblur, boxblur
 // [[Rcpp::export]]
-NumericVector medianblur(NumericVector im,int n, float threshold) {
+NumericVector medianblur(NumericVector im,int n, float threshold=0) {
   CId img = as<CId >(im);
-  img.blur_median(n,threshold);
+  try{
+    img.blur_median(n,threshold);
+    }
+  catch(CImgException &e){
+    forward_exception_to_r(e);
+    
+  }
   return wrap(img);
 }
 
 //' Blur image with a box filter (square window)
 //' @param im an image
 //' @param sigma Size of the box window.
-//' @param boundary_conditions Boundary conditions. FALSE: Dirichlet TRUE: Neumann.
+//' @param neumann If true, use Neumann boundary conditions, Dirichlet otherwise  (default true, Neumann)
 //' @seealso deriche(), vanvliet().
 //' @examples
 //' boxblur(boats,5) %>% plot(main="Dirichlet boundary")
 //' boxblur(boats,5,TRUE) %>% plot(main="Neumann boundary")
 //' @export
 // [[Rcpp::export]]
-NumericVector boxblur(NumericVector im,float sigma,bool boundary_conditions=true) {
+NumericVector boxblur(NumericVector im,float sigma,bool neumann=true) {
   CId img = as<CId >(im);
-  img.blur_box(sigma,boundary_conditions);
+  try{
+    img.blur_box(sigma,neumann);
+    }
+  catch(CImgException &e){
+    forward_exception_to_r(e);
+    
+  }
   return wrap(img);
 }
 
@@ -118,16 +153,22 @@ NumericVector boxblur(NumericVector im,float sigma,bool boundary_conditions=true
 //' @param im an image
 //' @param sx Size of the box window, along the X-axis.
 //' @param sy Size of the box window, along the Y-axis.
-//' @param boundary_conditions Boundary conditions. FALSE=Dirichlet, TRUE=Neumann.
+//' @param neumann If true, use Neumann boundary conditions, Dirichlet otherwise  (default true, Neumann)
 //' @seealso blur().
 //'
 //' @export
 //' @examples
 //' boxblur_xy(boats,20,5) %>% plot(main="Anisotropic blur")
 // [[Rcpp::export]]
-NumericVector boxblur_xy(NumericVector im,float sx,float sy,bool boundary_conditions=true) {
+NumericVector boxblur_xy(NumericVector im,float sx,float sy,bool neumann=true) {
   CId img = as<CId >(im);
-  img.blur_box(sx,sy,0,boundary_conditions);
+  try{
+    img.blur_box(sx,sy,0,neumann);
+    }
+  catch(CImgException &e){
+    forward_exception_to_r(e);
+    
+  }
   return wrap(img);
 }
 
@@ -137,9 +178,9 @@ NumericVector boxblur_xy(NumericVector im,float sx,float sy,bool boundary_condit
 //'  \eqn{res(x,y,z) = sum_{i,j,k} im(x + i,y + j,z + k)*flt(i,j,k).}
 //'
 //' @param im an image
-//' @param filter = the correlation kernel.
-//' @param boundary_conditions = the border condition type (0=zero, 1=dirichlet)
-//' @param normalise  = normalise filter (default FALSE)
+//' @param filter the correlation kernel.
+//' @param dirichlet boundary condition (FALSE=zero padding, TRUE=dirichlet). Default FALSE
+//' @param normalise normalise filter (default FALSE)
 //'      
 //'
 //' @export
@@ -151,10 +192,16 @@ NumericVector boxblur_xy(NumericVector im,float sx,float sy,bool boundary_condit
 //' correlate(boats,filter) %>% plot(main="Correlation")
 //' convolve(boats,filter) %>% plot(main="Convolution")
 // [[Rcpp::export]]
-NumericVector correlate(NumericVector im,NumericVector filter, bool boundary_conditions=true,bool normalise = false) {
+NumericVector correlate(NumericVector im,NumericVector filter, bool dirichlet=false,bool normalise = false) {
   CId img = as<CId >(im);
   CId flt = as<CId >(filter);
-  img.correlate(flt,boundary_conditions,normalise);
+  try{
+    img.correlate(flt,dirichlet,normalise);
+    }
+  catch(CImgException &e){
+    forward_exception_to_r(e);
+    
+  }
   return wrap(img);
 }
 
@@ -166,8 +213,8 @@ NumericVector correlate(NumericVector im,NumericVector filter, bool boundary_con
 //'
 //' @param im an image
 //' @param filter a filter (another image)
-//' @param boundary_conditions = the border condition type (0=zero, 1=dirichlet)
-//' @param normalise = normalise filter (default FALSE)
+//' @param dirichlet boundary condition (FALSE=zero padding, TRUE=dirichlet). Default FALSE
+//' @param normalise normalise filter (default FALSE)
 //' @export
 //' @seealso correlate
 //' @examples
@@ -178,36 +225,33 @@ NumericVector correlate(NumericVector im,NumericVector filter, bool boundary_con
 //' correlate(boats,filter) %>% plot(main="Correlation")
 //' convolve(boats,filter) %>% plot(main="Convolution")
 // [[Rcpp::export]]
-NumericVector convolve(NumericVector im,NumericVector filter, bool boundary_conditions=true,bool normalise = false) {
+NumericVector convolve(NumericVector im,NumericVector filter, bool dirichlet=false,bool normalise = false) {
   CId img = as<CId >(im);
   CId flt = as<CId >(filter);
-  img.convolve(flt,boundary_conditions,normalise);
+  try{
+    img.convolve(flt,dirichlet,normalise);
+    }
+  catch(CImgException &e){
+    forward_exception_to_r(e);
+    
+  }
   return wrap(img);
 }
 
 
-//' Sharpen image.
-//'
-//' @param im an image
-//' @param amplitude Sharpening amplitude
-//' @param sharpen_type Select sharpening method. Can be <tt>{ false=inverse diffusion | true=shock filters }</tt>.
-//' @param edge Edge threshold (shock filters only).
-//' @param alpha Gradient smoothness (shock filters only).
-//' @param sigma Tensor smoothness (shock filters only).
-//'
-//' @export
-//' @examples
-//' layout(t(1:2))
-//' plot(boats,main="Original")
-//' imsharpen(boats,150)  %>% plot(main="Sharpened")
-//' 
 // [[Rcpp::export]]
-NumericVector imsharpen(NumericVector im,float amplitude,
+NumericVector sharpen(NumericVector im,float amplitude,
 		bool sharpen_type = false,float edge = 1,
 		float alpha = 0,float sigma = 0)
  {
    CId img = as<CId >(im);
-   img.sharpen(amplitude,sharpen_type,edge,alpha,sigma);
+   try{
+     img.sharpen(amplitude,sharpen_type,edge,alpha,sigma);
+     }
+   catch(CImgException &e){
+     forward_exception_to_r(e);
+     
+   }
    return wrap(img);
 }
 
@@ -230,8 +274,17 @@ NumericVector imsharpen(NumericVector im,float amplitude,
 List get_gradient(NumericVector im,std::string axes = "",int scheme=3)
 {
    CId img = as<CId >(im);
-   CImgList<double> grad = img.get_gradient(axes.c_str(),scheme);
-   return wrap(grad);
+   try{
+     CImgList<double> grad = img.get_gradient(axes.c_str(),scheme);
+     return wrap(grad);
+     }
+   catch(CImgException &e){
+     forward_exception_to_r(e);
+     CImgList<double> empty;
+     return wrap(empty);
+   }
+   
+
 }
 
 //' Return image hessian.
@@ -241,10 +294,17 @@ List get_gradient(NumericVector im,std::string axes = "",int scheme=3)
 List get_hessian(NumericVector im,std::string axes = "")
 {
    CId img = as<CId >(im);
-   CImgList<double> hess = img.get_hessian(axes.c_str());
-   //CId out(im);
-   //out = img.get_hessian(axes.c_str());
-   return wrap(hess);
+
+   try{
+     CImgList<double> hess = img.get_hessian(axes.c_str());
+     return wrap(hess);
+     }
+   catch(CImgException &e){
+     forward_exception_to_r(e);
+     CImgList<double> empty;
+     return wrap(empty); //will never reach here
+   }
+   
 }
 
 //' Compute field of diffusion tensors for edge-preserving smoothing.
@@ -263,7 +323,13 @@ NumericVector diffusion_tensors(NumericVector im,
 				bool is_sqrt = false) 	
 {
   CId img = as<CId >(im);
-  img.diffusion_tensors(sharpness,anisotropy,alpha,sigma,is_sqrt);
+  try{
+    img.diffusion_tensors(sharpness,anisotropy,alpha,sigma,is_sqrt);
+    }
+  catch(CImgException &e){
+    forward_exception_to_r(e);
+    
+  }
   return wrap(img);
 }
 
@@ -283,7 +349,13 @@ NumericVector diffusion_tensors(NumericVector im,
 // [[Rcpp::export]]
 NumericVector haar(NumericVector im,bool inverse=false,int nb_scales=1) {
   CId img = as<CId >(im);
-  img.haar(inverse,nb_scales);
+  try{
+    img.haar(inverse,nb_scales);
+    }
+  catch(CImgException &e){
+    forward_exception_to_r(e);
+    
+  }
   return wrap(img);
 }
 
@@ -291,7 +363,13 @@ NumericVector haar(NumericVector im,bool inverse=false,int nb_scales=1) {
 List FFT_complex(NumericVector real,NumericVector imag,bool inverse=false,int nb_threads=0) {
   CId rl = as<CId >(real);
   CId img = as<CId >(imag);
-  rl.FFT(rl,img,inverse,nb_threads);
+  try{
+    rl.FFT(rl,img,inverse,nb_threads);
+    }
+  catch(CImgException &e){
+    forward_exception_to_r(e);
+    
+  }
   return List::create(_["real"] = wrap(rl),_["imag"] = wrap(img));
 }
 
@@ -299,7 +377,13 @@ List FFT_complex(NumericVector real,NumericVector imag,bool inverse=false,int nb
 List FFT_realim(NumericVector real,bool inverse=false,int nb_threads=0) {
   CId rl = as<CId >(real);
   CId im(rl,"xyzc",0);
-  rl.FFT(rl,im,inverse,nb_threads);
+  try{
+    rl.FFT(rl,im,inverse,nb_threads);
+    }
+  catch(CImgException &e){
+    forward_exception_to_r(e);
+    
+  }
   return List::create(_["real"] = wrap(rl),_["imag"] = wrap(im));
 }
 
@@ -307,7 +391,13 @@ List FFT_realim(NumericVector real,bool inverse=false,int nb_threads=0) {
 NumericVector FFT_realout(NumericVector real,NumericVector imag,bool inverse=false,int nb_threads=0) {
   CId rl = as<CId >(real);
   CId img = as<CId >(imag);
-  rl.FFT(rl,img,inverse,nb_threads);
+  try{
+    rl.FFT(rl,img,inverse,nb_threads);
+    }
+  catch(CImgException &e){
+    forward_exception_to_r(e);
+    
+  }
   return wrap(rl);
 }
 
@@ -328,12 +418,21 @@ NumericVector displacement(NumericVector sourceIm,NumericVector destIm,float smo
    CId src = as<CId >(sourceIm);
    CId dst = as<CId >(destIm);
    CId out(src,false);
-   out.displacement(dst,smoothness,precision,nb_scales,iteration_max,is_backward);
+   try{
+     out.displacement(dst,smoothness,precision,nb_scales,iteration_max,is_backward);
+     }
+   catch(CImgException &e){
+     forward_exception_to_r(e);
+     
+   }
    return wrap(out);
 }
 
 
 //' Blur image anisotropically, in an edge-preserving way.
+//' 
+//' Standard blurring removes noise from images, but tends to smooth away edges in the process. This anisotropic filter preserves edges better. 
+//' 
 //' @param im an image
 //' @param amplitude Amplitude of the smoothing.
 //' @param sharpness Sharpness.
@@ -345,7 +444,7 @@ NumericVector displacement(NumericVector sourceIm,NumericVector destIm,float smo
 //' @param gauss_prec Precision of the diffusion process.
 //' @param interpolation_type Interpolation scheme.
 //'  Can be 0=nearest-neighbor | 1=linear | 2=Runge-Kutta 
-//' @param is_fast_approx Determines if a fast approximation of the gaussian function is used or not.
+//' @param fast_approx If true, use fast approximation (default TRUE)
 //' @export
 //' @examples
 //' im <- load.image(system.file('extdata/Leonardo_Birds.jpg',package='imager'))
@@ -354,9 +453,15 @@ NumericVector displacement(NumericVector sourceIm,NumericVector destIm,float smo
 // [[Rcpp::export]]
 NumericVector blur_anisotropic(NumericVector im, float amplitude,  float sharpness=0.7,  float anisotropy=0.6,float alpha=0.6,  float sigma=1.1,  float dl=0.8,  float da=30,
                                float gauss_prec=2,  unsigned int interpolation_type=0,
-                               bool is_fast_approx=true) {
+                               bool fast_approx=true) {
   CId img = as<CId >(im);
-  img.blur_anisotropic(amplitude,sharpness,anisotropy,alpha,sigma,dl,da,gauss_prec,interpolation_type,is_fast_approx);
+  try{
+    img.blur_anisotropic(amplitude,sharpness,anisotropy,alpha,sigma,dl,da,gauss_prec,interpolation_type,fast_approx);
+    }
+  catch(CImgException &e){
+    forward_exception_to_r(e);
+    
+  }
   return wrap(img);
 }
 
@@ -405,3 +510,5 @@ NumericVector periodic_part(NumericVector im)
   img -= realpart;
   return wrap(img);
 }
+
+

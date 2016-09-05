@@ -53,9 +53,15 @@ center.stencil <- function(stencil,...)
 ##' @export
 get.stencil <- function(im,stencil,...)
     {
-        d <- center.stencil(stencil,...) %>% pixel.index(im,.)
+        d <- center.stencil(stencil,...) %>% index.coord(im,.)
         im[d]
     }
+
+check.dim <- function(im,coord,d)
+{
+    if (is.character(d)) d <- index.coords[[d]]
+    coord %inr% c(1,dim(im)[d])
+}
 
 check.x <- function(im,x)
     {
@@ -131,3 +137,4 @@ stencil.cross <- function(z=FALSE,cc=FALSE,origin=FALSE)
         if (origin) v <- rbind(0,v)
         v
     }
+

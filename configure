@@ -584,6 +584,14 @@ PACKAGE_URL=
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 CXXFLAGS
+HAVE_FFTW
+HAVE_OPENMP
+OPENMP_CFLAGS
+FFTW_LIBS
+FFTW_CFLAGS
+PKG_CONFIG_LIBDIR
+PKG_CONFIG_PATH
+PKG_CONFIG
 CPP
 OBJEXT
 EXEEXT
@@ -635,6 +643,7 @@ ac_subst_files=''
 ac_user_opts='
 enable_option_checking
 with_x
+enable_openmp
 '
       ac_precious_vars='build_alias
 host_alias
@@ -645,7 +654,12 @@ CFLAGS
 LDFLAGS
 LIBS
 CPPFLAGS
-CPP'
+CPP
+PKG_CONFIG
+PKG_CONFIG_PATH
+PKG_CONFIG_LIBDIR
+FFTW_CFLAGS
+FFTW_LIBS'
 
 
 # Initialize some variables set by options.
@@ -1253,6 +1267,12 @@ if test -n "$ac_init_help"; then
 
   cat <<\_ACEOF
 
+Optional Features:
+  --disable-option-checking  ignore unrecognized --enable/--with options
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --disable-openmp        do not use OpenMP
+
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
@@ -1268,6 +1288,13 @@ Some influential environment variables:
   CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
               you have headers in a nonstandard directory <include dir>
   CPP         C preprocessor
+  PKG_CONFIG  path to pkg-config utility
+  PKG_CONFIG_PATH
+              directories to add to pkg-config's search path
+  PKG_CONFIG_LIBDIR
+              path overriding pkg-config's built-in search path
+  FFTW_CFLAGS C compiler flags for FFTW, overriding pkg-config
+  FFTW_LIBS   linker flags for FFTW, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -1821,6 +1848,16 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
+
+: ${R_HOME=`R RHOME`}
+if test -z "${R_HOME}"; then
+  echo "could not determine R_HOME"
+  exit 1
+fi
+
+RBIN="${R_HOME}/bin/R"
+
+## OS checking borrowed from rgl package by Duncan Murdoch
 ##AC_CONFIG_AUX_DIR(src/build/autoconf)
 if test `uname` = "Darwin" ; then
   darwin="yes"
@@ -2976,6 +3013,330 @@ fi
 if test x$L_LIB != x; then
   LIBS="${L_LIB} ${LIBS}"
 fi
+
+
+
+# from mwaved package by jrwishart
+# Check if the FFTW Library exists on the system
+{ $as_echo "$as_me:${as_lineno-$LINENO}: Checking if FFTW3 library is available using pkg-config" >&5
+$as_echo "$as_me: Checking if FFTW3 library is available using pkg-config" >&6;}
+
+## --- FFTW 3 ----------------------------------------------------------------
+
+
+
+
+
+
+
+if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+	if test -n "$ac_tool_prefix"; then
+  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
+set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_PKG_CONFIG+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+if test -n "$PKG_CONFIG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
+$as_echo "$PKG_CONFIG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+fi
+if test -z "$ac_cv_path_PKG_CONFIG"; then
+  ac_pt_PKG_CONFIG=$PKG_CONFIG
+  # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_ac_pt_PKG_CONFIG+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $ac_pt_PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
+if test -n "$ac_pt_PKG_CONFIG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_pt_PKG_CONFIG" >&5
+$as_echo "$ac_pt_PKG_CONFIG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+  if test "x$ac_pt_PKG_CONFIG" = x; then
+    PKG_CONFIG=""
+  else
+    case $cross_compiling:$ac_tool_warned in
+yes:)
+{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
+$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
+ac_tool_warned=yes ;;
+esac
+    PKG_CONFIG=$ac_pt_PKG_CONFIG
+  fi
+else
+  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
+fi
+
+fi
+if test -n "$PKG_CONFIG"; then
+	_pkg_min_version=0.9.0
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking pkg-config is at least version $_pkg_min_version" >&5
+$as_echo_n "checking pkg-config is at least version $_pkg_min_version... " >&6; }
+	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+		PKG_CONFIG=""
+	fi
+fi
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for FFTW" >&5
+$as_echo_n "checking for FFTW... " >&6; }
+
+if test -n "$FFTW_CFLAGS"; then
+    pkg_cv_FFTW_CFLAGS="$FFTW_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"fftw3\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "fftw3") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_FFTW_CFLAGS=`$PKG_CONFIG --cflags "fftw3" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$FFTW_LIBS"; then
+    pkg_cv_FFTW_LIBS="$FFTW_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"fftw3\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "fftw3") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_FFTW_LIBS=`$PKG_CONFIG --libs "fftw3" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        FFTW_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "fftw3" 2>&1`
+        else
+	        FFTW_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "fftw3" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$FFTW_PKG_ERRORS" >&5
+
+	HAVE_FFTW=FALSE
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	HAVE_FFTW=FALSE
+else
+	FFTW_CFLAGS=$pkg_cv_FFTW_CFLAGS
+	FFTW_LIBS=$pkg_cv_FFTW_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	HAVE_FFTW=TRUE
+fi
+
+if test "$HAVE_FFTW" == TRUE
+then
+	HAVE_FFTW='-Dcimg_use_fftw3'
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: FFTW3 found!" >&5
+$as_echo "FFTW3 found!" >&6; }
+else
+  # Return message that package requires FFTW3 library
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: FFTW library not found, please install fftw3 for better FFT support." >&5
+$as_echo "FFTW library not found, please install fftw3 for better FFT support." >&6; }
+fi
+
+
+
+# Check for OpenMP (from randomForests package)
+
+  OPENMP_CFLAGS=
+  # Check whether --enable-openmp was given.
+if test "${enable_openmp+set}" = set; then :
+  enableval=$enable_openmp;
+fi
+
+  if test "$enable_openmp" != no; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $CC option to support OpenMP" >&5
+$as_echo_n "checking for $CC option to support OpenMP... " >&6; }
+if ${ac_cv_prog_c_openmp+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#ifndef _OPENMP
+ choke me
+#endif
+#include <omp.h>
+int main () { return omp_get_num_threads (); }
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_prog_c_openmp='none needed'
+else
+  ac_cv_prog_c_openmp='unsupported'
+	  	  	  	  	  	  	                                	  	  	  	  	  	  for ac_option in -fopenmp -xopenmp -openmp -mp -omp -qsmp=omp -homp \
+                           -Popenmp --openmp; do
+	    ac_save_CFLAGS=$CFLAGS
+	    CFLAGS="$CFLAGS $ac_option"
+	    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#ifndef _OPENMP
+ choke me
+#endif
+#include <omp.h>
+int main () { return omp_get_num_threads (); }
+
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_prog_c_openmp=$ac_option
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+	    CFLAGS=$ac_save_CFLAGS
+	    if test "$ac_cv_prog_c_openmp" != unsupported; then
+	      break
+	    fi
+	  done
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_prog_c_openmp" >&5
+$as_echo "$ac_cv_prog_c_openmp" >&6; }
+    case $ac_cv_prog_c_openmp in #(
+      "none needed" | unsupported)
+	;; #(
+      *)
+	OPENMP_CFLAGS=$ac_cv_prog_c_openmp ;;
+    esac
+  fi
+
+
+
+RBIN="${R_HOME}/bin/R"
+
+# Since some systems have broken OMP libraries we also check that the
+# actual package will work.
+ac_pkg_openmp=no
+if test -n "${OPENMP_CFLAGS}"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether OpenMP will work in a package" >&5
+$as_echo_n "checking whether OpenMP will work in a package... " >&6; }
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <omp.h>
+int
+main ()
+{
+ return omp_get_num_threads ();
+  ;
+  return 0;
+}
+_ACEOF
+  "$RBIN" CMD SHLIB conftest.c 1>&5 2>&5 && "$RBIN" --vanilla -q -e "dyn.load(paste('conftest',.Platform\$dynlib.ext,sep=''))" 1>&5 2>&5 && ac_pkg_openmp=yes
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ac_pkg_openmp}" >&5
+$as_echo "${ac_pkg_openmp}" >&6; }
+fi
+
+# If ${ac_pkg_openmp} = "yes" then we have OMP, otherwise it will be "no".
+if test "${ac_pkg_openmp}" = no; then
+  OPENMP_CFLAGS=''
+  HAVE_OPENMP=''
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: OpenMP does NOT appear to be supported on this system." >&5
+$as_echo "$as_me: WARNING: OpenMP does NOT appear to be supported on this system." >&2;}
+else
+  HAVE_OPENMP='-Dcimg_use_openmp'
+fi
+
+
+
+
+
+# Now substitute these variables in src/Makevars.in to create src/Makevars
+
+
+
 
 
 ## --- Output ----------------------------------------------------------------

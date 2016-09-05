@@ -24,6 +24,35 @@ mean(boats)
 sd(boats)
 
 ## ------------------------------------------------------------------------
+layout(t(1:2))
+plot(boats)
+plot(boats/2)
+
+## ------------------------------------------------------------------------
+layout(t(1:2))
+boats.s <- boats/255 #scale to 0..1
+plot(boats.s,rescale=FALSE)
+plot(boats.s/2,rescale=FALSE)
+
+## ------------------------------------------------------------------------
+rgb(0,1,0)
+
+## ------------------------------------------------------------------------
+cscale <- function(r,g,b) rgb(g,r,b)
+plot(boats.s,colourscale=cscale,rescale=FALSE)
+
+## ------------------------------------------------------------------------
+#Map grayscale values to blue
+cscale <- function(v) rgb(0,0,v)
+grayscale(boats) %>% plot(colourscale=cscale,rescale=FALSE)
+
+## ------------------------------------------------------------------------
+cscale <- scales::gradient_n_pal(c("red","purple","lightblue"),c(0,.5,1))
+#cscale is now a function returning colour codes
+cscale(0)
+grayscale(boats) %>% plot(colourscale=cscale,rescale=FALSE)
+
+## ------------------------------------------------------------------------
 fpath <- system.file('extdata/parrots.png',package='imager')
 
 ## ------------------------------------------------------------------------
@@ -83,10 +112,10 @@ iiply(boats,"c",hist.eq)
 ## ----fig.width=4, fig.height=2.3-----------------------------------------
 iiply(boats,"c",hist.eq) %>% as.data.frame %>% ggplot(aes(value))+geom_histogram(bins=30)+facet_wrap(~ cc)
 
-## ------------------------------------------------------------------------
-layout(t(1:2))
-imgradient(boats.g,"x") %>% plot(main="Gradient along x")
-imgradient(boats.g,"y") %>% plot(main="Gradient along y")
+## ----fig.width=7---------------------------------------------------------
+gr <- imgradient(boats.g,"xy")
+gr
+plot(gr,layout="row")
 
 ## ------------------------------------------------------------------------
 dx <- imgradient(boats.g,"x")
@@ -230,9 +259,9 @@ scales <- seq(2,20,l=10)
 d.max <- llply(scales,function(scale) hessdet(hub,scale)) %>% parmax
 plot(d.max,main="Point-wise maximum across scales")
 
-## ------------------------------------------------------------------------
+## ----fig.height=5,fig.width=5--------------------------------------------
 i.max <- llply(scales,function(scale) hessdet(hub,scale)) %>% which.parmax
-plot(i.max,main="Index of the point-wise maximum across scales")
+plot(i.max,main="Index of the point-wise maximum \n across scales")
 
 ## ----fig.height=7,fig.width=8--------------------------------------------
 #Get a data.frame of labelled regions

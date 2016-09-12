@@ -1,7 +1,7 @@
 Package: imager
 Type: Package
 Title: Image Processing Library Based on 'CImg'
-Version: 0.30
+Version: 0.31
 Date: 2016-09-02
 Author: Simon Barthelme [aut, cre],
     Antoine Cecchi [ctb]
@@ -27,6 +27,6 @@ Suggests: knitr, rmarkdown,ggplot2,dplyr,scales,
         testthat,OpenMPController
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2016-09-05 09:42:31 UTC; barthesi
+Packaged: 2016-09-12 09:17:49 UTC; barthesi
 Repository: CRAN
-Date/Publication: 2016-09-05 16:38:54
+Date/Publication: 2016-09-12 15:08:55

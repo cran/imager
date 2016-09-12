@@ -1,9 +1,9 @@
-5e357fbbd74b87a8c2317702ae879bd2 *DESCRIPTION
+a51eae0d379d97f655b9b33763bd15ce *DESCRIPTION
 554340b90a8ee67e17eba6e376cb026d *NAMESPACE
-71295ac43f9ea99aa0cdd5f61258cb1b *NEWS
-51e6440144ed92e255a23ee34e80e00d *NEWS.md
-83dc30df973dea6bb39c9821c932e3e4 *R/RcppExports.R
-c64c55033594ffef680cc9ba99e56172 *R/cimg_class.R
+fe19003eca9be2a7b43ec5cf6573ac12 *NEWS
+47b6c07d21e3eae8879d16fe15c0ccb3 *NEWS.md
+c7de0dcb952e4b038edff92b9e8e72f1 *R/RcppExports.R
+d54e97f8b459e45347074bfaf0553af6 *R/cimg_class.R
 25c94c4c70b8951b0a97cca02498f681 *R/conversions.R
 8efc2ef0671459751074af2ae73f771c *R/coordinates.R
 08aa2b2c82bc1739bc3a722bc29fe81e *R/datasets.R
@@ -11,7 +11,7 @@ c64c55033594ffef680cc9ba99e56172 *R/cimg_class.R
 7ef8eaa4e438ee9221a325a4d91f0cb7 *R/filtering.R
 2b18003058765e32a838362592e30426 *R/imgen.R
 2bc56088619732af594222ab30180318 *R/imglist.R
-276878b9084af260fb4685b8ec8f0aa5 *R/inline.R
+e03c8b98c97432d003c35b3096436da5 *R/inline.R
 af9f6357fae77dc7cc4bc817b2c34317 *R/interactive.R
 63a59b0532d127d2f8bf98c90e7dd4fb *R/interpolation.R
 89fc01ea7006185e62170a228f8ab0f9 *R/splitcombine.R
@@ -21,8 +21,8 @@ a5dba5403781ab2e12ff7bc64ade2887 *R/utils.R
 2a0e8911b35245f2bf00be4b4b804f5d *TODO
 b24ea0778448cb1cb3063360b025cd27 *build/vignette.rds
 087f1e3baae5e26d67d002135090e6d9 *cleanup
-a928b43fd26f766b6b13d8391f0c35ba *configure
-529b1447d83fedd561600287a0dee57b *configure.ac
+295222e41bb0b596e978d0ef8a29f560 *configure
+7c0e66d9b405f7b57c1c79493bd410ce *configure.ac
 7c1041a5b516a4b95e9be00fff37b22c *data/boats.RData
 a4ce859df4a9964195582e129c217fc0 *inst/doc/gettingstarted.R
 3da43cf269c72a325e21a2be7f0b8263 *inst/doc/gettingstarted.Rmd
@@ -126,7 +126,7 @@ cf5fbba8e677cef323988998030d8738 *man/pad.Rd
 6dbde7ffd88c734269f41b23cb08da55 *man/permute_axes.Rd
 53222015839baeb00429d68a5ae46397 *man/pixel.grid.Rd
 b229ab55a0f0c79449fdfb52972b30b1 *man/play.Rd
-e5864b1324e0979f16a2be03658fa856 *man/plot.cimg.Rd
+80f0898708a5a640f330f4c97f1c0de7 *man/plot.cimg.Rd
 124ae0400187782ee709e7fb5887d822 *man/plot.imlist.Rd
 a8a94a1c9620e63b9642380f30cc19d3 *man/renorm.Rd
 4c863e5735f176164389b72c85cba7ce *man/resize.Rd
@@ -142,7 +142,7 @@ a680472a2ef1eda48c1a9b90488543b5 *man/vanvliet.Rd
 429b25a38f282c30d5d178ad9efc3b1f *man/watershed.Rd
 ab8f97aa6f15c67d1029e3eb5091853d *src/Makevars.in
 5ecf9e8577f31e535dee1c371e75a35f *src/Makevars.win
-dac3d35bc25448987aab4bc477ca5cf1 *src/RcppExports.cpp
+78aff3a88c55983a329723eb1174a4ca *src/RcppExports.cpp
 8193f4fecd751c7d310d23b0faacd303 *src/colourspace.cpp
 ce982f60f36d6b31acf7a6b1abe4d529 *src/coordinates.cpp
 d7885219a3fa9d332e473a37a21fcda2 *src/display.cpp

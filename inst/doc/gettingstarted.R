@@ -1,6 +1,6 @@
 ## ----init,echo=FALSE-----------------------------------------------------
 knitr::opts_chunk$set(warning=FALSE, message=FALSE, cache=FALSE, 
-               comment=NA, verbose=TRUE, fig.width=4, fig.height=4,dev='jpeg')
+               comment=NA, verbose=TRUE, fig.width=4, fig.height=4,dev='jpeg',dev.args=list(quality=50))
 
 ## ----fig.width=4, fig.height=6,message=FALSE,dev='jpeg'------------------
 library(imager)
@@ -30,16 +30,15 @@ plot(boats/2)
 
 ## ------------------------------------------------------------------------
 layout(t(1:2))
-boats.s <- boats/255 #scale to 0..1
-plot(boats.s,rescale=FALSE)
-plot(boats.s/2,rescale=FALSE)
+plot(boats,rescale=FALSE)
+plot(boats/2,rescale=FALSE)
 
 ## ------------------------------------------------------------------------
 rgb(0,1,0)
 
 ## ------------------------------------------------------------------------
 cscale <- function(r,g,b) rgb(g,r,b)
-plot(boats.s,colourscale=cscale,rescale=FALSE)
+plot(boats,colourscale=cscale,rescale=FALSE)
 
 ## ------------------------------------------------------------------------
 #Map grayscale values to blue
@@ -67,14 +66,14 @@ R(boats) %>% hist(main="Red channel values in boats picture")
 #Equivalently:
 #channel(boats,1) %>% hist(main="Red channel values in boats picture")
 
-## ----fig.width=4, fig.height=2.2-----------------------------------------
+## ----fig.width=5, fig.height=3-------------------------------------------
 library(ggplot2)
 bdf <- as.data.frame(boats)
 head(bdf,3)
 bdf <- plyr::mutate(bdf,channel=factor(cc,labels=c('R','G','B')))
 ggplot(bdf,aes(value,col=channel))+geom_histogram(bins=30)+facet_wrap(~ channel)
 
-## ----fig.width=4, fig.height=2.2-----------------------------------------
+## ----fig.width=5, fig.height=3-------------------------------------------
 x <- rnorm(100)
 layout(t(1:2))
 hist(x,main="Histogram of x")
@@ -82,12 +81,12 @@ f <- ecdf(x)
 hist(f(x),main="Histogram of ecdf(x)")
 
 
-## ----fig.width=4, fig.height=2.2-----------------------------------------
+## ----fig.width=4, fig.height=3-------------------------------------------
 boats.g <- grayscale(boats)
 f <- ecdf(boats.g)
 plot(f,main="Empirical CDF of luminance values")
 
-## ----fig.width=4, fig.height=2.2-----------------------------------------
+## ----fig.width=4, fig.height=3-------------------------------------------
 f(boats.g) %>% hist(main="Transformed luminance values")
 
 ## ------------------------------------------------------------------------
@@ -109,7 +108,7 @@ imappend(cn.eq,"c") %>% plot(main="All channels equalised") #recombine and plot
 ## ------------------------------------------------------------------------
 iiply(boats,"c",hist.eq) 
 
-## ----fig.width=4, fig.height=2.3-----------------------------------------
+## ----fig.width=5, fig.height=3-------------------------------------------
 iiply(boats,"c",hist.eq) %>% as.data.frame %>% ggplot(aes(value))+geom_histogram(bins=30)+facet_wrap(~ cc)
 
 ## ----fig.width=7---------------------------------------------------------
@@ -131,10 +130,6 @@ l <- imgradient(boats.g,"xy")
 str(l)
 
 ## ------------------------------------------------------------------------
-enorm(list(3,2))
-sqrt(3^2+2^2)
-
-## ------------------------------------------------------------------------
 df <- grayscale(boats) %>% as.data.frame
 p <- ggplot(df,aes(x,y))+geom_raster(aes(fill=value))
 p
@@ -149,7 +144,7 @@ p
 ## ------------------------------------------------------------------------
 p+scale_fill_gradient(low="black",high="white")
 
-## ------------------------------------------------------------------------
+## ----fig.width=7---------------------------------------------------------
 df <- as.data.frame(boats) 
 p <- ggplot(df,aes(x,y))+geom_raster(aes(fill=value))+facet_wrap(~ cc)
 p+scale_y_reverse()
@@ -158,7 +153,7 @@ p+scale_y_reverse()
 as.data.frame(boats,wide="c") %>% head
 
 ## ------------------------------------------------------------------------
-df <- as.data.frame(boats,wide="c") %>% mutate(rgb.val=rgb(c.1/255,c.2/255,c.3/255))
+df <- as.data.frame(boats,wide="c") %>% mutate(rgb.val=rgb(c.1,c.2,c.3))
 head(df,3)
 
 ## ------------------------------------------------------------------------

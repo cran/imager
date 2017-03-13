@@ -1,8 +1,8 @@
 Package: imager
 Type: Package
 Title: Image Processing Library Based on 'CImg'
-Version: 0.40
-Date: 2017-03-08
+Version: 0.40.1
+Date: 2017-03-13
 Author: Simon Barthelme [aut, cre]
 Authors@R: person("Simon","Barthelme",email="simon.barthelme@gipsa-lab.fr",role=c("aut","cre"))
 Maintainer: Simon Barthelme <simon.barthelme@gipsa-lab.fr>
@@ -27,6 +27,6 @@ Suggests: knitr, rmarkdown,ggplot2,dplyr,scales,
         testthat,OpenMPController,raster
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2017-03-09 16:56:50 UTC; simon
+Packaged: 2017-03-13 09:33:44 UTC; simon
 Repository: CRAN
-Date/Publication: 2017-03-10 08:50:15
+Date/Publication: 2017-03-13 16:49:18

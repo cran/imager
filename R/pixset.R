@@ -263,7 +263,8 @@ grow <- function(px,x,y=x,z=x,boundary=TRUE)
 ##' Cleaning up can be achieved by shrinking the set (removing speckle), followed by growing it back up. Filling in can be achieved by growing the set (removing holes), and shrinking it again. 
 ##' @param px a pixset
 ##' @param ... parameters that define the structuring element to use, passed on to "grow" and "shrink"
-##' @return a pixset
+##' @examples
+##  #A pixset
 ##' im <- load.example("birds") %>% grayscale
 ##' sub <- imsub(-im,y> 380) %>% threshold("85%")
 ##' plot(sub)
@@ -426,7 +427,14 @@ px.right <- function(im,n=1)
 #' @export
 px.borders <- function(im,n=1)
 {
-    (px.left(im,n) | px.right(im,n)) | (px.top(im,n) | px.bottom(im,n))
+    if (all(dim(im)[1:2] > 1))
+        {
+            (px.left(im,n) | px.right(im,n)) | (px.top(im,n) | px.bottom(im,n))
+        }
+    else
+    {
+        (px.left(im,n) | px.right(im,n))
+    }
 }
 
 #' @describeIn common_pixsets all pixels in image
@@ -654,7 +662,8 @@ display.pixset <- function(x,...) display(as.cimg(x),...)
 ##' Compute the bounding box of a pixset 
 ##'
 ##' This function returns the bounding box of a pixset as another pixset. If the image has more than one frame, a bounding cube is returned.
-##' If the image has several colour channels, the bounding box is computed separately in each channel. 
+##' If the image has several colour channels, the bounding box is computed separately in each channel.
+##' crop.bbox crops an image using the bounding box of a pixset. 
 ##' @param px a pixset
 ##' @return a pixset object
 ##' @examples
@@ -663,6 +672,7 @@ display.pixset <- function(x,...) display(as.cimg(x),...)
 ##' plot(im)
 ##' highlight(bbox(px))
 ##' highlight(px,col="green")
+##' crop.bbox(im,px) %>% plot
 ##' @author Simon Barthelme
 ##' @export
 bbox <- function(px)
@@ -671,7 +681,7 @@ bbox <- function(px)
     #Compute separately across colour channels 
     if (spectrum(px) > 1)
     {
-        imsplit(px,"c") %>% bbox %>% imappend("c")
+        imsplit(px,"c") %>% map(bbox) %>% imappend("c")
     }
     
     if (sum(px) == 0)
@@ -690,6 +700,41 @@ bbox <- function(px)
             }
         }
 }
+
+
+
+#' @describeIn bbox crop image using the bounding box of pixset px
+#' @param im an image
+#' @export
+crop.bbox <- function(im,px)
+{
+    w <- where(px)
+    
+    if (spectrum(px) > 1)
+    {
+        px <- imsplit(px,"c") %>% parany
+    }
+    
+    if (sum(px) == 0)
+    {
+        im
+    }
+    else
+        {
+            if (depth(px)==1)
+            {
+                imsub(im,x %inr% range(w$x),y %inr% range(w$y))
+            }
+            else
+            {
+                imsub(im,x %inr% range(w$x),y %inr% range(w$y),z %inr% range(w$z))
+            }
+        }
+}
+
+
+
+
 ##' A pixset for NA values
 ##'
 ##' A pixset containing all NA pixels

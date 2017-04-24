@@ -35,6 +35,5 @@ plot(boats,main="Original")
 plot(boats.new,main="New sails")
 }
 \seealso{
-selectSimilar
+px.flood
 }
-

@@ -1,6 +1,6 @@
 ## ----init,echo=FALSE-----------------------------------------------------
 knitr::opts_chunk$set(warning=FALSE, message=FALSE, cache=FALSE, 
-               comment=NA, verbose=TRUE, fig.width=4, fig.height=4,dev='jpeg',dev.args=list(quality=50))
+               comment=NA, verbose=TRUE, fig.width=5, fig.height=5,dev='jpeg',dev.args=list(quality=50))
 
 ## ----fig.width=4, fig.height=6,message=FALSE,dev='jpeg'------------------
 library(imager)
@@ -68,9 +68,10 @@ R(boats) %>% hist(main="Red channel values in boats picture")
 
 ## ----fig.width=5, fig.height=3-------------------------------------------
 library(ggplot2)
+library(dplyr)
 bdf <- as.data.frame(boats)
 head(bdf,3)
-bdf <- plyr::mutate(bdf,channel=factor(cc,labels=c('R','G','B')))
+bdf <- mutate(bdf,channel=factor(cc,labels=c('R','G','B')))
 ggplot(bdf,aes(value,col=channel))+geom_histogram(bins=30)+facet_wrap(~ channel)
 
 ## ----fig.width=5, fig.height=3-------------------------------------------
@@ -102,14 +103,24 @@ hist.eq <- function(im) as.cimg(ecdf(im)(im),dim=dim(im))
 #Split across colour channels, 
 cn <- imsplit(boats,"c")
 cn #we now have a list of images
-cn.eq <- llply(cn,hist.eq) #run hist.eq on each
+cn.eq <- map_il(cn,hist.eq) #run hist.eq on each
 imappend(cn.eq,"c") %>% plot(main="All channels equalised") #recombine and plot
 
 ## ------------------------------------------------------------------------
-iiply(boats,"c",hist.eq) 
+library(purrr)
+#Convert to HSV, reduce saturation, convert back
+RGBtoHSV(boats) %>% imsplit("c") %>%
+    modify_at(2,~ . / 2) %>% imappend("c") %>%
+    HSVtoRGB %>% plot(rescale=FALSE)
+#Turn into a function
+desat <- function(im) RGBtoHSV(im) %>% imsplit("c") %>%
+    modify_at(2,~ . / 2) %>% imappend("c") %>%
+    HSVtoRGB
 
-## ----fig.width=5, fig.height=3-------------------------------------------
-iiply(boats,"c",hist.eq) %>% as.data.frame %>% ggplot(aes(value))+geom_histogram(bins=30)+facet_wrap(~ cc)
+#Split image into 3 blocks, reduce saturation in middle block, recombine
+im <- load.example("parrots")
+imsplit(im,"x",3) %>% modify_at(2,desat) %>%
+    imappend("x") %>% plot(rescale=FALSE)
 
 ## ----fig.width=7---------------------------------------------------------
 gr <- imgradient(boats.g,"xy")
@@ -198,7 +209,6 @@ head(df,3)
 unique(df$value) #10 regions
 
 ## ------------------------------------------------------------------------
-centers <- ddply(df,.(value),summarise,mx=mean(x),my=mean(y))
 centers <- dplyr::group_by(df,value) %>% dplyr::summarise(mx=mean(x),my=mean(y))
 
 ## ------------------------------------------------------------------------
@@ -243,19 +253,21 @@ hessdet <- function(im,scale=1) isoblur(im,scale) %>% imhessian %$% { scale^2*(x
 plot(hessdet(hub,1),main="Determinant of the Hessian at scale 1")
 
 ## ----fig.width=7---------------------------------------------------------
+library(purrr)
+
 #Get a data.frame with results at scale 2, 3 and 4
-dat <- ldply(c(2,3,4),function(scale) hessdet(hub,scale) %>% as.data.frame %>% mutate(scale=scale))
+dat <- map_df(2:4,function(scale) hessdet(hub,scale) %>% as.data.frame %>% mutate(scale=scale))
 p <- ggplot(dat,aes(x,y))+geom_raster(aes(fill=value))+facet_wrap(~ scale)
 p+scale_x_continuous(expand=c(0,0))+scale_y_continuous(expand=c(0,0),trans=scales::reverse_trans())
 
 ## ------------------------------------------------------------------------
 scales <- seq(2,20,l=10)
 
-d.max <- llply(scales,function(scale) hessdet(hub,scale)) %>% parmax
+d.max <- map_il(scales,function(scale) hessdet(hub,scale)) %>% parmax
 plot(d.max,main="Point-wise maximum across scales")
 
 ## ----fig.height=5,fig.width=5--------------------------------------------
-i.max <- llply(scales,function(scale) hessdet(hub,scale)) %>% which.parmax
+i.max <- map_il(scales,function(scale) hessdet(hub,scale)) %>% which.parmax
 plot(i.max,main="Index of the point-wise maximum \n across scales")
 
 ## ----fig.height=7,fig.width=8--------------------------------------------

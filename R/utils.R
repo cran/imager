@@ -76,15 +76,15 @@ FFT <- function(im.real,im.imag,inverse=FALSE)
 ##' @name resize_uniform
 ##' @param im an image
 ##' @param scale a scale factor
-##' @param interpolation interpolation method to use (see doc for resize). Default 3, linear.
+##' @param interpolation interpolation method to use (see doc for resize). Default 3, linear. Set to 5 for cubic, 6 for Lanczos (higher quality).  
 ##' @return an image
 ##' @references
-##' For double-scale, half-scale, triple-scale, etc. uses an anisotropic scaling algorithm described in: \url{http://scale2x.sourceforge.net/algorithm.html}.
+##' For double-scale, triple-scale, etc. uses an anisotropic scaling algorithm described in: \url{http://scale2x.sourceforge.net/algorithm.html}. For half-scaling uses what the CImg doc describes as an "optimised filter", see resize_halfXY in CImg.h. 
 ##' @seealso resize
 ##' @examples
 ##' im <- load.example("parrots")
 ##' imresize(im,1/4) #Quarter size
-##' liply(2:4,function(ind) imresize(im,1/ind),"x") %>%  plot
+##' map_il(2:4,~ imresize(im,1/.)) %>% imappend("x") %>% plot
 ##' @author Simon Barthelme
 NULL
 
@@ -232,15 +232,15 @@ iterate <- function(f,k)
 ##' Light interface for get_gradient. Refer to get_gradient for details on the computation.
 ##' 
 ##' @param im an image of class cimg
-##' @param axes direction along which to compute the gradient. Either a single character (e.g. "x"), or multiple characters (e.g. "xyz")
-##' @param scheme numerical scheme (default '3')
+##' @param axes direction along which to compute the gradient. Either a single character (e.g. "x"), or multiple characters (e.g. "xyz"). Default: "xy"
+##' @param scheme numerical scheme (default '3', rotation invariant)
 ##' @return an image or a list of images, depending on the value of "axes" 
 ##' @author Simon Barthelme
 ##' @export
 ##' @examples
 ##' grayscale(boats) %>% imgradient("x") %>% plot
 ##' imgradient(boats,"xy") #Returns a list 
-imgradient <- function(im,axes,scheme=3)
+imgradient <- function(im,axes="xy",scheme=3)
     {
         gr <- get_gradient(im,axes,scheme)
         if (length(gr) == 1)
@@ -664,7 +664,7 @@ patchstat <- function(im,expr,cx,cy,wx,wy)
 #' Autocrop image region 
 #'
 #' @param im an image
-#' @param color Colour used for the crop. If missing, the colour is taken from the top-left pixel. 
+#' @param color Colour used for the crop. If missing, the colour is taken from the top-left pixel. Can also be a colour name (e.g. "red", or "black")
 #' @param axes Axes used for the crop.
 #' @export
 #' @examples
@@ -673,15 +673,21 @@ patchstat <- function(im,expr,cx,cy,wx,wy)
 #' plot(padded)
 #' #Remove padding
 #' autocrop(padded) %>% plot
-#'
+#' #You can specify the colour if needs be
+#'autocrop(padded,"black") %>% plot
 #' #autocrop has a zero-tolerance policy: if a pixel value is slightly different from the one you gave
 #' #the pixel won't get cropped. A fix is to do a bucket fill first
 #' padded <- isoblur(padded,10)
 #' autocrop(padded) %>% plot
 #' padded2 <- bucketfill(padded,1,1,col=c(0,0,0),sigma=.1)
 #' autocrop(padded2) %>% plot
+#' 
 autocrop <- function(im,color=color.at(im,1,1),axes="zyx")
 {
+    if (is.character(color))
+    {
+        color <- col2rgb(color)[,1]/255
+    }
     autocrop_(im,color,axes)
 }
 

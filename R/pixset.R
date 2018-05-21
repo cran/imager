@@ -168,19 +168,7 @@ print.pixset <- function(x,...)
         invisible(x)
     }
 
-## Ops.cimg <- function(e1, e2)
-## {
-##     out <- NextMethod(.Generic)
-##     if (is.logical(out) && length(dim(out))==4)
-##         {
-##             as.pixset(out)
-##         }
-##     else
-##         {
-##             out
-##         }
-## }
-
+#' @method Ops imager_array
 #' @export
 Ops.imager_array <- function(e1, e2)
 {
@@ -336,10 +324,10 @@ shrink <- function(px,x,y=x,z=x,boundary=TRUE)
 ##' Various useful pixsets
 ##'
 ##' These functions define some commonly used pixsets.
-##' px.left gives the left-most pixels of an image
+##' px.left gives the left-most pixels of an image, px.right the right-most, etc.
 ##' px.circle returns an (approximately) circular pixset of radius r, embedded in an image of width x and height y
 ##' Mathematically speaking, the set of all pixels whose L2 distance to the center equals r or less.
-##' px.diamond is similar but returns a diamong (L1 distance less than r)
+##' px.diamond is similar but returns a diamond (L1 distance less than r)
 ##' px.square is also similar but returns a square (Linf distance less than r)
 ##' @name common_pixsets
 ##' @param r radius (in pixels)
@@ -363,6 +351,7 @@ shrink <- function(px,x,y=x,z=x,boundary=TRUE)
 ##' px.right(im,1) %>% plot(int=FALSE)
 ##' px.top(im,4) %>% plot(int=FALSE)
 ##' px.bottom(im,2) %>% plot(int=FALSE)
+##' #All of the above
 ##' px.borders(im,1) %>% plot(int=FALSE)
 ##' @author Simon Barthelme
 NULL
@@ -481,6 +470,7 @@ boundary <- function(px,depth=1,high_connexity=FALSE)
 ##' @param col color of the contours
 ##' @param ... passed to the "lines" function
 ##' @author Simon Barthelme
+##' @seealso colorise, another way of highlighting stuff
 ##' @examples
 ##' #Select similar pixels around point (180,200)
 ##' px <- px.flood(boats,180,200,sigma=.08)
@@ -749,3 +739,43 @@ px.na <- function(im)
 {
     is.na(im) %>% pixset
 }
+
+
+##' Fill in a colour in an area given by a pixset
+##'
+##' Paint all pixels in pixset px with the same colour 
+##' @param im an image
+##' @param px either a pixset or a formula, as in imeval. 
+##' @param col colour to fill in. either a vector of numeric values or a string (e.g. "red")
+##' @param alpha transparency (default 1, no transparency)
+##' @return an image
+##' @examples
+##' im <- load.example("coins")
+##' colorise(im,Xc(im) < 50,"blue") %>% plot
+##' #Same thing with the formula interface
+##' colorise(im,~ x < 50,"blue") %>% plot
+##' #Add transparency
+##' colorise(im,~ x < 50,"blue",alpha=.5) %>% plot
+##' #Highlight pixels with low luminance values
+##' colorise(im,~ . < 0.3,"blue",alpha=.2) %>% plot
+##' @author Simon Barthelme
+##' @export
+colorise <- function(im,px,col,alpha=1)
+{
+    if (is.character(col))
+    {
+        col <- col2rgb(col)[,1]/255
+    }
+    if (is.formula(px)) {
+        px <- imeval(im, px)
+    }
+
+    if (spectrum(px)!=1)
+    {
+        px <- imsplit(px,"c") %>% parany
+    }
+    mod <- function(im,c) { if (alpha==1) { im[px] <- c} else { im[px] <- alpha*c+(1-alpha)*im[px]}; im }
+    imsplit(im,"c") %>% map2_il(col,mod) %>% imappend("c")
+}
+
+

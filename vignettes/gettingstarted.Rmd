@@ -15,7 +15,7 @@ vignette: >
   
 ```{r init,echo=FALSE}
 knitr::opts_chunk$set(warning=FALSE, message=FALSE, cache=FALSE, 
-               comment=NA, verbose=TRUE, fig.width=4, fig.height=4,dev='jpeg',dev.args=list(quality=50))
+               comment=NA, verbose=TRUE, fig.width=5, fig.height=5,dev='jpeg',dev.args=list(quality=50))
 ```
 **imager** contains a large array of functions for working with image data, with most of these functions coming from the [CImg library](http://www.cimg.eu/) by David Tschumperlé. This vignette is just a short tutorial, you'll find more information and examples on the website. Each function in the package is documented and comes with examples, so have a look at package documentation as well.
 
@@ -150,9 +150,10 @@ Another approach is to turn the image into a `data.frame`, and use `ggplot` to v
 
 ```{r fig.width=5, fig.height=3}
 library(ggplot2)
+library(dplyr)
 bdf <- as.data.frame(boats)
 head(bdf,3)
-bdf <- plyr::mutate(bdf,channel=factor(cc,labels=c('R','G','B')))
+bdf <- mutate(bdf,channel=factor(cc,labels=c('R','G','B')))
 ggplot(bdf,aes(value,col=channel))+geom_histogram(bins=30)+facet_wrap(~ channel)
 ```
 
@@ -206,23 +207,29 @@ hist.eq <- function(im) as.cimg(ecdf(im)(im),dim=dim(im))
 #Split across colour channels, 
 cn <- imsplit(boats,"c")
 cn #we now have a list of images
-cn.eq <- llply(cn,hist.eq) #run hist.eq on each
+cn.eq <- map_il(cn,hist.eq) #run hist.eq on each
 imappend(cn.eq,"c") %>% plot(main="All channels equalised") #recombine and plot
 ```
 
-There's even a one-liner to do this:
+The map_il function is a variant of lapply inspired by the [purrr](http://purrr.tidyverse.org/) package. It applies a function to each element of a list and returns an image list. You can use purrr together with image for all kinds of neat tricks, e.g.: 
 
 ```{r}
-iiply(boats,"c",hist.eq) 
+library(purrr)
+#Convert to HSV, reduce saturation, convert back
+RGBtoHSV(boats) %>% imsplit("c") %>%
+    modify_at(2,~ . / 2) %>% imappend("c") %>%
+    HSVtoRGB %>% plot(rescale=FALSE)
+#Turn into a function
+desat <- function(im) RGBtoHSV(im) %>% imsplit("c") %>%
+    modify_at(2,~ . / 2) %>% imappend("c") %>%
+    HSVtoRGB
+
+#Split image into 3 blocks, reduce saturation in middle block, recombine
+im <- load.example("parrots")
+imsplit(im,"x",3) %>% modify_at(2,desat) %>%
+    imappend("x") %>% plot(rescale=FALSE)
 ```
 
-We can use it to check that all channels have been properly normalised:
-
-```{r fig.width=5, fig.height=3}
-iiply(boats,"c",hist.eq) %>% as.data.frame %>% ggplot(aes(value))+geom_histogram(bins=30)+facet_wrap(~ cc)
-```
-
-Our trick worked.
 
 # Example 2: Edge detection
 
@@ -288,7 +295,7 @@ p <- ggplot(df,aes(x,y))+geom_raster(aes(fill=value))
 p
 ```
 
-We're not quite there, mainly because or y axis is reversed. Here's a fix:
+We're not quite there, mainly because our y axis is reversed. Here's a fix:
 ```{r}
 p + scale_y_continuous(trans=scales::reverse_trans())
 ```
@@ -409,10 +416,9 @@ head(df,3)
 unique(df$value) #10 regions
 ```
 
-And now all we need to do is to split the data.frame into regions, and compute the mean coordinate values in each. We'll show two solutions, one using **plyr**, the other using the more recent **dplyr** variant:
+And now all we need to do is to split the data.frame into regions, and compute the mean coordinate values in each. Here's a solution using **dplyr**:
 
 ```{r}
-centers <- ddply(df,.(value),summarise,mx=mean(x),my=mean(y))
 centers <- dplyr::group_by(df,value) %>% dplyr::summarise(mx=mean(x),my=mean(y))
 ```
 
@@ -484,8 +490,10 @@ plot(hessdet(hub,1),main="Determinant of the Hessian at scale 1")
 To view the results at different scales, we can use `ggplot`:
 
 ```{r fig.width=7}
+library(purrr)
+
 #Get a data.frame with results at scale 2, 3 and 4
-dat <- ldply(c(2,3,4),function(scale) hessdet(hub,scale) %>% as.data.frame %>% mutate(scale=scale))
+dat <- map_df(2:4,function(scale) hessdet(hub,scale) %>% as.data.frame %>% mutate(scale=scale))
 p <- ggplot(dat,aes(x,y))+geom_raster(aes(fill=value))+facet_wrap(~ scale)
 p+scale_x_continuous(expand=c(0,0))+scale_y_continuous(expand=c(0,0),trans=scales::reverse_trans())
 ```
@@ -495,14 +503,14 @@ Scale-space theory suggests that we look for blobs [across scales](https://en.wi
 ```{r}
 scales <- seq(2,20,l=10)
 
-d.max <- llply(scales,function(scale) hessdet(hub,scale)) %>% parmax
+d.max <- map_il(scales,function(scale) hessdet(hub,scale)) %>% parmax
 plot(d.max,main="Point-wise maximum across scales")
 ```
 
 `parmax` is another example of a reduction function, one that here takes the maximum value for each pixel across all scales. To find out which scale had the maximum value point-wise, we can use `which.parmax`:
 
 ```{r fig.height=5,fig.width=5}
-i.max <- llply(scales,function(scale) hessdet(hub,scale)) %>% which.parmax
+i.max <- map_il(scales,function(scale) hessdet(hub,scale)) %>% which.parmax
 plot(i.max,main="Index of the point-wise maximum \n across scales")
 ```
 
@@ -576,7 +584,7 @@ All functions are documented.
 
 ## Loading, saving, reading image information
 
-- load.image,save.image,iminfo,load.video,save.video
+- load.image,save.image,iminfo,load.video,save.video,load.dir
 - plot.cimg, display, display_list, play, renorm
 - width, height, depth, spectrum,nPix
 
@@ -611,15 +619,15 @@ All functions are documented.
 - interp
 
 ## Generating images
-
-- capture.plot
-- as.cimg.function
+   
+- implot, capture.plot: use base graphics on images
+- imeval, as.cimg.function: create parametric images
 - imnoise,imfill,imdirac
 - implot
 
 ## Modifying images
 
-- add.colour,grayscale
+- add.colour,grayscale,colorise
 - imresize,resize,resize,resize_doubleXY,resize_halfXY,resize_tripleXY
 - autocrop, pad
 - threshold, renorm
@@ -637,6 +645,7 @@ All functions are documented.
 
 ## Morphology
 
+- grow, shrink, clean, fill     
 - dilate,dilate_rect,dilate_square
 - mopening,mopening_square,mclosing,mclosing_square
 - erode, erode_rect, erode_square
@@ -649,14 +658,16 @@ All functions are documented.
 
 ## Split-apply-combine
 
-- imsplit, imappend,
-- liply, iiply, ilply, idply
+- imsplit, imappend
+- map_il, map2_il (based on purrr package)
+- liply, iiply, ilply, idply (older variants based on plyr)
 
 ## Reductions
 
 - parmin, parmax, parmax.abs, which.parmax,which.parmin,parmin.abs
 - add, mult, enorm
 - parmedian, parvar, parsd
+- parany, parall (for pixsets)  
 - parorder
 
 ## Misc.

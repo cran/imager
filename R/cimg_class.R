@@ -8,12 +8,13 @@
 NULL
 
 #' @useDynLib imager, .registration=TRUE
-#' @importFrom grDevices as.raster col2rgb dev.capture gray rgb contourLines
+#' @importFrom grDevices as.raster col2rgb dev.capture gray rgb contourLines xy.coords
+#' @importFrom igraph as.igraph
 #' @importFrom utils file_test
-#' @importFrom graphics axis plot rasterImage layout lines plot.new plot.window title
+#' @importFrom graphics axis plot rasterImage layout lines plot.new plot.window title abline polygon
 #' @importFrom stats quantile rnorm kmeans setNames
 #' @importFrom plyr llply laply ldply ddply dlply ldply rename mutate
-#' @importFrom purrr map map_dbl map_lgl map_df map2
+#' @importFrom purrr map map_dbl map_lgl map_df map2 map_int pmap reduce keep
 #' @importFrom png readPNG writePNG
 #' @importFrom jpeg writeJPEG readJPEG
 #' @importFrom readbitmap read.bitmap
@@ -180,6 +181,7 @@ plot.cimg <- function(x,frame,xlim=c(1,width(x)),ylim=c(height(x),1),xlab="x",yl
         }
         
     }
+    invisible(x)
 }
 
 #Plots one-dimensional images
@@ -250,6 +252,20 @@ ldim <- function(v)
     {
         if (is.vector(v)) length(v) else dim(v)
     }
+
+##' Grayscale dimensions of image
+##'
+##' Shortcut, returns the dimensions of an image if it had only one colour channel
+##' @param im an image
+##' @return returns c(dim(im)[1:3],1)
+##' @author Simon Barthelme
+##' @examples
+##' imnoise(dim=gsdim(boats))
+##' @export
+gsdim <- function(im)
+{
+    c(dim(im)[1:3],1)
+}
 
 ##' Split a video into separate frames
 ##'
@@ -602,51 +618,51 @@ inda <- list('x'=1,'y'=2,'z'=3,'c'=4)
 ##' @param nPix how many pixels to pad with 
 ##' @param axes which axes to pad along 
 ##' @param pos -1: prepend 0: center 1: append
-##' @param val value to fill the padding with (default 0)
+##' @param val colour of the padded pixels (default 0 in all channels). Can be a string for colour images, e.g. "red", or "black". 
 ##' @return a padded image
 ##' @author Simon Barthelme
 ##' @examples
 ##' pad(boats,20,"xy") %>% plot
 ##' pad(boats,20,pos=-1,"xy") %>% plot
 ##' pad(boats,20,pos=1,"xy") %>% plot
+##' pad(boats,20,pos=1,"xy",val="red") %>% plot
 ##' @export
-pad <- function(im,nPix,axes,pos=0,val=0)
+pad <- function(im,nPix,axes,pos=0,val=rep(0,spectrum(im)))
 {
+    if (is.character(val))
+    {
+        val <- col2rgb(val)[,1]/255
+    }
+    if (length(val) != spectrum(im))
+    {
+        stop("val must be the same length as the number of colour channels in the image")
+    }
     if (nPix > 0)
     {
-        if (nPix > 0)
-            {
-                if (nchar(axes) > 1)
-                {
+        if (nchar(axes) > 1)
+        {
                     im <- pad(im,nPix,str_sub(axes,2),pos,val)
                     axes <- str_sub(axes,1,1)
-                }
-                if (pos==0)
-                {
-                    d <- rep(1,4)
-                    d[inda[[axes]]] <- round(nPix/2)
-                    pdIm <- cimg(array(val,d))
-                    imappend(list(pdIm,im,pdIm),axes)
-                }
-                else if (pos == -1)
-                {
-                    d <- rep(1,4)
-                    d[inda[[axes]]] <- nPix
-                    pdIm <- cimg(array(val,d))
-                    imappend(list(pdIm,im),axes)
-                }
-                else if (pos == 1)
-                {
-                    d <- rep(1,4)
-                    d[inda[[axes]]] <- nPix
-                pdIm <- cimg(array(val,d))
-                    imappend(list(im,pdIm),axes)
-                }
-            }
-        else
-            {
-                im
-            }
+        }
+        d <- dim(im)
+        if (pos==0)
+        {
+            d[inda[[axes]]] <- round(nPix/2)
+            pdIm <- imfill(dim=d,val=val)
+            imappend(list(pdIm,im,pdIm),axes)
+        }
+        else if (pos == -1)
+        {
+            d[inda[[axes]]] <- nPix
+            pdIm <- imfill(dim=d,val=val)
+            imappend(list(pdIm,im),axes)
+        }
+        else if (pos == 1)
+        {
+            d[inda[[axes]]] <- nPix
+            pdIm <- imfill(dim=d,val=val)
+            imappend(list(im,pdIm),axes)
+        }
     }
     else
     {

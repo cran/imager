@@ -1,5 +1,5 @@
 [![Linux Build Status](https://travis-ci.org/dahtah/imager.png?branch=master)](https://travis-ci.org/dahtah/imager/)
-[![CRAN Version](http://www.r-pkg.org/badges/version/imager)](https://cran.r-project.org/package=imager)
+[![CRAN Version](https://www.r-pkg.org/badges/version/imager)](https://cran.r-project.org/package=imager)
 
 Imager is an image/video processing package for R, based on [CImg](http://cimg.eu/), a C++ library by David Tschumperlé. CImg provides an easy-to-use and consistent API for image processing, which imager largely replicates. CImg supports images in up to four dimensions, which makes it suitable for applications like video processing/hyperspectral imaging/MRI.
 
@@ -45,7 +45,7 @@ To build under Linux make sure you have the headers for libX11 and libfftw3 (opt
 ### External dependencies
 
 OS X users need [XQuartz](https://www.xquartz.org/). 
-On its own imager supports JPEG, PNG, TIFF and BMP formats. If you need support for other file types install [ImageMagick](http://www.imagemagick.org/script/binary-releases.php).
+On its own imager supports JPEG, PNG, TIFF and BMP formats. If you need support for other file types install [ImageMagick](http://www.imagemagick.org/script/download.php).
 To load and save videos you'll need [ffmpeg](http://ffmpeg.org/download.html), no file formats are supported natively.
 
 

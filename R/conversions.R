@@ -272,25 +272,25 @@ as.cimg.vector <- function(obj,x=NA,y=NA,z=NA,cc=NA,dim=NULL,...)
                 if (is.whole(sqrt(l)))
                     {
                         warning("Guessing input is a square 2D image")
-                        d <- sqrt(l)
+                        d <- sqrt(l) %>% round
                         array(obj,c(d,d,1,1)) %>% cimg
                     }
                 else if (is.whole(sqrt(l/3)))
                     {
                         warning("Guessing input is a square 2D RGB image")
-                        d <- sqrt(l/3)
+                        d <- sqrt(l/3) %>% round
                         array(obj,c(d,d,1,3))%>% cimg
                     }
                 else if (is.whole((l)^(1/3))) 
                     {
                         warning("Guessing input is a cubic 3D image")
-                        d <- l^(1/3)
+                        d <- l^(1/3) %>% round
                         array(obj,c(d,d,d,1))%>% cimg
                     }
                 else if (is.whole((l/3)^(1/3))) 
                     {
                         warning("Guessing input is a cubic 3D RGB image")
-                        d <- (l/3)^(1/3)
+                        d <- (l/3)^(1/3) %>% round
                         array(obj,c(d,d,d,3))%>% cimg
                     }
                 else
@@ -372,7 +372,7 @@ as.cimg.matrix <- function(obj,...)
 ##' @return an object of class cimg
 ##' @examples
 ##' #Create a data.frame with columns x,y and value
-##' df <- expand.grid(x=1:10,y=1:10) %>% mutate(value=x*y)
+##' df <- expand.grid(x=1:10,y=1:10) %>% dplyr::mutate(value=x*y)
 ##' #Convert to cimg object (2D, grayscale image of size 10*10
 ##' as.cimg(df,dims=c(10,10,1,1)) %>% plot
 ##' @author Simon Barthelme
@@ -486,7 +486,7 @@ grayscale <- function(im,method="Luma",drop=TRUE)
 cvt.frame <- function(f){
   f <- as.double(f)
   d <- dim(f)
-  dim(f) <- c(d[1:2],1,4)
+  dim(f) <- c(d[1:2],1,d[3])
   cimg(f) %>% imrotate(90) %>% mirror("x")
 }
 
@@ -549,7 +549,8 @@ magick2cimg <- function(obj,alpha="rm",...)
     }
     x <- raster::sampleRegular(obj, maxpixels, asRaster=TRUE, useGDAL=TRUE)
     y <- raster::yFromRow(x, nrow(x):1)
-    value <- as.vector(x) %>% t
+    #for some reason as.vector(x) doesn't work anymore
+    value <- as.vector(raster::getValues(x)) %>% t
     x <- raster::xFromCol(x,1:ncol(x))
     array(value,c(length(x),length(y),1,1)) %>% as.cimg 
 }

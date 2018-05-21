@@ -77,9 +77,13 @@ load.image <- function(file) wrap.url(file,load.image.internal)
 
 load.image.internal <- function(file)
 {
-    bmp <- try(read.bitmap(file),silent=TRUE)
-    if (class(bmp) != "try-error") #Loaded succesfully
+    fext <- fileext(file)
+    if (fext %in% c('png','bmp','jpeg','jpg'))
     {
+        bmp <- read.bitmap(file)
+        ##bmp <- try(read.bitmap(file),silent=TRUE)
+        ## if (class(bmp) != "try-error") #Loaded succesfully
+        ## {
         if (!is.null(attr(bmp,"header"))) #We have a BMP file, rescale
         {
             bmp <- bmp/255
@@ -102,12 +106,12 @@ load.image.internal <- function(file)
             is.url <- grepl("^(http|ftp)s?://", file)
             if (is.url)
             {
-                load_image(file)
+                load_image(file)/255
             }
             else
             {
                 file <- normalizePath(file,mustWork=TRUE)
-                load_image(file)
+                load_image(file)/255
             }
         }
         else
@@ -151,8 +155,8 @@ has.ffmpeg <- function()
 
 has.magick <- function()
 {
-    test.magick <- c('conjure','montage') %>% Sys.which %>% Filter(function(v) nchar(v) > 0,.) %>% length
-    test.magick == 2
+    test.magick <- c('conjure','montage','magick') %>% Sys.which %>% map_lgl(function(v) nchar(v) > 0) 
+    any(test.magick)
 }
 
 convert.im.fromPNG <- function(A)
@@ -342,4 +346,38 @@ save.video <- function(im,fname,...)
         make.video(dname=dd,fname=fname,...)
     }, finally=unlink(dd,recursive=TRUE))
     
+}
+
+#borrowed from pkgmaker::file_extension
+fileext <- function(f)
+{
+    sub(".*\\.([^.]{3})$", "\\1", f) %>% tolower
+}
+
+                    
+##' Load all images in a directory
+##'
+##' Load all images in a directory and return them as an image list. 
+##' @param path directory to load from
+##' @param pattern optional: file pattern (ex. *jpg). Default NULL, in which case we look for file extensions png,jpeg,jpg,tif,bmp. 
+##' @param quiet if TRUE, loading errors are quiet. If FALSE, they are displayed. Default FALSE
+##' @return an image list
+##' @author Simon Barthelme
+##' @examples
+##' path <- system.file(package="imager") %>% paste0("/extdata")
+##' load.dir(path)
+##' @export
+load.dir <- function(path,pattern=NULL,quiet=FALSE)
+{
+    fn <- dir(path,full.names=TRUE,pattern=pattern)
+    nms <- dir(path,full.names=FALSE,pattern=pattern) #Lazy!!!
+    if (is.null(pattern))
+    {
+        is.img <- fn %>% fileext %>% { . %in% c("png","jpg","jpeg","bmp","tif") }
+        fn <- fn[is.img]
+        nms <- nms[is.img]
+    }
+    li <- purrr::safely(load.image,quiet=quiet)
+    map(fn,li) %>% setNames(nms) %>%
+        keep(~ is.null(.$error)) %>% map_il("result")
 }

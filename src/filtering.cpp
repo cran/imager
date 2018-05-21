@@ -1,4 +1,5 @@
 #include <imager.h>
+#include "wrappers_cimglist.h"
 using namespace Rcpp;
 using namespace cimg_library;
 
@@ -40,7 +41,7 @@ NumericVector deriche(NumericVector im,float sigma,int order=0,char axis = 'x',b
 //' @param im an image
 //' @param sigma standard deviation of the Gaussian filter
 //' @param order the order of the filter 0,1,2,3
-//' @param axis  Axis along which the filter is computed. Can be <tt>{ 'x' | 'y' | 'z' | 'c' }</tt>.
+//' @param axis  Axis along which the filter is computed. One of 'x', 'y', 'z', 'c'
 //' @param neumann If true, use Neumann boundary conditions (default false, Dirichlet)
 //' @references
 //'       From: I.T. Young, L.J. van Vliet, M. van Ginkel, Recursive Gabor filtering.
@@ -72,19 +73,8 @@ NumericVector vanvliet(NumericVector im,float sigma,int order=0,char axis = 'x',
 }
 
 
-//' Blur image isotropically.
-//' @param im an image
-//' @param sigma Standard deviation of the blur.
-//' @param neumann If true, use Neumann boundary conditions, Dirichlet otherwise  (default true, Neumann)
-//' @param gaussian Use a Gaussian filter (actually vanVliet-Young). Default: 0th-order Deriche filter.
-//' @seealso deriche,vanvliet
-//' @export
-//' @examples
-//' isoblur(boats,3) %>% plot(main="Isotropic blur, sigma=3")
-//' isoblur(boats,3) %>% plot(main="Isotropic blur, sigma=10")
-//' @seealso medianblur
 // [[Rcpp::export]]
-NumericVector isoblur(NumericVector im,float sigma,bool neumann=true,bool gaussian=false) {
+NumericVector isoblur_(NumericVector im,float sigma,bool neumann=true,bool gaussian=false) {
   CId img = as< CId >(im);
   try{
     img.blur(sigma,neumann,gaussian);
@@ -95,6 +85,8 @@ NumericVector isoblur(NumericVector im,float sigma,bool neumann=true,bool gaussi
   }
   return wrap(img);
 }
+
+
 
 
 //' Blur image with the median filter.
@@ -192,15 +184,17 @@ NumericVector boxblur_xy(NumericVector im,float sx,float sy,bool neumann=true) {
   return wrap(img);
 }
 
-//' Correlation of image by filter
+//' Correlation/convolution of image by filter
 //'
 //'  The correlation of image im by filter flt is defined as:
 //'  \eqn{res(x,y,z) = sum_{i,j,k} im(x + i,y + j,z + k)*flt(i,j,k).}
+//'  The convolution of an image img by filter flt is defined to be:
+//'       \eqn{res(x,y,z) = sum_{i,j,k} img(x-i,y-j,z-k)*flt(i,j,k)}
 //'
 //' @param im an image
 //' @param filter the correlation kernel.
-//' @param dirichlet boundary condition (FALSE=zero padding, TRUE=dirichlet). Default FALSE
-//' @param normalise normalise filter (default FALSE)
+//' @param dirichlet boundary condition. Dirichlet if true, Neumann if false (default TRUE, Dirichlet)
+//' @param normalise compute a normalised correlation (ie. local cosine similarity)
 //'      
 //'
 //' @export
@@ -212,11 +206,11 @@ NumericVector boxblur_xy(NumericVector im,float sx,float sy,bool neumann=true) {
 //' correlate(boats,filter) %>% plot(main="Correlation")
 //' convolve(boats,filter) %>% plot(main="Convolution")
 // [[Rcpp::export]]
-NumericVector correlate(NumericVector im,NumericVector filter, bool dirichlet=false,bool normalise = false) {
+NumericVector correlate(NumericVector im,NumericVector filter, bool dirichlet=true,bool normalise = false) {
   CId img = as<CId >(im);
   CId flt = as<CId >(filter);
   try{
-    img.correlate(flt,dirichlet,normalise);
+    img.correlate(flt,!dirichlet,normalise);
     }
   catch(CImgException &e){
     forward_exception_to_r(e);
@@ -226,30 +220,14 @@ NumericVector correlate(NumericVector im,NumericVector filter, bool dirichlet=fa
 }
 
 
-//' Convolve image by filter.
-//'
-//'      The result  res of the convolution of an image img by filter flt is defined to be:
-//'       \eqn{res(x,y,z) = sum_{i,j,k} img(x-i,y-j,z-k)*flt(i,j,k)}
-//'
-//' @param im an image
-//' @param filter a filter (another image)
-//' @param dirichlet boundary condition (FALSE=zero padding, TRUE=dirichlet). Default FALSE
-//' @param normalise normalise filter (default FALSE)
+//' @describeIn correlate convolve image with filter
 //' @export
-//' @seealso correlate
-//' @examples
-//' #Edge filter
-//' filter <- as.cimg(function(x,y) sign(x-5),10,10) 
-//' layout(t(1:2))
-//' #Convolution vs. correlation 
-//' correlate(boats,filter) %>% plot(main="Correlation")
-//' convolve(boats,filter) %>% plot(main="Convolution")
 // [[Rcpp::export]]
-NumericVector convolve(NumericVector im,NumericVector filter, bool dirichlet=false,bool normalise = false) {
+NumericVector convolve(NumericVector im,NumericVector filter, bool dirichlet=true,bool normalise = false) {
   CId img = as<CId >(im);
   CId flt = as<CId >(filter);
   try{
-    img.convolve(flt,dirichlet,normalise);
+    img.convolve(flt,!dirichlet,normalise);
     }
   catch(CImgException &e){
     forward_exception_to_r(e);

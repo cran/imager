@@ -1,4 +1,4 @@
-17ed4798ea14fb249c3ea895221920f0 *DESCRIPTION
+79ca3ad7c5cae614630e6a8d982d4eff *DESCRIPTION
 1230ce914a6547744bbf5b50492cbf67 *NAMESPACE
 1c6048aee1da456371d08f4ab1988be7 *NEWS
 87363934975d9b0e1df992dbcea161f7 *NEWS.md
@@ -204,8 +204,8 @@ ce982f60f36d6b31acf7a6b1abe4d529 *src/coordinates.cpp
 92e68a68edf17ddc343972f6b0856c91 *src/display.cpp
 ca66c0384ec13fbdb8500ea8a372221c *src/drawing.cpp
 41c35e9dd78d726fbf96c2007a30c2cc *src/filtering.cpp
-d33e1ab461cf7b7c553978e1f413bfdc *src/hough.cpp
-f3a31e98e7bc2e82382ea61614dcc970 *src/imgraphs.cpp
+7cf0f6ea63bd077244db1a2d64b86db9 *src/hough.cpp
+774a89da80723128790a6eeb24f6813c *src/imgraphs.cpp
 3e5c4e7498aaf77d986b75527048370d *src/interact.cpp
 42787e1efa685feb44a956efe47fb7ba *src/interpolation.cpp
 4cbbe9caa25e61679419dad3d2d994f0 *src/morphology.cpp

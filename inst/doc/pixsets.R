@@ -3,6 +3,8 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE, cache=FALSE,
                comment=NA, verbose=TRUE, fig.width=5, fig.height=5,dev='jpeg',dev.args=list(quality=50))
 
 ## ------------------------------------------------------------------------
+library(imager)
+library(magrittr)
 im <- load.example('parrots') %>% grayscale
 px <- im > .6 #Select pixels with high luminance
 px

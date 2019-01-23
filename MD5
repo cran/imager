@@ -1,4 +1,4 @@
-79ca3ad7c5cae614630e6a8d982d4eff *DESCRIPTION
+85c58234db964564dbc7096fa746b7a3 *DESCRIPTION
 1230ce914a6547744bbf5b50492cbf67 *NAMESPACE
 1c6048aee1da456371d08f4ab1988be7 *NEWS
 87363934975d9b0e1df992dbcea161f7 *NEWS.md
@@ -27,7 +27,7 @@ af01156a3aada58b7c87b21136a620e9 *R/transformations.R
 06b8c1d4843ed6947c80345605d8dd58 *R/utils.R
 aaec2347aa5ded12e340e4a13ea0d03c *README.md
 2a0e8911b35245f2bf00be4b4b804f5d *TODO
-8a29b24489062cf7cb834351f0cd904e *build/vignette.rds
+265b8e5082aac101bb434eb242bf02d1 *build/vignette.rds
 087f1e3baae5e26d67d002135090e6d9 *cleanup
 2298aa3987bbef5c6a94b632e3d6cf1d *configure
 960c13e91b0d2cc7c266cc5f105c1feb *configure.ac
@@ -35,10 +35,10 @@ aaec2347aa5ded12e340e4a13ea0d03c *README.md
 b54dd69fdffbe0d2103a98e999dedc34 *data/datalist
 e93874cc12cfc024f39037744953c7fc *inst/doc/gettingstarted.R
 64b324854a2814a5c0bbe2a82b9013b4 *inst/doc/gettingstarted.Rmd
-93bd7db6748a70f6043f98f0165db35d *inst/doc/gettingstarted.html
-390824a33185ae3d4eefca1473785bc9 *inst/doc/pixsets.R
-0dc07817a961e3f4cd9ed2d8171a6097 *inst/doc/pixsets.Rmd
-9f550d749ed965bb373de554a8f83140 *inst/doc/pixsets.html
+a56a64ea94788669840d4f8ff8e5dca7 *inst/doc/gettingstarted.html
+6faa350f7634e6ab6c7fd42614645523 *inst/doc/pixsets.R
+77f8180cba9d53ae5df86446d83bf6fc *inst/doc/pixsets.Rmd
+d5e9f51054005310ea5a9747272adbd2 *inst/doc/pixsets.html
 ed59819ea84d02aae563ae9d421e1235 *inst/extdata/HubbleDeepField.jpg
 05e04a3bc5a858c40e001cc65b853dfc *inst/extdata/Leonardo_Birds.jpg
 4d29aa9924270069d8d6a243e20eba86 *inst/extdata/coins.png
@@ -195,8 +195,8 @@ de65b820ccf0488de3f3f2f237657dd4 *man/split_connected.Rd
 ad2654de31942fed6a81372ca95c69f8 *man/warp.Rd
 175e0ff835838c3a97f4e262ea2e22a9 *man/watershed.Rd
 6d2ea6da4b089e34b2c74fa9915598ad *man/where.Rd
-990a6b7a1e785bb41feb36d38ff4c1c4 *src/Makevars.in
-0921c95e100ceb6edfe481db8258741c *src/Makevars.win
+92cbd8377d7c51128bdd9b581a35681f *src/Makevars.in
+9d68d28f7d6475a7f73c4704bde8b8ff *src/Makevars.win
 57e4656745ba760e96d3e16920daaca5 *src/RcppExports.cpp
 cac489a7495799d378cf0c10c8db3ebd *src/colourspace.cpp
 67105790818cc582e900600d002d1ec8 *src/compile.R
@@ -218,4 +218,4 @@ acedfc8c44d7fbe12958baf2f4404fda *src/transformations.cpp
 531cc2d4b2972036796d2204004a9361 *tests/testthat/test_cpp_api.R
 e3c6a711e65146bf0dc6cf0e951d4636 *tests/testthat/test_reductions.R
 64b324854a2814a5c0bbe2a82b9013b4 *vignettes/gettingstarted.Rmd
-0dc07817a961e3f4cd9ed2d8171a6097 *vignettes/pixsets.Rmd
+77f8180cba9d53ae5df86446d83bf6fc *vignettes/pixsets.Rmd

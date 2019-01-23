@@ -24,6 +24,8 @@ If you've already gone through the "Getting started" vignette, you know about im
 A pixset is what you get if you run a test on an image: 
 
 ```{r}
+library(imager)
+library(magrittr)
 im <- load.example('parrots') %>% grayscale
 px <- im > .6 #Select pixels with high luminance
 px

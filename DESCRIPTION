@@ -1,7 +1,7 @@
 Package: imager
 Type: Package
 Title: Image Processing Library Based on 'CImg'
-Version: 0.41.1
+Version: 0.41.2
 Date: 2018-05-30
 Author: Simon Barthelme [aut, cre],
   David Tschumperle [ctb],
@@ -11,7 +11,7 @@ Authors@R: c(person("Simon","Barthelme",email="simon.barthelme@gipsa-lab.fr",rol
  person("David","Tschumperle",role=c("ctb")),
  person("Jan","Wijffels",role=c("ctb")),
  person("Haz Edine","Assemlal",role=c("ctb")))
-Maintainer: Simon Barthelme <simon.barthelme@gipsa-lab.fr>
+Maintainer: ORPHANED
 Description: Fast image processing for images in up to 4 dimensions (two spatial
     dimensions, one time/depth dimension, one colour dimension). Provides most
     traditional image processing tools (filtering, morphology, transformations,
@@ -32,6 +32,10 @@ Suggests: knitr, rmarkdown,ggplot2,dplyr,scales,
         testthat,OpenMPController,raster,spatstat
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2018-05-30 07:24:21 UTC; ripley
+Packaged: 2019-01-21 11:13:57 UTC; ripley
 Repository: CRAN
-Date/Publication: 2018-05-30 07:55:35 UTC
+Date/Publication: 2019-01-23 10:43:50 UTC
+X-CRAN-Original-Maintainer: Simon Barthelme
+        <simon.barthelme@gipsa-lab.fr>
+X-CRAN-Comment: Orphaned on 2019-01-23 as no response to request to fix
+        check issues.

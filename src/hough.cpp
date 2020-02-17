@@ -11,7 +11,7 @@ NumericVector hough_line_px(LogicalVector px,NumericVector theta)
 {
   CIb ppx = as<CIb >(px);
   NumericVector ctheta = cos(theta),stheta = sin(theta);
-  int maxd = 2*ceil(sqrt(pow(ppx.width(),2.0)+pow(ppx.height(),2.0)));
+  int maxd = 2*ceil(sqrt(pow( (double) ppx.width(),2)+pow( (double) ppx.height(),2)));
   int offset = maxd/2;
   CId out(maxd,theta.length());
   out.fill(0);

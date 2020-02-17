@@ -532,6 +532,7 @@ px.flood <- function(im,x,y,z=1,sigma=0,high_connexity=FALSE)
 ##' @param ... further arguments passed to label
 ##' @seealso label
 ##' @return a list of pixsets
+##' @examples
 ##' px <- isoblur(grayscale(boats),5) > .75
 ##' plot(px)
 ##' spl <- split_connected(px)
@@ -778,4 +779,18 @@ colorise <- function(im,px,col,alpha=1)
     imsplit(im,"c") %>% map2_il(col,mod) %>% imappend("c")
 }
 
-
+##' Remove all connected regions that touch image boundaries
+##'
+##' All pixels that belong to a connected region in contact with image boundaries are set to FALSE. 
+##' @param px a pixset
+##' @return a pixset 
+##' @author Simon Barthelme
+##' @examples
+##' im <- draw_circle(imfill(100,100),c(0,50,100),c(50,50,50),radius=10,color=1)
+##' plot(im)
+##' as.pixset(im) %>% px.remove_outer %>% plot
+##' @export
+px.remove_outer <- function(px)
+{
+    pad(px,2,"xy",val=TRUE) %>% bucketfill(1,1,color=0) %>% crop.borders(1,1)  %>% as.pixset
+}

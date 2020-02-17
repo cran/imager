@@ -128,8 +128,9 @@ wrap.url <- function(file,fun)
     if (is.url)
     {
         url <- file
-        file <- tempfile()
-        downloader::download(url,file)
+        ext <- stringr::str_extract_all(url,"\\.([A-Za-z0-9]+$)")[[1]]
+        if (length(ext) > 0) file <- tempfile(fileext=ext) else file <- tempfile()
+        downloader::download(url,file,mode="wb")
         out <- fun(file)
         unlink(file)
         out
@@ -274,7 +275,7 @@ convert.im.toPNG <- function(A)
 load.example <- function(name)
 {
     fnames <- list(parrots="parrots.png",hubble="HubbleDeepField.jpg",
-                   tennis="tennis_sif.mpeg",birds="Leonardo_Birds.jpg",coins="coins.png")
+                   tennis="tennis_sif.mp4",birds="Leonardo_Birds.jpg",coins="coins.png")
     if (name %in% names(fnames))
     {
         fp <- paste0('extdata/',fnames[name]) %>% system.file(package='imager')
@@ -351,7 +352,7 @@ save.video <- function(im,fname,...)
 #borrowed from pkgmaker::file_extension
 fileext <- function(f)
 {
-    sub(".*\\.([^.]{3})$", "\\1", f) %>% tolower
+    sub(".*\\.([^.]{3,4})$", "\\1", f) %>% tolower
 }
 
                     

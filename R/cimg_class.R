@@ -13,7 +13,6 @@ NULL
 #' @importFrom utils file_test
 #' @importFrom graphics axis plot rasterImage layout lines plot.new plot.window title abline polygon
 #' @importFrom stats quantile rnorm kmeans setNames
-#' @importFrom plyr llply laply ldply ddply dlply ldply rename mutate
 #' @importFrom purrr map map_dbl map_lgl map_df map2 map_int pmap reduce keep
 #' @importFrom png readPNG writePNG
 #' @importFrom jpeg writeJPEG readJPEG
@@ -97,7 +96,7 @@ NULL
 ##' @param xlab x axis label
 ##' @param ylab y axis label
 ##' @param interpolate should the image be plotted with antialiasing (default TRUE)
-##' @param asp aspect ratio. The default value (1) means that the aspect ratio of the image will be kept regardless of the dimensions of the plot. A numeric value other than one changes the aspect ratio, but it will be kept the same regardless of dimensions. Setting asp="varing" means the aspect ratio will depend on plot dimensions (this used to be the default in versions of imager < 0.40)
+##' @param asp aspect ratio. The default value (1) means that the aspect ratio of the image will be kept regardless of the dimensions of the plot. A numeric value other than one changes the aspect ratio, but it will be kept the same regardless of dimensions. Setting asp="varying" means the aspect ratio will depend on plot dimensions (this used to be the default in versions of imager < 0.40)
 ##' @param xaxs The style of axis interval calculation to be used for the x-axis. See ?par
 ##' @param yaxs The style of axis interval calculation to be used for the y-axis. See ?par
 ##' @param axes Whether to draw axes (default TRUE)
@@ -286,7 +285,7 @@ frames <- function(im,index,drop=FALSE)
         names(res) <- nm
         if (drop)
             {
-                res <- llply(res,function(v)  as.array(v) %>% squeeze)
+                res <- purrr::map(res,function(v)  as.array(v) %>% squeeze)
             }
         res
     }
@@ -325,7 +324,7 @@ channels <- function(im,index,drop=FALSE)
         names(res) <- nm
         if (drop)
             {
-                res <- llply(res,function(v) { as.array(v) %>% squeeze})
+                res <- purrr::map(res,function(v) { as.array(v) %>% squeeze})
             }
         res
     }
@@ -341,11 +340,11 @@ imcol <- function(im,x)
     }
     else if (depth(im) > 1)
     {
-        frames(im) %>% llply(function(v) imcol(v,x))
+        frames(im) %>% purrr::map(function(v) imcol(v,x))
     }
     else if (spectrum(im) > 1)
     {
-        channels(im) %>% llply(function(v) imcol(v,x))
+        channels(im) %>% purrr::map(function(v) imcol(v,x))
     }
     else
     {
@@ -364,11 +363,11 @@ imrow <- function(im,y)
     }
     else if (depth(im) > 1)
     {
-        frames(im) %>% llply(function(v) imrow(v,y))
+        frames(im) %>% purrr::map(function(v) imrow(v,y))
     }
     else if (spectrum(im) > 1)
     {
-        channels(im) %>% llply(function(v) imrow(v,y))
+        channels(im) %>% purrr::map(function(v) imrow(v,y))
     }
     else
     {
@@ -505,8 +504,8 @@ imsub <- function(im,...)
     {
         l <- as.list(substitute(list(...))[-1])
         consts <- list(width=width(im),height=height(im),depth=depth(im),spectrum=spectrum(im))
-        consts <- plyr::mutate(consts,cx=width/2,cy=height/2,cz=depth/2)
-        env <- parent.frame()
+        consts <- mutate_plyr(consts,cx=width/2,cy=height/2,cz=depth/2)
+        env <- new.env(parent = parent.frame())
         Reduce(function(a,b) subs(a,b,consts,envir=env),l,init=im)
     }
 
@@ -627,8 +626,13 @@ inda <- list('x'=1,'y'=2,'z'=3,'c'=4)
 ##' pad(boats,20,pos=1,"xy") %>% plot
 ##' pad(boats,20,pos=1,"xy",val="red") %>% plot
 ##' @export
-pad <- function(im,nPix,axes,pos=0,val=rep(0,spectrum(im)))
+pad <- function(im,nPix,axes,pos=0,val)
 {
+    if (missing(val))
+    {
+        val <- if (is.pixset(im)) FALSE else 0
+        val <- rep(val,dim(im)[4])
+    }
     if (is.character(val))
     {
         val <- col2rgb(val)[,1]/255

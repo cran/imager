@@ -1,7 +1,7 @@
 Package: imager
 Type: Package
 Title: Image Processing Library Based on 'CImg'
-Version: 0.42.7
+Version: 0.42.8
 Author: Simon Barthelme [aut],
   David Tschumperle [ctb],
   Jan Wijffels [ctb],
@@ -30,9 +30,9 @@ LinkingTo: Rcpp
 LazyData: true
 RoxygenNote: 7.1.1
 Suggests: knitr, rmarkdown,ggplot2,dplyr,scales,
-        testthat,OpenMPController,raster,spatstat,magick,Cairo
+        testthat,OpenMPController,raster,spatstat.geom,magick,Cairo
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2021-01-26 00:58:19 UTC; tanuki
+Packaged: 2021-03-15 15:02:49 UTC; tanuki
 Repository: CRAN
-Date/Publication: 2021-02-23 12:20:21 UTC
+Date/Publication: 2021-03-15 23:00:02 UTC

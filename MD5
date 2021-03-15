@@ -1,4 +1,4 @@
-5b46c5399b76da44d87bf51541288daa *DESCRIPTION
+9dcb777715c02ae9b097e4173ad439ae *DESCRIPTION
 19255e2bc962ea1d1eda1801617cbef6 *NAMESPACE
 47f3c577210aad89d50795462f54d4b5 *NEWS
 18aaf4dbab2744bf1bbb776060c26158 *NEWS.md
@@ -6,7 +6,7 @@ ae4074c22139a4f050859d6fa36de26f *R/RcppExports.R
 d8817e5b7a52b5a59b254cbe4929ecd9 *R/basegraphics.R
 5c170b78b623ff08104200e2167516e5 *R/canny.R
 89b6754c106e162ec20596b6a3b9d609 *R/cimg_class.R
-6442d1cb5e7efd9e607ef424cdd83507 *R/conversions.R
+55b1116ce1b587fb989cbe858b52347b *R/conversions.R
 42422efc1dbbb30da75e2041d2f1452b *R/coordinates.R
 08aa2b2c82bc1739bc3a722bc29fe81e *R/datasets.R
 3a00c229eabbcecfdbbda2bdb5587dcc *R/drawing.R
@@ -27,17 +27,17 @@ af01156a3aada58b7c87b21136a620e9 *R/transformations.R
 8d2487dbf45064f33b08e5a80830b68e *R/utils-pipe.R
 67a47cd4b15348bef6e82c3826503ac1 *R/utils.R
 2a0e8911b35245f2bf00be4b4b804f5d *TODO
-922fb548711521406a09bd07abf65d13 *build/vignette.rds
+7436c73a43a7dd9024315051dd7c130d *build/vignette.rds
 087f1e3baae5e26d67d002135090e6d9 *cleanup
 36763264f33479523e5a23b4ab630293 *configure
 04ad276c5505c4e3e7f17544b6e7f560 *configure.ac
 4f97ce3dc62ddc04bc68301e22723dca *data/boats.rda
 657d7193c84db4e1800d53920a4d9a85 *inst/doc/gettingstarted.R
 cf5ce3f3460e1ddf057457ac5586714f *inst/doc/gettingstarted.Rmd
-42505b14ab4a56ea41636487b1519097 *inst/doc/gettingstarted.html
+5d3a39ca672e5efae8c7415857f0235b *inst/doc/gettingstarted.html
 c4ae380326b9caa75dc58bf9aaaa5c82 *inst/doc/pixsets.R
 9dae35996fd7e790c1ab8810e026429a *inst/doc/pixsets.Rmd
-81a5d0917b29684612d54e77edd4d5a5 *inst/doc/pixsets.html
+97631856231e29069cc0c8f0c2d1771a *inst/doc/pixsets.html
 ed59819ea84d02aae563ae9d421e1235 *inst/extdata/HubbleDeepField.jpg
 05e04a3bc5a858c40e001cc65b853dfc *inst/extdata/Leonardo_Birds.jpg
 1ff4ed9a8af95f958db61e079257cf78 *inst/extdata/coins.png

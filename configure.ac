@@ -1,12 +1,12 @@
 
 
 
-AC_PREREQ(2.62)
+AC_PREREQ([2.69])
 
 
 ## ---[ VERSION ]-------------------------------------------------------------
 
-AC_INIT()
+AC_INIT
 
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
@@ -228,4 +228,5 @@ AC_SUBST(CPPFLAGS)
 AC_SUBST(CXXFLAGS)
 AC_SUBST(LIBS)
 
-AC_OUTPUT(src/Makevars)
+AC_CONFIG_FILES([src/Makevars])
+AC_OUTPUT

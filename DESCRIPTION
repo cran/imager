@@ -1,7 +1,7 @@
 Package: imager
 Type: Package
 Title: Image Processing Library Based on 'CImg'
-Version: 0.42.11
+Version: 0.42.13
 Author: Simon Barthelme [aut],
   David Tschumperle [ctb],
   Jan Wijffels [ctb],
@@ -28,11 +28,11 @@ BugReports: https://github.com/dahtah/imager/issues
 SystemRequirements: fftw3,libtiff,C++11,X11
 LinkingTo: Rcpp
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Suggests: knitr, rmarkdown,ggplot2,dplyr,scales,
         testthat,raster,spatstat.geom,magick,Cairo
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2021-11-17 12:46:42 UTC; tanuki
+Packaged: 2022-02-26 02:33:32 UTC; tanuki
 Repository: CRAN
-Date/Publication: 2021-11-18 06:20:09 UTC
+Date/Publication: 2022-03-07 08:10:02 UTC

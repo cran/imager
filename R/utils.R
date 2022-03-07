@@ -351,7 +351,7 @@ imwarp <- function(im,map,direction="forward",coordinates="absolute",boundary="d
 ##' @export
 imdirac <- function(dims,x,y,z=1,cc=1)
     {
-        if (class(dims) == "cimg")
+        if (inherits(dims,"cimg"))
             {
                 dims <- dim(dims)
             }
@@ -482,15 +482,15 @@ iminfo <- function(fname)
         cmd <- "identify -format  \"%f;%m;%w;%h;%b  \""
         fname <- paste0("\"",fname,"\"")
         out <- try(system(paste(cmd,fname),intern=TRUE))
-        if (class(out) != "try-error")
+        if (!inherits(out,"try-error"))
         {
             if (length(out) > 0)
             {
                 dat <- stringr::str_trim(out) %>% stringr::str_split(";")
                 dat <- dat[[1]]
-                names(dat) <- c("name","format","width","height","size")
-                size <- NULL #pointless, only here to make CRAN happy
-                dplyr::mutate(as.list(dat),width=as.numeric(width),height=as.numeric(height),size=as.numeric(stringr::str_sub(size,end=-2)))
+                dat2 <- list(dat[1],dat[2],as.numeric(dat[3]),as.numeric(dat[4]), dat[5])
+                names(dat2) <- c("name","format","width","height","size")
+                return(dat2)
             }
             else
             {

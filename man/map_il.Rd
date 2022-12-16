@@ -23,11 +23,11 @@ Works like purrr::map, purrr::map_dbl and the like but ensures that the output i
 }
 \section{Functions}{
 \itemize{
-\item \code{map2_il}: Parallel map (two values)
+\item \code{map2_il()}: Parallel map (two values)
 
-\item \code{pmap_il}: Parallel map (multiple values)
+\item \code{pmap_il()}: Parallel map (multiple values)
+
 }}
-
 \examples{
 #Returns a list
 imsplit(boats,"x",2) \%>\% purrr::map(~ isoblur(.,3))

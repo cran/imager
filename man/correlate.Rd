@@ -26,9 +26,9 @@ The correlation of image im by filter flt is defined as:
 }
 \section{Functions}{
 \itemize{
-\item \code{convolve}: convolve image with filter
-}}
+\item \code{convolve()}: convolve image with filter
 
+}}
 \examples{
 #Edge filter
 filter <- as.cimg(function(x,y) sign(x-5),10,10) 

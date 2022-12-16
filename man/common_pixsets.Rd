@@ -58,27 +58,27 @@ px.square is also similar but returns a square (Linf distance less than r)
 }
 \section{Functions}{
 \itemize{
-\item \code{px.circle}: A circular-shaped pixset
+\item \code{px.circle()}: A circular-shaped pixset
 
-\item \code{px.diamond}: A diamond-shaped pixset
+\item \code{px.diamond()}: A diamond-shaped pixset
 
-\item \code{px.square}: A square-shaped pixset
+\item \code{px.square()}: A square-shaped pixset
 
-\item \code{px.left}: n left-most pixels (left-hand border)
+\item \code{px.left()}: n left-most pixels (left-hand border)
 
-\item \code{px.top}: n top-most pixels
+\item \code{px.top()}: n top-most pixels
 
-\item \code{px.bottom}: n bottom-most pixels
+\item \code{px.bottom()}: n bottom-most pixels
 
-\item \code{px.right}: n right-most pixels
+\item \code{px.right()}: n right-most pixels
 
-\item \code{px.borders}: image borders (to depth n)
+\item \code{px.borders()}: image borders (to depth n)
 
-\item \code{px.all}: all pixels in image
+\item \code{px.all()}: all pixels in image
 
-\item \code{px.none}: no pixel in image
+\item \code{px.none()}: no pixel in image
+
 }}
-
 \examples{
 px.circle(20,350,350) \%>\% plot(interp=FALSE)
 px.circle(3) \%>\% plot(interp=FALSE)

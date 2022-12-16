@@ -27,9 +27,9 @@ The old version of imeval used CImg's internal math parser, but has been retired
 }
 \section{Functions}{
 \itemize{
-\item \code{imdo}: run imeval and reshape
-}}
+\item \code{imdo()}: run imeval and reshape
 
+}}
 \examples{
 ## Computing mean absolute deviation
 imeval(boats, ~ mean(abs(.-median(.))))

@@ -27,15 +27,15 @@ These functions return pixel coordinates for an image, as an image. All is made 
 }
 \section{Functions}{
 \itemize{
-\item \code{Xc}: X coordinates
+\item \code{Xc()}: X coordinates
 
-\item \code{Yc}: Y coordinates
+\item \code{Yc()}: Y coordinates
 
-\item \code{Zc}: Z coordinates
+\item \code{Zc()}: Z coordinates
 
-\item \code{Cc}: C coordinates
+\item \code{Cc()}: C coordinates
+
 }}
-
 \examples{
 im <- imfill(5,5) #An image
 Xc(im) #An image of the same size, containing the x coordinates of each pixel

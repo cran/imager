@@ -55,25 +55,25 @@ Erode/dilate image by a structuring element.
 }
 \section{Functions}{
 \itemize{
-\item \code{erode_rect}: Erode image by a rectangular structuring element of specified size.
+\item \code{erode_rect()}: Erode image by a rectangular structuring element of specified size.
 
-\item \code{erode_square}: Erode image by a square structuring element of specified size.
+\item \code{erode_square()}: Erode image by a square structuring element of specified size.
 
-\item \code{dilate}: Dilate image by a structuring element.
+\item \code{dilate()}: Dilate image by a structuring element.
 
-\item \code{dilate_rect}: Dilate image by a rectangular structuring element of specified size
+\item \code{dilate_rect()}: Dilate image by a rectangular structuring element of specified size
 
-\item \code{dilate_square}: Dilate image by a square structuring element of specified size
+\item \code{dilate_square()}: Dilate image by a square structuring element of specified size
 
-\item \code{mopening}: Morphological opening (erosion followed by dilation)
+\item \code{mopening()}: Morphological opening (erosion followed by dilation)
 
-\item \code{mopening_square}: Morphological opening by a square element (erosion followed by dilation)
+\item \code{mopening_square()}: Morphological opening by a square element (erosion followed by dilation)
 
-\item \code{mclosing_square}: Morphological closing by a square element (dilation followed by erosion)
+\item \code{mclosing_square()}: Morphological closing by a square element (dilation followed by erosion)
 
-\item \code{mclosing}: Morphological closing (dilation followed by erosion)
+\item \code{mclosing()}: Morphological closing (dilation followed by erosion)
+
 }}
-
 \examples{
 fname <- system.file('extdata/Leonardo_Birds.jpg',package='imager')
 im <- load.image(fname) \%>\% grayscale

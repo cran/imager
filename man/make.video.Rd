@@ -40,9 +40,9 @@ make.video takes as argument a directory that contains a sequence of images repr
 }
 \section{Functions}{
 \itemize{
-\item \code{save.video}: Save a video using ffmpeg
-}}
+\item \code{save.video()}: Save a video using ffmpeg
 
+}}
 \examples{
 ## Not run
 ## iml <- map_il(seq(0,20,l=60),~ isoblur(boats,.))

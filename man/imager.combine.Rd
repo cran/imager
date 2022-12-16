@@ -81,47 +81,47 @@ parvar returns an unbiased estimate of the variance (as in the base var function
 }
 \section{Functions}{
 \itemize{
-\item \code{add}: Add images
+\item \code{add()}: Add images
 
-\item \code{wsum}: Weighted sum of images
+\item \code{wsum()}: Weighted sum of images
 
-\item \code{average}: Average images
+\item \code{average()}: Average images
 
-\item \code{mult}: Multiply images (pointwise)
+\item \code{mult()}: Multiply images (pointwise)
 
-\item \code{parmax}: Parallel max over images
+\item \code{parmax()}: Parallel max over images
 
-\item \code{parmax.abs}: Parallel max in absolute value over images,
+\item \code{parmax.abs()}: Parallel max in absolute value over images,
 
-\item \code{parmin.abs}: Parallel min in absolute value over images,
+\item \code{parmin.abs()}: Parallel min in absolute value over images,
 
-\item \code{parmin}: Parallel min over images
+\item \code{parmin()}: Parallel min over images
 
-\item \code{enorm}: Euclidean norm (i.e. sqrt(A^2 + B^2 + ...))
+\item \code{enorm()}: Euclidean norm (i.e. sqrt(A^2 + B^2 + ...))
 
-\item \code{parmed}: Median
+\item \code{parmed()}: Median
 
-\item \code{parvar}: Variance
+\item \code{parvar()}: Variance
 
-\item \code{parsd}: Std. deviation
+\item \code{parsd()}: Std. deviation
 
-\item \code{parall}: Parallel all (for pixsets)
+\item \code{parall()}: Parallel all (for pixsets)
 
-\item \code{parany}: Parallel any (for pixsets)
+\item \code{parany()}: Parallel any (for pixsets)
 
-\item \code{equal}: Test equality
+\item \code{equal()}: Test equality
 
-\item \code{which.parmax}: index of parallel maxima
+\item \code{which.parmax()}: index of parallel maxima
 
-\item \code{which.parmin}: index of parallel minima
+\item \code{which.parmin()}: index of parallel minima
 
-\item \code{parsort}: pixel-wise sort
+\item \code{parsort()}: pixel-wise sort
 
-\item \code{parorder}: pixel-wise order
+\item \code{parorder()}: pixel-wise order
 
-\item \code{parrank}: pixel-wise rank
+\item \code{parrank()}: pixel-wise rank
+
 }}
-
 \examples{
 im1 <- as.cimg(function(x,y) x,50,50)
 im2 <- as.cimg(function(x,y) y,50,50)

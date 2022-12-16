@@ -36,13 +36,13 @@ Return or set pixel value at coordinates
 }
 \section{Functions}{
 \itemize{
-\item \code{at<-}: set value of pixel at a location
+\item \code{at(im, x, y, z = 1, cc = 1) <- value}: set value of pixel at a location
 
-\item \code{color.at}: return value of all colour channels at a location
+\item \code{color.at()}: return value of all colour channels at a location
 
-\item \code{color.at<-}: set value of all colour channels at a location
+\item \code{color.at(im, x, y, z = 1) <- value}: set value of all colour channels at a location
+
 }}
-
 \examples{
 im <- as.cimg(function(x,y) x+y,50,50)
 at(im,10,1)

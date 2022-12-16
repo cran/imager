@@ -28,13 +28,13 @@ Convert various objects to image lists
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{list}: convert from list
+\item \code{as.imlist(list)}: convert from list
 
-\item \code{imlist}: Convert from imlist (identity)
+\item \code{as.imlist(imlist)}: Convert from imlist (identity)
 
-\item \code{cimg}: Convert from image
+\item \code{as.imlist(cimg)}: Convert from image
+
 }}
-
 \examples{
 list(a=boats,b=boats*2) \%>\% as.imlist
 }

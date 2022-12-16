@@ -25,9 +25,9 @@ subim is an alias defined for backward-compatibility.
 }
 \section{Functions}{
 \itemize{
-\item \code{subim}: alias for imsub
-}}
+\item \code{subim()}: alias for imsub
 
+}}
 \examples{
 parrots <- load.example("parrots")
 imsub(parrots,x < 30) #Only the first 30 columns

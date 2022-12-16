@@ -72,44 +72,44 @@ All functions listed here assume the input image has three colour channels (spec
 }
 \section{Functions}{
 \itemize{
-\item \code{RGBtoHSL}: RGB to HSL conversion
+\item \code{RGBtoHSL()}: RGB to HSL conversion
 
-\item \code{RGBtoXYZ}: CIE RGB to CIE XYZ (1931) conversion, D65 white point
+\item \code{RGBtoXYZ()}: CIE RGB to CIE XYZ (1931) conversion, D65 white point
 
-\item \code{XYZtoRGB}: CIE XYZ to CIE RGB (1931) conversion, D65 white point
+\item \code{XYZtoRGB()}: CIE XYZ to CIE RGB (1931) conversion, D65 white point
 
-\item \code{HSLtoRGB}: HSL to RGB conversion
+\item \code{HSLtoRGB()}: HSL to RGB conversion
 
-\item \code{RGBtoHSV}: RGB to HSV conversion
+\item \code{RGBtoHSV()}: RGB to HSV conversion
 
-\item \code{HSVtoRGB}: HSV to RGB conversion
+\item \code{HSVtoRGB()}: HSV to RGB conversion
 
-\item \code{RGBtoHSI}: RGB to HSI conversion
+\item \code{RGBtoHSI()}: RGB to HSI conversion
 
-\item \code{HSItoRGB}: HSI to RGB conversion
+\item \code{HSItoRGB()}: HSI to RGB conversion
 
-\item \code{RGBtosRGB}: RGB to sRGB conversion
+\item \code{RGBtosRGB()}: RGB to sRGB conversion
 
-\item \code{sRGBtoRGB}: sRGB to RGB conversion
+\item \code{sRGBtoRGB()}: sRGB to RGB conversion
 
-\item \code{RGBtoYCbCr}: RGB to YCbCr conversion
+\item \code{RGBtoYCbCr()}: RGB to YCbCr conversion
 
-\item \code{YCbCrtoRGB}: YCbCr to RGB conversion
+\item \code{YCbCrtoRGB()}: YCbCr to RGB conversion
 
-\item \code{RGBtoYUV}: RGB to YUV conversion
+\item \code{RGBtoYUV()}: RGB to YUV conversion
 
-\item \code{YUVtoRGB}: YUV to RGB conversion
+\item \code{YUVtoRGB()}: YUV to RGB conversion
 
-\item \code{LabtoRGB}: Lab to RGB (linear)
+\item \code{LabtoRGB()}: Lab to RGB (linear)
 
-\item \code{RGBtoLab}: RGB (linear) to Lab
+\item \code{RGBtoLab()}: RGB (linear) to Lab
 
-\item \code{LabtoXYZ}: Lab to XYZ
+\item \code{LabtoXYZ()}: Lab to XYZ
 
-\item \code{XYZtoLab}: XYZ to Lab
+\item \code{XYZtoLab()}: XYZ to Lab
 
-\item \code{LabtosRGB}: Lab to sRGB
+\item \code{LabtosRGB()}: Lab to sRGB
 
-\item \code{sRGBtoLab}: sRGB to Lab
+\item \code{sRGBtoLab()}: sRGB to Lab
+
 }}
-

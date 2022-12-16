@@ -44,19 +44,19 @@ Imager implements various converters that turn your data into cimg objects. If y
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{numeric}: convert numeric
+\item \code{as.cimg(numeric)}: convert numeric
 
-\item \code{logical}: convert logical
+\item \code{as.cimg(logical)}: convert logical
 
-\item \code{double}: convert double
+\item \code{as.cimg(double)}: convert double
 
-\item \code{cimg}: return object
+\item \code{as.cimg(cimg)}: return object
 
-\item \code{vector}: convert vector
+\item \code{as.cimg(vector)}: convert vector
 
-\item \code{matrix}: Convert to matrix
+\item \code{as.cimg(matrix)}: Convert to matrix
+
 }}
-
 \examples{
 as.cimg(1:100,x=10,y=10) #10x10, grayscale image
 as.cimg(rep(1:100,3),x=10,y=10,cc=3) #10x10 RGB

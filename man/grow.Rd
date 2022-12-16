@@ -26,9 +26,9 @@ A structuring element is a pattern to be moved over the image: for example a 3x3
 }
 \section{Functions}{
 \itemize{
-\item \code{shrink}: shrink pixset using erosion
-}}
+\item \code{shrink()}: shrink pixset using erosion
 
+}}
 \examples{
 #A pixel set:
 a <- grayscale(boats) > .8

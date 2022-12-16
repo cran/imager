@@ -31,15 +31,15 @@ Resize image by a single scale factor. For non-uniform scaling and a wider range
 }
 \section{Functions}{
 \itemize{
-\item \code{resize_doubleXY}: Double size
+\item \code{resize_doubleXY()}: Double size
 
-\item \code{resize_halfXY}: Half size
+\item \code{resize_halfXY()}: Half size
 
-\item \code{resize_tripleXY}: Triple size
+\item \code{resize_tripleXY()}: Triple size
 
-\item \code{imresize}: resize by scale factor
+\item \code{imresize()}: resize by scale factor
+
 }}
-
 \examples{
 im <- load.example("parrots")
 imresize(im,1/4) #Quarter size

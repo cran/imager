@@ -43,21 +43,21 @@ Extract one frame out of a 4D image/video
 }
 \section{Functions}{
 \itemize{
-\item \code{frame}: Extract frame
+\item \code{frame()}: Extract frame
 
-\item \code{imcol}: Extract a particular column from an image
+\item \code{imcol()}: Extract a particular column from an image
 
-\item \code{imrow}: Extract a particular row from an image
+\item \code{imrow()}: Extract a particular row from an image
 
-\item \code{channel}: Extract an image channel
+\item \code{channel()}: Extract an image channel
 
-\item \code{R}: Extract red channel
+\item \code{R()}: Extract red channel
 
-\item \code{G}: Extract green channel
+\item \code{G()}: Extract green channel
 
-\item \code{B}: Extract blue channel
+\item \code{B()}: Extract blue channel
+
 }}
-
 \examples{
 #Extract the red channel from the boats image, then the first row, plot
 rw <- R(boats) \%>\% imrow(10)

@@ -27,14 +27,14 @@ Image dimensions
 }
 \section{Functions}{
 \itemize{
-\item \code{width}: Width of the image (in pixels)
+\item \code{width()}: Width of the image (in pixels)
 
-\item \code{height}: Height of the image (in pixels)
+\item \code{height()}: Height of the image (in pixels)
 
-\item \code{spectrum}: Number of colour channels
+\item \code{spectrum()}: Number of colour channels
 
-\item \code{depth}: Depth of the image/number of frames in a video
+\item \code{depth()}: Depth of the image/number of frames in a video
 
-\item \code{nPix}: Total number of pixels (prod(dim(im)))
+\item \code{nPix()}: Total number of pixels (prod(dim(im)))
+
 }}
-

@@ -20,9 +20,9 @@ Cleaning up can be achieved by shrinking the set (removing speckle), followed by
 }
 \section{Functions}{
 \itemize{
-\item \code{fill}: Fill in holes using morphological closing
-}}
+\item \code{fill()}: Fill in holes using morphological closing
 
+}}
 \examples{
 im <- load.example("birds") \%>\% grayscale
 sub <- imsub(-im,y> 380) \%>\% threshold("85\%")

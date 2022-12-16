@@ -24,9 +24,9 @@ crop.bbox crops an image using the bounding box of a pixset.
 }
 \section{Functions}{
 \itemize{
-\item \code{crop.bbox}: crop image using the bounding box of pixset px
-}}
+\item \code{crop.bbox()}: crop image using the bounding box of pixset px
 
+}}
 \examples{
 im <- grayscale(boats)
 px <- im > .85

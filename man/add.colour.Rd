@@ -22,9 +22,9 @@ Add colour channels to a grayscale image or pixel set
 }
 \section{Functions}{
 \itemize{
-\item \code{add.color}: Alias for add.colour
-}}
+\item \code{add.color()}: Alias for add.colour
 
+}}
 \examples{
 grayscale(boats) #No more colour channels
 add.colour(grayscale(boats)) #Image has depth = 3 (but contains only grays)

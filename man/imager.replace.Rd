@@ -32,17 +32,17 @@ Note that cimg objects can also be treated as regular arrays and modified using 
 }
 \section{Functions}{
 \itemize{
-\item \code{channel<-}: Replace image channel
+\item \code{channel(x, ind) <- value}: Replace image channel
 
-\item \code{R<-}: Replace red channel
+\item \code{R(x) <- value}: Replace red channel
 
-\item \code{G<-}: Replace green channel
+\item \code{G(x) <- value}: Replace green channel
 
-\item \code{B<-}: Replace blue channel
+\item \code{B(x) <- value}: Replace blue channel
 
-\item \code{frame<-}: Replace image frame
+\item \code{frame(x, ind) <- value}: Replace image frame
+
 }}
-
 \examples{
 boats.cp <- boats
 #Set the green channel in the boats image to 0

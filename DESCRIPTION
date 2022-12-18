@@ -1,7 +1,7 @@
 Package: imager
 Type: Package
 Title: Image Processing Library Based on 'CImg'
-Version: 0.42.14
+Version: 0.42.15
 Author: Simon Barthelme [aut],
   David Tschumperle [ctb],
   Jan Wijffels [ctb],
@@ -33,6 +33,6 @@ Suggests: knitr, rmarkdown,ggplot2,dplyr,scales,
         testthat,raster,spatstat.geom,magick,Cairo
 VignetteBuilder: knitr
 NeedsCompilation: yes
-Packaged: 2022-12-16 02:06:34 UTC; tanuki
+Packaged: 2022-12-17 10:22:22 UTC; tanuki
 Repository: CRAN
-Date/Publication: 2022-12-16 12:50:02 UTC
+Date/Publication: 2022-12-18 17:20:02 UTC

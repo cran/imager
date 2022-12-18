@@ -131,19 +131,16 @@
 // Define correct string functions for each compiler and OS.
 #if cimg_OS==2 && defined(_MSC_VER)
 #define cimg_sscanf std::sscanf
-#define cimg_sprintf std::sprintf
 #define cimg_snprintf cimg::_snprintf
 #define cimg_vsnprintf cimg::_vsnprintf
 #else
 #include <stdio.h>
 #if defined(__MACOSX__) || defined(__APPLE__)
 #define cimg_sscanf cimg::_sscanf
-#define cimg_sprintf cimg::_sprintf
 #define cimg_snprintf cimg::_snprintf
 #define cimg_vsnprintf cimg::_vsnprintf
 #else
 #define cimg_sscanf std::sscanf
-#define cimg_sprintf std::sprintf
 #define cimg_snprintf snprintf
 #define cimg_vsnprintf vsnprintf
 #endif
@@ -16660,7 +16657,7 @@ namespace cimg_library_suffixed {
 
       // Check end of data.
       if (ptrs<ptre) {
-        if (error_message) cimg_sprintf(error_message,
+        if (error_message) cimg_snprintf(error_message, 128,
                                         "CImg3d (%u,%u) contains %u value%s more than expected",
                                         nb_points,nb_primitives,(unsigned int)(ptre - ptrs),(ptre - ptrs)>1?"s":"");
         return false;

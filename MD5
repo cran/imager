@@ -1,4 +1,4 @@
-6f512339afabd1cfff56080481b05e17 *DESCRIPTION
+d5fc11294622d19d99fca4a41c239a68 *DESCRIPTION
 19255e2bc962ea1d1eda1801617cbef6 *NAMESPACE
 47f3c577210aad89d50795462f54d4b5 *NEWS
 18aaf4dbab2744bf1bbb776060c26158 *NEWS.md
@@ -34,16 +34,16 @@ af01156a3aada58b7c87b21136a620e9 *R/transformations.R
 4f97ce3dc62ddc04bc68301e22723dca *data/boats.rda
 b96ea788d8c7fc2140e8577b80e5500f *inst/doc/gettingstarted.R
 52b87146552fe1b6cab5158a4ad6a8a5 *inst/doc/gettingstarted.Rmd
-4a4070ac26af58660d28277db5d5a628 *inst/doc/gettingstarted.html
+3ddd165d00363a33c2f2519ebb29406b *inst/doc/gettingstarted.html
 d6221a0e9995c6e3568f18062dcb3c5a *inst/doc/pixsets.R
 252f0a23e71ce51423fca46a871dea79 *inst/doc/pixsets.Rmd
-45e27575296efde28938f0eb26d8bffa *inst/doc/pixsets.html
+386d71ff198d874e576c41a43ce30fcb *inst/doc/pixsets.html
 ed59819ea84d02aae563ae9d421e1235 *inst/extdata/HubbleDeepField.jpg
 05e04a3bc5a858c40e001cc65b853dfc *inst/extdata/Leonardo_Birds.jpg
 1ff4ed9a8af95f958db61e079257cf78 *inst/extdata/coins.png
 7ad6e497bb7da372d579ddfe904c279f *inst/extdata/parrots.png
 227d8d140c00d188d8043455c89a3b6a *inst/extdata/tennis_sif.mp4
-569e0b5e703898dae1a474ab3dfb356c *inst/include/CImg.h
+7a0c899928dfc24eb4082262240b6af4 *inst/include/CImg.h
 8cb05a30e373b683455cd61d6bdc2abb *inst/include/NOTE_CImg
 38f3916b66c20d09537b0ce0bf6b65aa *inst/include/imager.h
 fe7c92e38433e248062b71d5194f39dd *inst/include/plugins/inpaint.h

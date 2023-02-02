@@ -43,10 +43,10 @@ colorise(im,px,"red",alpha=.5) %>% plot
 plot(px)
 
 ## -----------------------------------------------------------------------------
-where(px) %>% head
+imager::where(px) %>% head
 
 ## -----------------------------------------------------------------------------
-where(px) %>% dplyr::summarise(mx=mean(x),my=mean(y))
+imager::where(px) %>% dplyr::summarise(mx=mean(x),my=mean(y))
 
 ## -----------------------------------------------------------------------------
 plot(im)
@@ -67,7 +67,7 @@ is.connected(px)
 boundary(px) %>% plot
 ##Make your own highlight function:
 plot(im)
-boundary(px) %>% where %$% { points(x,y,cex=.1,col="red") }
+boundary(px) %>% imager::where() %$% { points(x,y,cex=.1,col="red") }
 
 ## -----------------------------------------------------------------------------
 plot(im)
@@ -106,7 +106,7 @@ imsplit(px,"y",2) %>% imappend("x") %>% plot()
 ## -----------------------------------------------------------------------------
 px <- boats > .8
 px
-where(px) %>% head
+imager::where(px) %>% head
 
 ## -----------------------------------------------------------------------------
 plot(px)
@@ -116,10 +116,10 @@ imsplit(px,"c") %>% plot
 
 ## -----------------------------------------------------------------------------
 #parall stands for "parallel-all", and works similarly to parmax, parmin, etc.
-imsplit(px,"c") %>% parall %>% where %>% head
+imsplit(px,"c") %>% parall %>% imager::where() %>% head
 
 #at each location, test if any channel is in px
-imsplit(px,"c") %>% parany %>% where %>% head
+imsplit(px,"c") %>% parany %>% imager::where() %>% head
 
 #highlight the set (unsurprisingly, it's mostly white pixels)
 plot(boats)

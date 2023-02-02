@@ -98,13 +98,13 @@ It converts "px" to an image and uses plot.cimg.
 The *where* function returns coordinates for pixels in the set:
 
 ```{r}
-where(px) %>% head
+imager::where(px) %>% head
 ```
 
 where returns a data.frame. That format is especially convenient if you want to compute some statistics on the coordinates, e.g., the center of mass of a region defined by a pixset:
 
 ```{r}
-where(px) %>% dplyr::summarise(mx=mean(x),my=mean(y))
+imager::where(px) %>% dplyr::summarise(mx=mean(x),my=mean(y))
 ```
 
 
@@ -146,7 +146,7 @@ The boundary function computes the boundaries of the set:
 boundary(px) %>% plot
 ##Make your own highlight function:
 plot(im)
-boundary(px) %>% where %$% { points(x,y,cex=.1,col="red") }
+boundary(px) %>% imager::where() %$% { points(x,y,cex=.1,col="red") }
 ```
 
 # Growing, shrinking, morphological operations
@@ -206,7 +206,7 @@ Be careful: each colour channel is treated as having its own set of pixels, so t
 ```{r}
 px <- boats > .8
 px
-where(px) %>% head
+imager::where(px) %>% head
 ```
 
 Here "px" tells us the location in all locations and across channels of pixels with values higher than .8. If you plot it you'll see the following:
@@ -226,10 +226,10 @@ If you need to find the pixel locations that have a value of .9 in all channels,
 
 ```{r}
 #parall stands for "parallel-all", and works similarly to parmax, parmin, etc.
-imsplit(px,"c") %>% parall %>% where %>% head
+imsplit(px,"c") %>% parall %>% imager::where() %>% head
 
 #at each location, test if any channel is in px
-imsplit(px,"c") %>% parany %>% where %>% head
+imsplit(px,"c") %>% parany %>% imager::where() %>% head
 
 #highlight the set (unsurprisingly, it's mostly white pixels)
 plot(boats)

@@ -1,4 +1,4 @@
-e25e75cc88010fd8ff250f82de2b9d88 *DESCRIPTION
+7885f937ae9b35d5f351f30220286a5a *DESCRIPTION
 19255e2bc962ea1d1eda1801617cbef6 *NAMESPACE
 47f3c577210aad89d50795462f54d4b5 *NEWS
 18aaf4dbab2744bf1bbb776060c26158 *NEWS.md
@@ -27,17 +27,17 @@ af01156a3aada58b7c87b21136a620e9 *R/transformations.R
 8d2487dbf45064f33b08e5a80830b68e *R/utils-pipe.R
 893bbda5f2060b4a7bf3ec2c653ded3a *R/utils.R
 2a0e8911b35245f2bf00be4b4b804f5d *TODO
-0a0bf378d52fd61a547244481ce8e83c *build/vignette.rds
+f3e93890994371c2e0fca6c4a7a73b15 *build/vignette.rds
 087f1e3baae5e26d67d002135090e6d9 *cleanup
 36763264f33479523e5a23b4ab630293 *configure
 5f3e2952039c875685c1d56220fed002 *configure.ac
 4f97ce3dc62ddc04bc68301e22723dca *data/boats.rda
 b96ea788d8c7fc2140e8577b80e5500f *inst/doc/gettingstarted.R
 52b87146552fe1b6cab5158a4ad6a8a5 *inst/doc/gettingstarted.Rmd
-978352adbb8859ef67851fbf12eaf211 *inst/doc/gettingstarted.html
+d723fd40f67f7906ed87b8dd3c6ab54f *inst/doc/gettingstarted.html
 be6998ccd0d251af74e0f2f1ae3fe54d *inst/doc/pixsets.R
 fe0d2d4e3abdeb0b0ec4252f81a3b01d *inst/doc/pixsets.Rmd
-08a58d6d63e0764e3086c0c9008feed9 *inst/doc/pixsets.html
+0bbeba8cd2e62fb412cff96320fccf48 *inst/doc/pixsets.html
 ed59819ea84d02aae563ae9d421e1235 *inst/extdata/HubbleDeepField.jpg
 05e04a3bc5a858c40e001cc65b853dfc *inst/extdata/Leonardo_Birds.jpg
 1ff4ed9a8af95f958db61e079257cf78 *inst/extdata/coins.png
@@ -199,7 +199,7 @@ faa21e1a5cb4c28f43660fe8cebadad0 *man/rm.alpha.Rd
 175e0ff835838c3a97f4e262ea2e22a9 *man/watershed.Rd
 6d2ea6da4b089e34b2c74fa9915598ad *man/where.Rd
 29a6592cfe734be0f496a2d3141cf400 *src/Makevars.in
-c0af0290071243178a60d4801ddc2179 *src/Makevars.ucrt
+14b5caaa148d5a85176a209a2d9fad47 *src/Makevars.ucrt
 d8f1aa4d8feb32a1bf10527b7e0e92e3 *src/Makevars.win
 4170a9df368e3e99922abfa10ce987c3 *src/RcppExports.cpp
 cac489a7495799d378cf0c10c8db3ebd *src/colourspace.cpp

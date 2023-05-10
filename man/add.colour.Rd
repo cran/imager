@@ -26,6 +26,7 @@ Add colour channels to a grayscale image or pixel set
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 grayscale(boats) #No more colour channels
 add.colour(grayscale(boats)) #Image has depth = 3 (but contains only grays)
 }

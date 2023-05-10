@@ -17,6 +17,7 @@ autocrop(im, color = color.at(im, 1, 1), axes = "zyx")
 Autocrop image region
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Add pointless padding
 padded <- pad(boats,30,"xy")
 plot(padded)

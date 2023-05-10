@@ -11,6 +11,7 @@
 #'
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' layout(t(1:2))
 #' plot(boats,main="Original")
 #' imsharpen(boats,150)  %>% plot(main="Sharpened")
@@ -29,6 +30,7 @@ imsharpen <- function(im,amplitude,type="diffusion",edge=1,alpha=0,sigma=0)
 #' @seealso deriche,vanvliet,inpaint,medianblur
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' isoblur(boats,3) %>% plot(main="Isotropic blur, sigma=3")
 #' isoblur(boats,10) %>% plot(main="Isotropic blur, sigma=10")
 isoblur <- function(im,sigma,neumann=TRUE,gaussian=TRUE,na.rm=FALSE)
@@ -52,6 +54,7 @@ isoblur <- function(im,sigma,neumann=TRUE,gaussian=TRUE,na.rm=FALSE)
 ##' @param sigma std. deviation of the Gaussian (size of neighbourhood)
 ##' @return an image with missing values filled-in.
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' im <- boats
 ##' im[sample(nPix(im),1e4)] <- NA
 ##' inpaint(im,1) %>% imlist(im,.) %>%

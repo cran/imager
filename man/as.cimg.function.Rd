@@ -39,6 +39,7 @@ an object of class cimg
 Similar to as.im.function from the spatstat package, but simpler. Creates a grid of pixel coordinates x=1:width,y=1:height and (optional) z=1:depth, and evaluates the input function at these values.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 im = as.cimg(function(x,y) cos(sin(x*y/100)),100,100)
 plot(im)
 #The following is just a rectangle at the center of the image 

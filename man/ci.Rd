@@ -17,6 +17,7 @@ Allows you to concatenate image lists together, or images with image lists.
 Doesn't quite work like R's "c" primitive: image lists are always *flat*, not nested, meaning each element of an image list is an image.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 
 l1 <- imlist(boats,grayscale(boats))
 l2 <- imgradient(boats,"xy")

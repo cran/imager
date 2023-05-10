@@ -24,6 +24,7 @@ a padded image
 Pad image with n pixels along specified axis
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 pad(boats,20,"xy") \%>\% plot
 pad(boats,20,pos=-1,"xy") \%>\% plot
 pad(boats,20,pos=1,"xy") \%>\% plot

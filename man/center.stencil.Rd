@@ -15,6 +15,7 @@ center.stencil(stencil, ...)
 Center stencil at a location
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 stencil <- data.frame(dx=seq(-2,2,1),dy=seq(-2,2,1))
 center.stencil(stencil,x=10,y=20)
 }

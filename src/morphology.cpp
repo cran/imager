@@ -15,6 +15,7 @@ using namespace cimg_library;
 //' @param tolerance Tolerance used to determine if two neighboring pixels belong to the same region.
 //' @export
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' imname <- system.file('extdata/parrots.png',package='imager')
 //' im <- load.image(imname) %>% grayscale
 //' #Thresholding yields different discrete regions of high intensity
@@ -64,6 +65,7 @@ NumericVector blabel(LogicalVector im,bool high_connectivity=false)
 //' @param real_mode If TRUE, perform erosion as defined on the reals. If FALSE, perform binary erosion (default FALSE).
 //' @export
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' fname <- system.file('extdata/Leonardo_Birds.jpg',package='imager')
 //' im <- load.image(fname) %>% grayscale
 //' outline <- threshold(-im,"95%")
@@ -261,6 +263,7 @@ LogicalVector bdilate_square(LogicalVector im,int size) {
 //' @param priority Priority map.
 //' @param fill_lines Sets if watershed lines must be filled or not.
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' #In our initial image we'll place three seeds 
 //' #(non-zero pixels) at various locations, with values 1, 2 and 3. 
 //' #We'll use the watershed algorithm to propagate these values
@@ -303,6 +306,7 @@ NumericVector watershed(NumericVector im,NumericVector priority, bool fill_lines
 //' @param metric Type of metric. Can be <tt>{ 0=Chebyshev | 1=Manhattan | 2=Euclidean | 3=Squared-euclidean }</tt>.
 //' @export
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' imd <- function(x,y) imdirac(c(100,100,1,1),x,y)
 //' #Image is three white dots
 //' im <- imd(20,20)+imd(40,40)+imd(80,80)

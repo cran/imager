@@ -44,6 +44,7 @@ make.video takes as argument a directory that contains a sequence of images repr
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 ## Not run
 ## iml <- map_il(seq(0,20,l=60),~ isoblur(boats,.))
 ## f <- tempfile(fileext=".avi")

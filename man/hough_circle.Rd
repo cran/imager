@@ -19,6 +19,7 @@ Detects circles of known radius in a pixset. The output is an image where the pi
 NB: in the current implementation, does not detect circles centred outside the limits of the pixset.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- load.example('coins')
 px <- cannyEdges(im)
 #Find circles of radius 20

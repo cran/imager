@@ -7,5 +7,5 @@
 \description{
 CImg by David Tschumperle is a C++ library for image processing. It provides most common functions for image manipulation and filtering, as well as some advanced algorithms. imager makes these functions accessible from R and adds many utilities for accessing and working with image data from R.
 You should install ImageMagick if you want support for image formats beyond PNG and JPEG, and ffmpeg if you need to work with videos (in which case you probably also want to take a look at experimental package imagerstreams on github).
-Package documentation is available at http://dahtah.github.io/imager/.
+Package documentation is available at http://asgr.github.io/imager/.
 }

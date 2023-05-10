@@ -20,6 +20,7 @@ nothing
 You'll need ImageMagick for formats other than PNG and JPEG.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Create temporary file
 tmpF <- tempfile(fileext=".png")
 #Save boats image

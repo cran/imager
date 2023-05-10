@@ -8,6 +8,7 @@
 #' @return an igraph "graph" object
 #' @seealso as.igraph.cimg
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' library(igraph)
 #' #Simple 3x3 lattice
 #' px <- px.all(imfill(3,3))
@@ -60,6 +61,7 @@ as.igraph.pixset <- function(x,weighted=TRUE,...)
 ##' @author Simon Barthelme
 ##' @seealso as.igraph.pixset
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' library(igraph)
 ##' im <- imfill(5,5)
 ##' G <- as.igraph(im)

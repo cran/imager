@@ -33,6 +33,7 @@ Methods to convert various objects to pixsets
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 #When converting an image to a pixset, the default is to include all pixels with non-zero value 
 as.pixset(boats)
 #The above is equivalent to:

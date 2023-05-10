@@ -6,6 +6,7 @@
 ##' @param axis which axis to append along (e.g. "c" for colour)
 ##' @param ... further arguments to be passed to fun
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' build.im <- function(size) as.cimg(function(x,y) (x+y)/size,size,size)
 ##' liply(c(10,50,100),build.im,"y") %>% plot
 ##' @export
@@ -23,6 +24,7 @@ liply <- function(lst,fun,axis,...)
 ##' @param fun function to apply
 ##' @param ... extra arguments for function fun
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' parrots <- load.example("parrots")
 ##' ilply(parrots,"c",mean) #mean luminance per colour channel
 ##' @export
@@ -38,6 +40,7 @@ ilply <- function(im,axis,fun,...)
 ##' @param fun function to apply
 ##' @param ... extra arguments to function fun
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' idply(boats,"c",mean) #mean luminance per colour channel
 ##' @export
 idply <- function(im,axis,fun,...)
@@ -55,6 +58,7 @@ idply <- function(im,axis,fun,...)
 ##' @param fun function to apply
 ##' @param ... extra arguments to function fun
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' ##' #Normalise colour channels separately, recombine
 ##' iiply(boats,"c",function(v) (v-mean(v))/sd(v)) %>% plot 
 ##' 
@@ -75,6 +79,7 @@ iiply <- function(im,axis,fun,...)
 ## if nb = -px, with px > 1 split into blocks of px pixels.
 ##' @seealso imappend (the reverse operation)
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' im <- as.cimg(function(x,y,z) x+y+z,10,10,5)
 ##' imsplit(im,"z") #Split along the z axis into a list with 5 elements
 ##' imsplit(im,"z",2) #Split along the z axis into two groups
@@ -145,11 +150,15 @@ imsplit.recur <- function(im,spl,nb=-1)
 ##' These functions take a list of images and combine them by adding, multiplying, taking the parallel min or max, etc.
 ##' The max. in absolute value of (x1,x2) is defined as x1 if (|x1| > |x2|), x2 otherwise. It's useful for example in getting the most extreme value while keeping the sign. 
 ##' "parsort","parrank" and "parorder" aren't really reductions because they return a list of the same size. They perform a pixel-wise sort (resp. order and rank) across the list.
+##' 
 ##' parvar returns an unbiased estimate of the variance (as in the base var function). parsd returns the square root of parvar. 
+##' 
+##' To correctly use multiple threads users should set \option{nthreads} in \code{\link{cimg.use.openmp}}. You also need to be careful that this is not higher than the value in the system environment variable OMP_THREAD_LIMIT (this can be checked with Sys.getenv('OMP_THREAD_LIMIT')). The OMP_THREAD_LIMIT thread limit usually needs to be correctly set before launching R, so using Sys.setenv once a session has started is not certain to work.
 ##' @name imager.combine
 ##' @param x a list of images
 ##' @param na.rm ignore NAs (default FALSE)
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' im1 <- as.cimg(function(x,y) x,50,50)
 ##' im2 <- as.cimg(function(x,y) y,50,50)
 ##' im3 <- as.cimg(function(x,y) cos(x/10),50,50)
@@ -246,7 +255,7 @@ parmin <- function(x,na.rm=FALSE) check.reduce(x) %>% reduce_minmax(na_rm=na.rm,
 ##' @export
 enorm <- function(x) check.reduce(x) %>% reduce_list(5)
 
-##' @describeIn imager.combine Median
+##' @describeIn imager.combine Parallel Median over images
 ##' @export
 parmed <- function(x,na.rm=FALSE) check.reduce(x) %>% reduce_med(na_rm=na.rm)
 
@@ -383,6 +392,7 @@ maxmin.ind <- function(L,max=TRUE)
 #' @seealso imsplit (the reverse operation)
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' imappend(list(boats,boats),"x") %>% plot
 #' imappend(list(boats,boats),"y") %>% plot
 #' purrr::map(1:3, ~imnoise(100,100)) %>% imappend("c") %>% plot

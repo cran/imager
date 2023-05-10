@@ -10,6 +10,7 @@
 ##' @param dim a vector of image dimensions (optional, may be used instead of "im")
 ##' @return a data.frame
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' im <- as.cimg(array(0,c(10,10))) #A 10x10 image
 ##' pixel.grid(im) %>% head
 ##' pixel.grid(dim=dim(im)) %>% head #Same as above
@@ -67,6 +68,7 @@ pixel.grid <- function(im,standardise=FALSE,drop.unused=TRUE,dim=NULL)
 ##' @return another image of the same size, containing pixel coordinates
 ##' @seealso as.cimg.function, pixel.grid
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' im <- imfill(5,5) #An image
 ##' Xc(im) #An image of the same size, containing the x coordinates of each pixel
 ##' Xc(im) %>% imrow(1)
@@ -108,6 +110,7 @@ coordImage <- function(im,channel)
 ##' @param outside what to do if some coordinates are outside the image: "stop" issues error, "NA" replaces invalid coordinates with NAs. Default: "stop". 
 ##' @return a vector of indices (NA if the indices are invalid)
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' im <- as.cimg(function(x,y) x+y,100,100)
 ##' px <- index.coord(im,data.frame(x=c(3,3),y=c(1,2)))
 ##' im[px] #Values should be 3+1=4, 3+2=5
@@ -167,6 +170,7 @@ index.coord <- function(im,coords,outside="stop")
 ##' @return a data.frame of coordinate values
 ##' @seealso index.coord for the reverse operation
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' cind <- coord.index(boats,33)
 ##' #Returns (x,y,z,c) coordinates of the 33rd pixel in the array
 ##' cind
@@ -204,6 +208,7 @@ pixel.index <- coord.index
 ##' @param condition a function that takes scalars and returns logicals
 ##' @return coordinates of all pixels such that condition(pixel) == TRUE
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' im <- as.cimg(function(x,y) x+y,10,10)
 ##' get.locations(im,function(v) v < 4)
 ##' get.locations(im,function(v) v^2 + 3*v - 2 < 30)

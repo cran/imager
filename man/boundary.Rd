@@ -17,6 +17,7 @@ boundary(px, depth = 1, high_connexity = FALSE)
 Find the boundary of a shape in a pixel set
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 px.diamond(10,30,30) \%>\% boundary \%>\% plot
 px.square(10,30,30) \%>\% boundary \%>\% plot
 px.square(10,30,30) \%>\% boundary(depth=3) \%>\% plot

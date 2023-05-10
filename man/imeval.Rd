@@ -31,6 +31,7 @@ The old version of imeval used CImg's internal math parser, but has been retired
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 ## Computing mean absolute deviation
 imeval(boats, ~ mean(abs(.-median(.))))
 ##Equivalent to:
@@ -85,6 +86,7 @@ grayscale(boats) \%>\%
 ##e.g.
 imeval(boats, ~ .*s(.,3)) \%>\% plot
 
+\dontshow{cimg.limit.openmp()}
 #The rank function outputs a vector
 grayscale(boats) \%>\% rank \%>\% class
 #Auto-reshape into an image

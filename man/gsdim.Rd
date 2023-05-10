@@ -16,6 +16,7 @@ returns c(dim(im)[1:3],1)
 Shortcut, returns the dimensions of an image if it had only one colour channel
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 imnoise(dim=gsdim(boats))
 }
 \author{

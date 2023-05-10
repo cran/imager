@@ -200,6 +200,7 @@ draw_text_ <- function(im, x, y, text, color, opacity = 1, fsize = 20L) {
 #' @param neumann If true, use Neumann boundary conditions (default false, Dirichlet)
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' deriche(boats,sigma=2,order=0) %>% plot("Zeroth-order Deriche along x")
 #' deriche(boats,sigma=2,order=1) %>% plot("First-order Deriche along x")
 #' deriche(boats,sigma=2,order=1) %>% plot("Second-order Deriche along x")
@@ -227,6 +228,7 @@ deriche <- function(im, sigma, order = 0L, axis = 'x', neumann = FALSE) {
 #'       recursive filtering. IEEE Trans. Signal Processing,
 #'       vol. 54, pp. 2365-2367, 2006.
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' vanvliet(boats,sigma=2,order=0) %>% plot("Zeroth-order Young-van Vliet along x")
 #' vanvliet(boats,sigma=2,order=1) %>% plot("First-order Young-van Vliet along x")
 #' vanvliet(boats,sigma=2,order=1) %>% plot("Second-order Young-van Vliet along x")
@@ -249,6 +251,7 @@ isoblur_ <- function(im, sigma, neumann = TRUE, gaussian = FALSE) {
 #' @param threshold Threshold used to discard pixels too far from the current pixel value in the median computation. Can be used for edge-preserving smoothing. Default 0 (include all pixels in window).
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' medianblur(boats,5) %>% plot(main="Median blur, 5 pixels")
 #' medianblur(boats,10) %>% plot(main="Median blur, 10 pixels")
 #' medianblur(boats,10,8) %>% plot(main="Median blur, 10 pixels, threshold = 8")
@@ -263,6 +266,7 @@ medianblur <- function(im, n, threshold = 0) {
 #' @param neumann If true, use Neumann boundary conditions, Dirichlet otherwise  (default true, Neumann)
 #' @seealso deriche(), vanvliet().
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' boxblur(boats,5) %>% plot(main="Dirichlet boundary")
 #' boxblur(boats,5,TRUE) %>% plot(main="Neumann boundary")
 #' @export
@@ -275,6 +279,7 @@ boxblur <- function(im, boxsize, neumann = TRUE) {
 #' The Laplacian is the sum of second derivatives, approximated here using finite differences.
 #' @param im an image
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' imlap(boats) %>% plot
 #' @export
 imlap <- function(im) {
@@ -293,6 +298,7 @@ imlap <- function(im) {
 #'
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' boxblur_xy(boats,20,5) %>% plot(main="Anisotropic blur")
 boxblur_xy <- function(im, sx, sy, neumann = TRUE) {
     .Call(`_imager_boxblur_xy`, im, sx, sy, neumann)
@@ -313,6 +319,7 @@ boxblur_xy <- function(im, sx, sy, neumann = TRUE) {
 #'
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' #Edge filter
 #' filter <- as.cimg(function(x,y) sign(x-5),10,10) 
 #' layout(t(1:2))
@@ -379,6 +386,7 @@ diffusion_tensors <- function(im, sharpness = 0.7, anisotropy = 0.6, alpha = 0.6
 #' @param nb_scales Number of scales used for the transform.
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' #Image compression: set small Haar coefficients to 0
 #' hr <- haar(boats,nb=3) 
 #' mask.low <- threshold(abs(hr),"75%")
@@ -433,6 +441,7 @@ displacement <- function(sourceIm, destIm, smoothness = 0.1, precision = 5.0, nb
 #' @param fast_approx If true, use fast approximation (default TRUE)
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' im <- load.image(system.file('extdata/Leonardo_Birds.jpg',package='imager'))
 #' im.noisy <- (im + 80*rnorm(prod(dim(im)))) 
 #' blur_anisotropic(im.noisy,ampl=1e4,sharp=1) %>% plot
@@ -493,6 +502,7 @@ interp_xyc <- function(inp, ix, iy, z, ic, cubic = FALSE) {
 #' @param tolerance Tolerance used to determine if two neighboring pixels belong to the same region.
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' imname <- system.file('extdata/parrots.png',package='imager')
 #' im <- load.image(imname) %>% grayscale
 #' #Thresholding yields different discrete regions of high intensity
@@ -519,6 +529,7 @@ blabel <- function(im, high_connectivity = FALSE) {
 #' @param real_mode If TRUE, perform erosion as defined on the reals. If FALSE, perform binary erosion (default FALSE).
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' fname <- system.file('extdata/Leonardo_Birds.jpg',package='imager')
 #' im <- load.image(fname) %>% grayscale
 #' outline <- threshold(-im,"95%")
@@ -599,6 +610,7 @@ bdilate_square <- function(im, size) {
 #' @param priority Priority map.
 #' @param fill_lines Sets if watershed lines must be filled or not.
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' #In our initial image we'll place three seeds 
 #' #(non-zero pixels) at various locations, with values 1, 2 and 3. 
 #' #We'll use the watershed algorithm to propagate these values
@@ -630,6 +642,7 @@ watershed <- function(im, priority, fill_lines = TRUE) {
 #' @param metric Type of metric. Can be <tt>{ 0=Chebyshev | 1=Manhattan | 2=Euclidean | 3=Squared-euclidean }</tt>.
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' imd <- function(x,y) imdirac(c(100,100,1,1),x,y)
 #' #Image is three white dots
 #' im <- imd(20,20)+imd(40,40)+imd(80,80)
@@ -725,6 +738,7 @@ rotate <- function(im, angle, interpolation = 1L, boundary = 0L) {
 #' @param interpolation Interpolation type. 0=nearest | 1=linear | 2=cubic 
 #' @param boundary_conditions Boundary conditions. 0=dirichlet | 1=neumann | 2=periodic 
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' rotate_xy(boats,30,200,400) %>% plot
 #' rotate_xy(boats,30,200,400,boundary=2) %>% plot
 #' @export
@@ -737,6 +751,7 @@ rotate_xy <- function(im, angle, cx, cy, interpolation = 1L, boundary_conditions
 #' @param axis Mirror axis ("x","y","z","c")
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' mirror(boats,"x") %>% plot
 #' mirror(boats,"y") %>% plot
 mirror <- function(im, axis) {
@@ -750,6 +765,7 @@ mirror <- function(im, axis) {
 #' @param perm a character string, e.g., "zxyc" to have the z-axis come first
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' im <- array(0,c(10,30,40,3)) %>% as.cimg
 #' permute_axes(im,"zxyc")
 permute_axes <- function(im, perm) {
@@ -787,6 +803,7 @@ resize_tripleXY <- function(im) {
 #'          - 2: Repeat Pattern (Fourier style).
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' imshift(boats,10,50) %>% plot
 imshift <- function(im, delta_x = 0L, delta_y = 0L, delta_z = 0L, delta_c = 0L, boundary_conditions = 0L) {
     .Call(`_imager_imshift`, im, delta_x, delta_y, delta_z, delta_c, boundary_conditions)
@@ -830,6 +847,7 @@ resize <- function(im, size_x = -100L, size_y = -100L, size_z = -100L, size_c = 
 #' @seealso imwarp for a user-friendly interface 
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' #Shift image via warp
 #' warp.x <- imfill(width(boats),height(boats),val=5)
 #' warp.y <- imfill(width(boats),height(boats),val=20)
@@ -875,6 +893,7 @@ px_append <- function(imlist, axis) {
 #' @param wx vector of coordinates for patch width 
 #' @param wy vector of coordinates for patch height 
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' #Example: median filtering using patch_summary_cimg
 #' #Center a patch at each pixel
 #' im <- grayscale(boats)
@@ -906,6 +925,7 @@ extract_fast <- function(im, fun, cx, cy, wx, wy) {
 #' @return a list of image patches (cimg objects)
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' #2 patches of size 5x5 located at (10,10) and (10,20)
 #' extract_patches(boats,c(10,10),c(10,20),5,5)
 extract_patches <- function(im, cx, cy, wx, wy, boundary_conditions = 0L) {
@@ -938,6 +958,10 @@ cimg_omp <- function() {
 
 set_cimg_omp <- function(mode) {
     .Call(`_imager_set_cimg_omp`, mode)
+}
+
+set_omp_num_threads <- function(threads) {
+    invisible(.Call(`_imager_set_omp_num_threads`, threads))
 }
 
 has_omp <- function() {

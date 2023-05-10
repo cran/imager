@@ -75,6 +75,7 @@ Erode/dilate image by a structuring element.
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 fname <- system.file('extdata/Leonardo_Birds.jpg',package='imager')
 im <- load.image(fname) \%>\% grayscale
 outline <- threshold(-im,"95\%")

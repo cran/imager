@@ -25,6 +25,7 @@ This is a convenience function for quickly creating blank images, or images fill
 If val is a logical value, creates a pixset instead.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 
 imfill(20,20) \%>\% plot #Blank image of size 20x20
 imfill(20,20,val=c(1,0,0)) \%>\% plot #All red image

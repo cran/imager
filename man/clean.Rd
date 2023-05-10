@@ -24,6 +24,7 @@ Cleaning up can be achieved by shrinking the set (removing speckle), followed by
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- load.example("birds") \%>\% grayscale
 sub <- imsub(-im,y> 380) \%>\% threshold("85\%")
 plot(sub)

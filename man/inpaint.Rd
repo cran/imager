@@ -18,6 +18,7 @@ an image with missing values filled-in.
 Fill in NA values (inpainting) using a Gaussian filter, i.e. replace missing pixel values with a weighted average of the neighbours.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- boats
 im[sample(nPix(im),1e4)] <- NA
 inpaint(im,1) \%>\% imlist(im,.) \%>\%

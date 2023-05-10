@@ -18,6 +18,7 @@ a cimg object
 R's native object for representing images is a "raster". This function converts raster objects to cimg objects.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 rst <- as.raster(matrix((1:4)/4,2,2))
 as.cimg(rst) \%>\% plot(int=FALSE)
 all.equal(rst,as.raster(as.cimg(rst)))

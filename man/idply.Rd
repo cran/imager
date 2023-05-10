@@ -19,5 +19,6 @@ idply(im, axis, fun, ...)
 Shorthand for imsplit followed by purrr::map_df
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 idply(boats,"c",mean) #mean luminance per colour channel
 }

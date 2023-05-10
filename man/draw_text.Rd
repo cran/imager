@@ -28,6 +28,7 @@ an image
 Like other native CImg drawing functions, this is meant to be basic but fast. Use implot for flexible drawing.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 draw_text(boats,100,100,"Some text",col="black") \%>\% plot
 }
 \seealso{

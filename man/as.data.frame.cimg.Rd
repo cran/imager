@@ -20,6 +20,7 @@ a data.frame
 This function combines the output of pixel.grid with the actual values (stored in $value)
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 
 #First five pixels
 as.data.frame(boats) \%>\% head(5)

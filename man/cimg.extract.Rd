@@ -59,6 +59,7 @@ Extract one frame out of a 4D image/video
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Extract the red channel from the boats image, then the first row, plot
 rw <- R(boats) \%>\% imrow(10)
 plot(rw,type="l",xlab="x",ylab="Pixel value")

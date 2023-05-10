@@ -29,6 +29,7 @@ Works like purrr::map, purrr::map_dbl and the like but ensures that the output i
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Returns a list
 imsplit(boats,"x",2) \%>\% purrr::map(~ isoblur(.,3))
 #Returns an "imlist" object

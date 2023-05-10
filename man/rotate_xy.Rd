@@ -23,6 +23,7 @@ rotate_xy(im, angle, cx, cy, interpolation = 1L, boundary_conditions = 0L)
 Rotate image by an arbitrary angle, around a center point.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 rotate_xy(boats,30,200,400) \%>\% plot
 rotate_xy(boats,30,200,400,boundary=2) \%>\% plot
 }

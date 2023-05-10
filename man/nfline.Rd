@@ -23,6 +23,7 @@ This is a simple interface over abline meant to be used along with the Hough tra
 See the documentation for hough_lines.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Boring example, see ?hough_lines
 plot(boats)
 nfline(theta=0,rho=10,col="red")

@@ -20,6 +20,7 @@ This function provides 2D and 3D (linear or cubic) interpolation for pixel value
 Locations need to be provided as a data.frame with variables x,y,z, and c (the last two are optional).
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 
 loc <- data.frame(x=runif(10,1,width(boats)),y=runif(10,1,height(boats))) #Ten random locations
 interp(boats,loc)

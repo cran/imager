@@ -44,13 +44,16 @@ Return or set pixel value at coordinates
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- as.cimg(function(x,y) x+y,50,50)
 at(im,10,1)
 at(im,10:12,1)
 at(im,10:12,1:3)
 at(im,1,2) <- 10
 at(im,1,2)
+\dontshow{cimg.limit.openmp()}
 color.at(boats,x=10,y=10)
+\dontshow{cimg.limit.openmp()}
 im <- boats
 color.at(im,x=10,y=10) <- c(255,0,0)
 #There should now be a red dot

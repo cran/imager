@@ -10,6 +10,7 @@
 #' @param high_connexity Use 8-connexity (only for 2d images, default FALSE).
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' #Change the colour of a sail 
 #' boats.new <- bucketfill(boats,x=169,y=179,color="pink",sigma=.2) 
 #' layout(t(1:2))
@@ -58,6 +59,7 @@ bucketfill <- function(im,x,y,z = 1,color,opacity=1,sigma=0,high_connexity=FALSE
 ##' @return an image
 ##' @seealso implot
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' draw_circle(boats,c(50,100),c(150,200),30,"darkgreen") %>% plot
 ##' draw_circle(boats,125,60,radius=30,col=c(0,1,0),opacity=.2,filled=TRUE) %>% plot
 ##' @author Simon Barthelme
@@ -94,6 +96,7 @@ draw_circle <- function(im,x,y,radius,color="white",opacity=1,filled=TRUE)
 ##' @return an image
 ##' @seealso implot,draw_circle
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' draw_rect(boats,1,1,50,50,"darkgreen") %>% plot
 ##' @author Simon Barthelme
 ##' @export
@@ -123,6 +126,7 @@ draw_rect <- function(im,x0,y0,x1,y1,color="white",opacity=1,filled=TRUE)
 ##' @return an image
 ##' @seealso implot,draw_circle,draw_rect
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' draw_text(boats,100,100,"Some text",col="black") %>% plot
 ##' @author Simon Barthelme
 ##' @export

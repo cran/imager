@@ -33,5 +33,6 @@ imshift(
 Shift image content.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 imshift(boats,10,50) \%>\% plot
 }

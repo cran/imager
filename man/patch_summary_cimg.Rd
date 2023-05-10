@@ -25,6 +25,7 @@ Extract a numerical summary from image patches, using CImg's mini-language
 Experimental feature.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Example: median filtering using patch_summary_cimg
 #Center a patch at each pixel
 im <- grayscale(boats)

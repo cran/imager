@@ -20,6 +20,7 @@ a vector of indices (NA if the indices are invalid)
 Pixels are stored linearly in (x,y,z,c) order. This function computes the vector index of a pixel given its coordinates
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- as.cimg(function(x,y) x+y,100,100)
 px <- index.coord(im,data.frame(x=c(3,3),y=c(1,2)))
 im[px] #Values should be 3+1=4, 3+2=5

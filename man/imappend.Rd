@@ -15,6 +15,7 @@ imappend(imlist, axis)
 All images will be concatenated along the x,y,z, or c axis.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 imappend(list(boats,boats),"x") \%>\% plot
 imappend(list(boats,boats),"y") \%>\% plot
 purrr::map(1:3, ~imnoise(100,100)) \%>\% imappend("c") \%>\% plot

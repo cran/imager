@@ -22,6 +22,7 @@ If the image has more than one colour channel, return a list with the contour li
 Does not work on 3D images.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 boats.gs <- grayscale(boats)
 ct <- contours(boats.gs,nlevels=3)
 plot(boats.gs)

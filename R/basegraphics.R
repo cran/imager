@@ -23,6 +23,7 @@ flattenAlpha <- function(im)
 ##' @seealso plot, capture.plot
 ##' @export
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' \dontrun{
 ##' b.new <- implot(boats,text(150,50,"Boats!!!",cex=3))
 ##' plot(b.new)

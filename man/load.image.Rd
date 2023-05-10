@@ -16,6 +16,7 @@ an object of class 'cimg'
 PNG, JPEG and BMP are supported via the readbitmap package. You'll need to install ImageMagick for other formats. If the path is actually a URL, it should start with http(s) or ftp(s).
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Find path to example file from package
 fpath <- system.file('extdata/Leonardo_Birds.jpg',package='imager') 
 im <- load.image(fpath)

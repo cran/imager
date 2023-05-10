@@ -14,6 +14,7 @@
 ##' @return an image with the extracted frames along the "z" coordinates
 ##' @seealso save.video, make.video
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' 
 ##' fname <- system.file('extdata/tennis_sif.mpeg',package='imager')
 ##' ##Not run
@@ -66,6 +67,7 @@ load.video.internal <- function(fname,maxSize=1,skip.to=0,frames=NULL,fps=NULL,e
 ##' @param file path to file or URL
 ##' @return an object of class 'cimg'
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' #Find path to example file from package
 ##' fpath <- system.file('extdata/Leonardo_Birds.jpg',package='imager') 
 ##' im <- load.image(fpath)
@@ -198,6 +200,7 @@ load.jpeg <- function(file)
 ##' @seealso save.video
 ##' @export
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' #Create temporary file
 ##' tmpF <- tempfile(fileext=".png")
 ##' #Save boats image
@@ -268,6 +271,7 @@ convert.im.toPNG <- function(A)
 ##' @return an image
 ##' @author Simon Barthelme
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' load.example("hubble") %>% plot
 ##' load.example("birds") %>% plot
 ##' load.example("parrots") %>% plot
@@ -311,6 +315,7 @@ load.example <- function(name)
 ##' @param ... extra arguments to save.video, passed on to make.video
 ##' @seealso load.video
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' ## Not run
 ##' ## iml <- map_il(seq(0,20,l=60),~ isoblur(boats,.))
 ##' ## f <- tempfile(fileext=".avi")
@@ -365,6 +370,7 @@ fileext <- function(f)
 ##' @return an image list
 ##' @author Simon Barthelme
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' path <- system.file(package="imager") %>% paste0("/extdata")
 ##' load.dir(path)
 ##' @export

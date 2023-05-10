@@ -21,6 +21,7 @@ This function is equivalent to R's builtin fft, up to normalisation (R's version
 Important note: FFT will compute a multidimensional Fast Fourier Transform, using as many dimensions as you have in the image, meaning that if you have a colour video, it will perform a 4D FFT. If you want to compute separate FFTs across channels, use imsplit.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 
 im <- as.cimg(function(x,y) sin(x/5)+cos(x/4)*sin(y/2),128,128)
 ff <- FFT(im)

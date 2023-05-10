@@ -28,6 +28,7 @@ crop.bbox crops an image using the bounding box of a pixset.
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- grayscale(boats)
 px <- im > .85
 plot(im)

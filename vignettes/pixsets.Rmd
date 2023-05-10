@@ -15,12 +15,17 @@ vignette: >
 
 ```{r init,echo=FALSE}
 knitr::opts_chunk$set(warning=FALSE, message=FALSE, cache=FALSE, 
-               comment=NA, verbose=TRUE, fig.width=5, fig.height=5,dev='jpeg',dev.args=list(quality=25))
+               comment=NA, verbose=TRUE, fig.width=4, fig.height=4,dev='jpeg',dev.args=list(quality=25))
 ```
 If you've already gone through the "Getting started" vignette, you know about image objects ("cimg" class). This vignette introduces pixsets, which is the other important kind of objects. Pixsets represent sets of pixels, or equivalently binary images, AKA "masks". 
 ```{r}
 library(imager)
 ```
+
+```{r include=FALSE}
+cimg.limit.openmp()
+```
+
 # From images to pixsets and back
 
 A pixset is what you get if you run a test on an image: 
@@ -151,7 +156,7 @@ boundary(px) %>% imager::where() %$% { points(x,y,cex=.1,col="red") }
 
 # Growing, shrinking, morphological operations
 
-The grow and shrink operators let you grow and shrink pixsets using morphological operators (dilation and erosion, resp.). Have a look at the article on (morphology)[https://dahtah.github.io/imager/morphology.html] for more:
+The grow and shrink operators let you grow and shrink pixsets using morphological operators (dilation and erosion, resp.). Have a look at the article on (morphology)[https://asgr.github.io/imager/morphology.html] for more:
 ```{r}
 plot(im)
 highlight(px)

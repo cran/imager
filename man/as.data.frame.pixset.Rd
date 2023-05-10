@@ -18,6 +18,7 @@
 Methods to convert pixsets to various objects
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 
 px <- boats > 250
 #Convert to array of logicals

@@ -37,6 +37,7 @@ These functions return pixel coordinates for an image, as an image. All is made 
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- imfill(5,5) #An image
 Xc(im) #An image of the same size, containing the x coordinates of each pixel
 Xc(im) \%>\% imrow(1)

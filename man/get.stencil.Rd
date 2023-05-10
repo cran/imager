@@ -20,6 +20,7 @@ pixel values in neighbourhood
 A stencil defines a neighbourhood in an image (for example, the four nearest neighbours in a 2d image). This function centers the stencil at a certain pixel and returns the values of the neighbourhing pixels.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #The following stencil defines a neighbourhood that
 #includes the next pixel to the left (delta_x = -1) and the next pixel to the right (delta_x = 1)
 stencil <- data.frame(dx=c(-1,1),dy=c(0,0))

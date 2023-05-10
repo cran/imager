@@ -1,5 +1,7 @@
 library(imager)
 
+cimg.limit.openmp()
+
 test_that("add_average_mult",
 {
     im <- imnoise(5,5)

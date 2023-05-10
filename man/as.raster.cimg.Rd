@@ -36,6 +36,7 @@ a raster object
 raster objects are used by R's base graphics for plotting. R wants hexadecimal RGB values for plotting, e.g. gray(0) yields #000000, meaning black. If you want to control precisely how numerical values are turned into colours for plotting, you need to specify a colour scale using the colourscale argument (see examples). Otherwise the default is "gray" for grayscale images, "rgb" for colour. These expect values in [0..1], so the default is to rescale the data to [0..1]. If you wish to over-ride that behaviour, set rescale=FALSE.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #A raster is a simple array of RGB values
 as.raster(boats) \%>\% str
 #By default as.raster rescales input values, so that:

@@ -18,5 +18,6 @@ an image, or a list of images
 Compute image hessian.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 imhessian(boats,"xy") \%>\% plot(main="Second-derivative, d/(dx*dy)")
 }

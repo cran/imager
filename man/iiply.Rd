@@ -19,6 +19,7 @@ iiply(im, axis, fun, ...)
 This is just imsplit followed by purrr::map followed by imappend
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 ##' #Normalise colour channels separately, recombine
 iiply(boats,"c",function(v) (v-mean(v))/sd(v)) \%>\% plot 
 

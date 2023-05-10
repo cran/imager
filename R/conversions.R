@@ -10,6 +10,7 @@
 ##' @return a data.frame
 ##' @author Simon Barthelme
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##'
 ##' #First five pixels
 ##' as.data.frame(boats) %>% head(5)
@@ -56,6 +57,7 @@ as.data.frame.cimg <- function (x, ...,wide=c(FALSE,"c","d"))
 ##' @seealso plot.cimg, rasterImage
 ##' @author Simon Barthelme
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' #A raster is a simple array of RGB values
 ##' as.raster(boats) %>% str
 ##' #By default as.raster rescales input values, so that:
@@ -135,6 +137,7 @@ as.raster.cimg <- function(x,frames,rescale=TRUE,colourscale=NULL,
 ##' @return a cimg object
 ##' @author Simon Barthelme
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' rst <- as.raster(matrix((1:4)/4,2,2))
 ##' as.cimg(rst) %>% plot(int=FALSE)
 ##' all.equal(rst,as.raster(as.cimg(rst)))
@@ -183,26 +186,23 @@ cimg2im <- function(img,W=NULL)
     }
 
 ##' Convert an image in spatstat format to an image in cimg format
-##'
-##' as.cimg.im is an alias for the same function
 ##' 
-##' @param img a spatstat image
+##' @param obj a spatstat image
+##' @param ... optional arguments
 ##' @return a cimg image
 ##' @author Simon Barthelme
 ##' @export
-im2cimg <- function(img)
+as.cimg.im <- function(obj, ...)
     {
         if (requireNamespace("spatstat.geom",quietly=TRUE))
             {
-                spatstat.geom::as.matrix.im(img) %>% as.cimg %>% imrotate(-90)
+                spatstat.geom::as.matrix.im(obj) %>% as.cimg %>% imrotate(-90)
             }
         else
             {
                 stop("The spatstat.geom package is required")
             }
     }
-
-as.cimg.im <- im2cimg
 
 ##' Convert to cimg object
 ##'
@@ -218,6 +218,7 @@ as.cimg.im <- im2cimg
 ##' @seealso as.cimg.array, as.cimg.function, as.cimg.data.frame
 ##' @export
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' as.cimg(1:100,x=10,y=10) #10x10, grayscale image
 ##' as.cimg(rep(1:100,3),x=10,y=10,cc=3) #10x10 RGB
 ##' as.cimg(1:100,dim=c(10,10,1,1))
@@ -310,6 +311,7 @@ as.cimg.vector <- function(obj,x=NA,y=NA,z=NA,cc=NA,dim=NULL,...)
 ##' @param obj an array
 ##' @param ... ignored
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' as.cimg(array(1:9,c(3,3)))
 ##' as.cimg(array(1,c(10,10,3))) #Guesses colour image
 ##' as.cimg(array(1:9,c(10,10,4))) #Guesses video
@@ -371,6 +373,7 @@ as.cimg.matrix <- function(obj,...)
 ##' @param ... ignored
 ##' @return an object of class cimg
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' #Create a data.frame with columns x,y and value
 ##' df <- expand.grid(x=1:10,y=1:10) %>% dplyr::mutate(value=x*y)
 ##' #Convert to cimg object (2D, grayscale image of size 10*10
@@ -439,6 +442,7 @@ as.matrix.cimg <- function(x,...) {
 ##' @param drop if TRUE returns an image with a single channel, otherwise keep the three channels (default TRUE)
 ##' @return a grayscale image (spectrum == 1)
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' grayscale(boats) %>% plot
 ##' #In many pictures, the difference between Luma and XYZ conversion is subtle 
 ##' grayscale(boats,method="XYZ") %>% plot

@@ -20,6 +20,7 @@ a grayscale image (spectrum == 1)
 This function converts from RGB images to grayscale
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 grayscale(boats) \%>\% plot
 #In many pictures, the difference between Luma and XYZ conversion is subtle 
 grayscale(boats,method="XYZ") \%>\% plot

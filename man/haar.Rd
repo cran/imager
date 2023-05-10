@@ -17,6 +17,7 @@ haar(im, inverse = FALSE, nb_scales = 1L)
 Compute Haar multiscale wavelet transform.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Image compression: set small Haar coefficients to 0
 hr <- haar(boats,nb=3) 
 mask.low <- threshold(abs(hr),"75\%")

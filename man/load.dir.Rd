@@ -20,6 +20,7 @@ an image list
 Load all images in a directory and return them as an image list.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 path <- system.file(package="imager") \%>\% paste0("/extdata")
 load.dir(path)
 }

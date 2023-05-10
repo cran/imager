@@ -23,6 +23,7 @@ imdraw(im, sprite, x = 1, y = 1, z = 1, opacity = 1)
 Draw image on another image
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- load.example("parrots")
 boats.small <- imresize(boats,.5)
 #I'm aware the result is somewhat ugly

@@ -13,6 +13,7 @@ a cimg image corresponding to the contents of the current plotting window
 Capture the current R plot device as a cimg image
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 ##interactive only:
 ##plot(1:10)
 ###Make a plot of the plot

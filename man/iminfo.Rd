@@ -16,6 +16,7 @@ a list with fields name, format, width (pix.), height (pix.), size (bytes)
 This function calls ImageMagick's "identify" utility on an image file to get some information. You need ImageMagick on your path for this to work.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 \dontrun{
 someFiles <- dir("*.png") #Find all PNGs in directory
 iminfo(someFiles[1])

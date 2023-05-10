@@ -15,6 +15,7 @@ mirror(im, axis)
 Mirror image content along specified axis
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 mirror(boats,"x") \%>\% plot
 mirror(boats,"y") \%>\% plot
 }

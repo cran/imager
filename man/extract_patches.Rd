@@ -41,6 +41,7 @@ WARNINGS:
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 #2 patches of size 5x5 located at (10,10) and (10,20)
 extract_patches(boats,c(10,10),c(10,20),5,5)
 }

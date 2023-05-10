@@ -21,6 +21,7 @@ Return a graph where nodes are pixels, and two nodes are connected if and only i
 The graph is represented as an igraph "graph" object
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 library(igraph)
 #Simple 3x3 lattice
 px <- px.all(imfill(3,3))

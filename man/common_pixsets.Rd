@@ -80,6 +80,7 @@ px.square is also similar but returns a square (Linf distance less than r)
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 px.circle(20,350,350) \%>\% plot(interp=FALSE)
 px.circle(3) \%>\% plot(interp=FALSE)
 r <- 5

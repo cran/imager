@@ -12,6 +12,7 @@
 ##' @param dim dimension vector (optional, alternative to specifying x,y,z)
 ##' @return an image object (class cimg)
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' 
 ##' imfill(20,20) %>% plot #Blank image of size 20x20
 ##' imfill(20,20,val=c(1,0,0)) %>% plot #All red image
@@ -60,6 +61,7 @@ imfill <- function(x=1,y=1,z=1,val=0,dim=NULL)
 ##' @param dim dimension vector (optional, alternative to specifying x,y,z,cc)
 ##' @return a cimg object
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' imnoise(100,100,cc=3) %>% plot(main="White noise in RGB")
 ##' imnoise(100,100,cc=3) %>% isoblur(5) %>% plot(main="Filtered (non-white) noise")
 ##' imnoise(dim=dim(boats)) #Noise image of the same size as the boats image
@@ -89,6 +91,7 @@ imnoise <- function(x=1,y=1,z=1,cc=1,mean=0,sd=1,dim=NULL)
 ##' @return an object of class cimg
 ##' @author Simon Barthelme
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' im = as.cimg(function(x,y) cos(sin(x*y/100)),100,100)
 ##' plot(im)
 ##' #The following is just a rectangle at the center of the image 

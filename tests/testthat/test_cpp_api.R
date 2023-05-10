@@ -1,6 +1,8 @@
 library(imager)
 library(Rcpp)
 
+cimg.limit.openmp()
+
 test_that("cpp_plugin",{
 
     foo.inline <- "

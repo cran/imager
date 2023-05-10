@@ -15,6 +15,7 @@
 Click on individual images to zoom in.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 ##Not run: interactive only 
 ## imgradient(boats,"xy") \%>\% display
 }

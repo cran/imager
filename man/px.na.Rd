@@ -16,6 +16,7 @@ a pixset
 A pixset containing all NA pixels
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- boats
 im[1] <- NA
 px.na(im)

@@ -30,6 +30,7 @@ The correlation of image im by filter flt is defined as:
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Edge filter
 filter <- as.cimg(function(x,y) sign(x-5),10,10) 
 layout(t(1:2))

@@ -18,6 +18,7 @@ a data.frame of coordinate values
 Compute (x,y,z,cc) coordinates from linear pixel index.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 cind <- coord.index(boats,33)
 #Returns (x,y,z,c) coordinates of the 33rd pixel in the array
 cind

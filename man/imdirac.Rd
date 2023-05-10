@@ -24,6 +24,7 @@ an image
 This small utility is useful to examine the impulse response of a filter
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Explicit settings of all dimensions
 imdirac(c(50,50,1,1),20,20)
 imdirac(c(50,50),20,20) #Implicit

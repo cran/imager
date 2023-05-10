@@ -23,6 +23,7 @@ imsharpen(im, amplitude, type = "diffusion", edge = 1, alpha = 0, sigma = 0)
 The default sharpening filter is inverse diffusion. The "shock filter" is a non-linear diffusion that has better edge-preserving properties.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 layout(t(1:2))
 plot(boats,main="Original")
 imsharpen(boats,150)  \%>\% plot(main="Sharpened")

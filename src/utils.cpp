@@ -94,6 +94,7 @@ LogicalVector px_append(List imlist,char axis)
 //' @param wx vector of coordinates for patch width 
 //' @param wy vector of coordinates for patch height 
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' #Example: median filtering using patch_summary_cimg
 //' #Center a patch at each pixel
 //' im <- grayscale(boats)
@@ -171,6 +172,7 @@ NumericVector extract_fast(NumericVector im,int fun,IntegerVector cx,IntegerVect
 //' @return a list of image patches (cimg objects)
 //' @export
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' #2 patches of size 5x5 located at (10,10) and (10,20)
 //' extract_patches(boats,c(10,10),c(10,20),5,5)
 // [[Rcpp::export]]
@@ -328,9 +330,19 @@ int set_cimg_omp(int mode)
 }
 
 // [[Rcpp::export]]
+void set_omp_num_threads(int threads)
+{
+#if cimg_use_openmp == 1
+  omp_set_num_threads(threads);
+#else
+  Rcpp::Rcerr << "No OpenMP support found, ignoring call to set_omp_num_threads" << '\n' ;
+#endif
+}
+
+// [[Rcpp::export]]
 bool has_omp()
 {
-#ifdef cimg_use_openmp
+#if cimg_use_openmp == 1
   return true;
 #else
   return false;

@@ -1,10 +1,13 @@
 ## ----init,echo=FALSE----------------------------------------------------------
 knitr::opts_chunk$set(warning=FALSE, message=FALSE, cache=FALSE,
-               comment=NA, verbose=TRUE, fig.width=5, fig.height=5,dev='jpeg',dev.args=list(quality=25))
+               comment=NA, verbose=TRUE, fig.width=4, fig.height=4,dev='jpeg',dev.args=list(quality=25))
 
 ## ----fig.width=4, fig.height=6,message=FALSE,dev='jpeg'-----------------------
 library(imager)
 plot(boats)
+
+## ----include=FALSE------------------------------------------------------------
+cimg.limit.openmp()
 
 ## -----------------------------------------------------------------------------
 class(boats)

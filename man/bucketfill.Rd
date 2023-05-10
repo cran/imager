@@ -36,6 +36,7 @@ bucketfill(
 Bucket fill
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Change the colour of a sail 
 boats.new <- bucketfill(boats,x=169,y=179,color="pink",sigma=.2) 
 layout(t(1:2))

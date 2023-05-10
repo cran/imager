@@ -28,6 +28,7 @@ In case of lines contents are interpolated. Note that grabLine does not support 
 Note that you need X11 library to use these functions.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 ##Not run: interactive only 
 ##grabRect(boats)
 ##grabRect(boats,TRUE)

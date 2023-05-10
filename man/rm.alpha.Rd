@@ -16,6 +16,7 @@ an image with only three RGB channels and the alpha channel as attribute
 Remove alpha channel and store as attribute
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #An image with 4 colour channels (RGBA)
 im <- imfill(2,2,val=c(0,0,0,0))
 #Remove fourth channel

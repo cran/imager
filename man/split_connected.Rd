@@ -19,6 +19,7 @@ Compute connected components (using "label"), then split into as many sets as th
 Useful for segmentation
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 px <- isoblur(grayscale(boats),5) > .75
 plot(px)
 spl <- split_connected(px)

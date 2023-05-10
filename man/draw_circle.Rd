@@ -28,6 +28,7 @@ an image
 Add circle or circles to an image. Like other native CImg drawing functions, this is meant to be basic but fast. Use implot for flexible drawing.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 draw_circle(boats,c(50,100),c(150,200),30,"darkgreen") \%>\% plot
 draw_circle(boats,125,60,radius=30,col=c(0,1,0),opacity=.2,filled=TRUE) \%>\% plot
 }

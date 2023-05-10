@@ -17,6 +17,7 @@ Imager ships with five test pictures and a video. Two (parrots and boats) come f
 The test video ("tennis") comes from [xiph.org](https://media.xiph.org/video/derf/)'s collection.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 load.example("hubble") \%>\% plot
 load.example("birds") \%>\% plot
 load.example("parrots") \%>\% plot

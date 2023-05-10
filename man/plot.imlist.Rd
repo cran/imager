@@ -17,6 +17,7 @@
 Each image in the list will be plotted separately. The layout argument controls the overall layout of the plot window. The default layout is "rect", which will fit all of your images into a rectangle that's as close to a square as possible.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 imsplit(boats,"c") #Returns an image list
 imsplit(boats,"c") \%>\% plot
 imsplit(boats,"c") \%>\% plot(layout="row")

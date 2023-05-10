@@ -13,5 +13,6 @@ imlap(im)
 The Laplacian is the sum of second derivatives, approximated here using finite differences.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 imlap(boats) \%>\% plot
 }

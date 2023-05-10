@@ -22,6 +22,7 @@ The distance transform implementation has been submitted by A. Meijster, and imp
         The submitted code has then been modified to fit CImg coding style and constraints.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 imd <- function(x,y) imdirac(c(100,100,1,1),x,y)
 #Image is three white dots
 im <- imd(20,20)+imd(40,40)+imd(80,80)

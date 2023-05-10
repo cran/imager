@@ -15,6 +15,7 @@ Internally cimg objects are 4D arrays (stored in x,y,z,c mode) but often one doe
 There are easier ways of accessing image data, for example imsub, channels, R, G, B, and the like.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- imfill(4,4)
 dim(im) #4 dimensional, but the last two ones are singletons
 im[,1,,] <- 1:4 #Assignment the standard way

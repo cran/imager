@@ -37,6 +37,7 @@ You need to have ffmpeg on your path for this to work. This function uses ffmpeg
 Videos are memory-intensive, and load.video performs a safety check before loading a video that would be larger than maxSize in memory (default 1GB)
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 
 fname <- system.file('extdata/tennis_sif.mpeg',package='imager')
 ##Not run

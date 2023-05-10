@@ -17,6 +17,7 @@
 Convert image list to data.frame
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Transform the image gradient into a data.frame
 gr <- imgradient(boats,"xy") \%>\% setNames(c("dx","dy")) \%>\% as.data.frame
 str(gr)

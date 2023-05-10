@@ -30,6 +30,7 @@ WARNINGS:
 - widths and heights should be odd integers (they're rounded up otherwise).
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- grayscale(boats)
 #Mean of an image patch centered at (10,10) of size 3x3
 patchstat(im,'mean',10,10,3,3)

@@ -24,6 +24,7 @@ This feature is experimental!!!
 Note that you need X11 library to use this function.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Implement a basic image gallery:
 #press "right" and "left" to view each image in a list
 gallery <- function(iml)

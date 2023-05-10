@@ -19,6 +19,7 @@ Use this if you need to process colour channels separately, or frames separately
 Returns an "imlist" object, which is essentially a souped-up list.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- as.cimg(function(x,y,z) x+y+z,10,10,5)
 imsplit(im,"z") #Split along the z axis into a list with 5 elements
 imsplit(im,"z",2) #Split along the z axis into two groups

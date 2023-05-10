@@ -21,6 +21,7 @@ isoblur(im, sigma, neumann = TRUE, gaussian = TRUE, na.rm = FALSE)
 Blur image isotropically.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 isoblur(boats,3) \%>\% plot(main="Isotropic blur, sigma=3")
 isoblur(boats,10) \%>\% plot(main="Isotropic blur, sigma=10")
 }

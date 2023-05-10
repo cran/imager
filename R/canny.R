@@ -53,6 +53,7 @@ guess.kmeans <- function(x)
 ##' @param alpha threshold adjusment factor (default 1)
 ##' @param sigma smoothing
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' cannyEdges(boats) %>% plot
 ##' #Make thresholds less strict
 ##' cannyEdges(boats,alpha=.4) %>% plot

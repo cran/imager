@@ -30,6 +30,7 @@ an image
 Add a rectangle to an image. Like other native CImg drawing functions, this is meant to be basic but fast. Use implot for flexible drawing.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 draw_rect(boats,1,1,50,50,"darkgreen") \%>\% plot
 }
 \seealso{

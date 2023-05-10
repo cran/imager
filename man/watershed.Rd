@@ -17,6 +17,7 @@ watershed(im, priority, fill_lines = TRUE)
 The watershed transform is a label propagation algorithm. The value of non-zero pixels will get propagated to their zero-value neighbours. The propagation is controlled by a priority map. See examples.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #In our initial image we'll place three seeds 
 #(non-zero pixels) at various locations, with values 1, 2 and 3. 
 #We'll use the watershed algorithm to propagate these values

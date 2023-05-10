@@ -23,6 +23,7 @@ The thresholds are returned as attributes.
 The edge detection is based on a smoothed image gradient with a degree of smoothing set by the sigma parameter.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 cannyEdges(boats) \%>\% plot
 #Make thresholds less strict
 cannyEdges(boats,alpha=.4) \%>\% plot

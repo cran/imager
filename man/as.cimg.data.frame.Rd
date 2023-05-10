@@ -22,6 +22,7 @@ an object of class cimg
 This function is meant to be just like as.cimg.data.frame, but in reverse. Each line in the data frame must correspond to a pixel. For example, the data fame can be of the form (x,y,value) or (x,y,z,value), or (x,y,z,cc,value). The coordinates must be valid image coordinates (i.e., positive integers).
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Create a data.frame with columns x,y and value
 df <- expand.grid(x=1:10,y=1:10) \%>\% dplyr::mutate(value=x*y)
 #Convert to cimg object (2D, grayscale image of size 10*10

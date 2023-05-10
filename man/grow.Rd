@@ -30,6 +30,7 @@ A structuring element is a pattern to be moved over the image: for example a 3x3
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 #A pixel set:
 a <- grayscale(boats) > .8
 plot(a)
@@ -42,6 +43,7 @@ el <- matrix(1,2,2) \%>\% as.cimg
 all.equal(grow(a,el),grow(a,2))
 #Circular structuring element
 px.circle(5) \%>\% grow(a,.) \%>\% plot
+\dontshow{cimg.limit.openmp()}
 #Sometimes boundary conditions matter
 im <- imfill(10,10)
 px <- px.all(im)

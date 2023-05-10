@@ -26,6 +26,7 @@ Select pixels that are similar to a seed pixel. The underlying algorithm is the 
 Old name: selectSimilar (deprecated)
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Select part of a sail 
 px <- px.flood(boats,x=169,y=179,sigma=.2) 
 plot(boats)

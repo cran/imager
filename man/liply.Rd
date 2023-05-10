@@ -19,6 +19,7 @@ liply(lst, fun, axis, ...)
 This is just a shortcut for purrr::map followed by imappend
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 build.im <- function(size) as.cimg(function(x,y) (x+y)/size,size,size)
 liply(c(10,50,100),build.im,"y") \%>\% plot
 }

@@ -18,6 +18,7 @@ a blended image
 Flatten alpha channel
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Add alpha channel
 alpha <- Xc(grayscale(boats))/width(boats)
 boats.a <- imlist(boats,alpha) \%>\% imappend("c")

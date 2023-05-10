@@ -23,6 +23,7 @@ imrotate(im, angle, cx, cy, interpolation = 1L, boundary = 0L)
 If cx and cy aren't given, the default is to centre the rotation in the middle of the image. When cx and cy are given, the algorithm used is different, and does not change the size of the image.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 imrotate(boats,30) \%>\% plot
 #Shift centre to (20,20)
 imrotate(boats,30,cx=20,cy=20) \%>\% plot 

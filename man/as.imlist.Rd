@@ -36,5 +36,6 @@ Convert various objects to image lists
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 list(a=boats,b=boats*2) \%>\% as.imlist
 }

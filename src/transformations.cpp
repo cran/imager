@@ -45,6 +45,7 @@ NumericVector rotate(NumericVector im,float  	angle,
 //' @param interpolation Interpolation type. 0=nearest | 1=linear | 2=cubic 
 //' @param boundary_conditions Boundary conditions. 0=dirichlet | 1=neumann | 2=periodic 
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' rotate_xy(boats,30,200,400) %>% plot
 //' rotate_xy(boats,30,200,400,boundary=2) %>% plot
 //' @export
@@ -74,6 +75,7 @@ NumericVector rotate_xy(NumericVector im,
 //' @param axis Mirror axis ("x","y","z","c")
 //' @export
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' mirror(boats,"x") %>% plot
 //' mirror(boats,"y") %>% plot
 // [[Rcpp::export]]
@@ -98,6 +100,7 @@ NumericVector mirror(NumericVector im,char axis)
 //' @param perm a character string, e.g., "zxyc" to have the z-axis come first
 //' @export
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' im <- array(0,c(10,30,40,3)) %>% as.cimg
 //' permute_axes(im,"zxyc")
 // [[Rcpp::export]]
@@ -186,6 +189,7 @@ NumericVector resize_tripleXY(NumericVector im)
 //'          - 2: Repeat Pattern (Fourier style).
 //' @export
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' imshift(boats,10,50) %>% plot
 // [[Rcpp::export]]
 NumericVector imshift(NumericVector im, int delta_x=0,  int delta_y=0,  int delta_z=0,  int delta_c=0,
@@ -258,6 +262,7 @@ NumericVector resize(NumericVector im, int size_x=-100,  int size_y=-100,
 //' @seealso imwarp for a user-friendly interface 
 //' @export
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' #Shift image via warp
 //' warp.x <- imfill(width(boats),height(boats),val=5)
 //' warp.y <- imfill(width(boats),height(boats),val=20)

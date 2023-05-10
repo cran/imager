@@ -22,6 +22,7 @@ a modified image
 A shortcut for modifying parts of an image, using imeval syntax. See doc for imeval first. As part of a pipe, avoids the creating of intermediate variables.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Set border to 0:
 imchange(boats,px.borders(boats,10),~ 0) \%>\% plot
 #Eq. to

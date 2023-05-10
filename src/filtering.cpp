@@ -14,6 +14,7 @@ using namespace cimg_library;
 //' @param neumann If true, use Neumann boundary conditions (default false, Dirichlet)
 //' @export
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' deriche(boats,sigma=2,order=0) %>% plot("Zeroth-order Deriche along x")
 //' deriche(boats,sigma=2,order=1) %>% plot("First-order Deriche along x")
 //' deriche(boats,sigma=2,order=1) %>% plot("Second-order Deriche along x")
@@ -53,6 +54,7 @@ NumericVector deriche(NumericVector im,float sigma,int order=0,char axis = 'x',b
 //'       recursive filtering. IEEE Trans. Signal Processing,
 //'       vol. 54, pp. 2365-2367, 2006.
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' vanvliet(boats,sigma=2,order=0) %>% plot("Zeroth-order Young-van Vliet along x")
 //' vanvliet(boats,sigma=2,order=1) %>% plot("First-order Young-van Vliet along x")
 //' vanvliet(boats,sigma=2,order=1) %>% plot("Second-order Young-van Vliet along x")
@@ -98,6 +100,7 @@ NumericVector isoblur_(NumericVector im,float sigma,bool neumann=true,bool gauss
 //' @param threshold Threshold used to discard pixels too far from the current pixel value in the median computation. Can be used for edge-preserving smoothing. Default 0 (include all pixels in window).
 //' @export
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' medianblur(boats,5) %>% plot(main="Median blur, 5 pixels")
 //' medianblur(boats,10) %>% plot(main="Median blur, 10 pixels")
 //' medianblur(boats,10,8) %>% plot(main="Median blur, 10 pixels, threshold = 8")
@@ -121,6 +124,7 @@ NumericVector medianblur(NumericVector im,int n, float threshold=0) {
 //' @param neumann If true, use Neumann boundary conditions, Dirichlet otherwise  (default true, Neumann)
 //' @seealso deriche(), vanvliet().
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' boxblur(boats,5) %>% plot(main="Dirichlet boundary")
 //' boxblur(boats,5,TRUE) %>% plot(main="Neumann boundary")
 //' @export
@@ -143,6 +147,7 @@ NumericVector boxblur(NumericVector im,float boxsize,bool neumann=true) {
 //' The Laplacian is the sum of second derivatives, approximated here using finite differences.
 //' @param im an image
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' imlap(boats) %>% plot
 //' @export
 // [[Rcpp::export]]
@@ -170,6 +175,7 @@ NumericVector imlap(NumericVector im) {
 //'
 //' @export
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' boxblur_xy(boats,20,5) %>% plot(main="Anisotropic blur")
 // [[Rcpp::export]]
 NumericVector boxblur_xy(NumericVector im,float sx,float sy,bool neumann=true) {
@@ -199,6 +205,7 @@ NumericVector boxblur_xy(NumericVector im,float sx,float sy,bool neumann=true) {
 //'
 //' @export
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' #Edge filter
 //' filter <- as.cimg(function(x,y) sign(x-5),10,10) 
 //' layout(t(1:2))
@@ -338,6 +345,7 @@ NumericVector diffusion_tensors(NumericVector im,
 //' @param nb_scales Number of scales used for the transform.
 //' @export
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' #Image compression: set small Haar coefficients to 0
 //' hr <- haar(boats,nb=3) 
 //' mask.low <- threshold(abs(hr),"75%")
@@ -445,6 +453,7 @@ NumericVector displacement(NumericVector sourceIm,NumericVector destIm,float smo
 //' @param fast_approx If true, use fast approximation (default TRUE)
 //' @export
 //' @examples
+//' \dontshow{cimg.limit.openmp()}
 //' im <- load.image(system.file('extdata/Leonardo_Birds.jpg',package='imager'))
 //' im.noisy <- (im + 80*rnorm(prod(dim(im)))) 
 //' blur_anisotropic(im.noisy,ampl=1e4,sharp=1) %>% plot

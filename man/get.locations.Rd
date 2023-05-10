@@ -18,6 +18,7 @@ coordinates of all pixels such that condition(pixel) == TRUE
 Typical use case: you want the coordinates of all pixels with a value above a certain threshold
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- as.cimg(function(x,y) x+y,10,10)
 get.locations(im,function(v) v < 4)
 get.locations(im,function(v) v^2 + 3*v - 2 < 30)

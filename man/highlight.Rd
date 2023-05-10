@@ -17,6 +17,7 @@ highlight(px, col = "red", ...)
 Overlay an image plot with the contours of a pixel set. Note that this function doesn't do the image plotting, just the highlighting.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Select similar pixels around point (180,200)
 px <- px.flood(boats,180,200,sigma=.08)
 plot(boats)

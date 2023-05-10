@@ -19,6 +19,7 @@ boxblur_xy(im, sx, sy, neumann = TRUE)
 This is a recursive algorithm, not depending on the values of the box kernel size.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 boxblur_xy(boats,20,5) \%>\% plot(main="Anisotropic blur")
 }
 \seealso{

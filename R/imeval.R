@@ -11,6 +11,7 @@
 ##' @param env additional variables (defaults to the calling environment)
 ##' @seealso imchange, which modifies specific parts of an image
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' ## Computing mean absolute deviation
 ##' imeval(boats, ~ mean(abs(.-median(.))))
 ##' ##Equivalent to:
@@ -144,6 +145,7 @@ add.variables <- function(im,vars,env)
 ##' @seealso imeval
 ##' @return a modified image
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' #Set border to 0:
 ##' imchange(boats,px.borders(boats,10),~ 0) %>% plot
 ##' #Eq. to
@@ -212,6 +214,7 @@ is.formula <- function (x) inherits(x, "formula")
 ##'
 ##' @param form a single formula
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' #The rank function outputs a vector
 ##' grayscale(boats) %>% rank %>% class
 ##' #Auto-reshape into an image

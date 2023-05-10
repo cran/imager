@@ -17,6 +17,7 @@ renorm(x, min = 0, max = 255)
 Pixel data is usually expressed on a 0...255 scale for displaying. This function performs a linear renormalisation to range min...max
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 renorm(0:10)
 renorm(-5:5) #Same as above
 }

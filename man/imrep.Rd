@@ -20,6 +20,7 @@ either an image or an image list
 Kinda like rep, for images. Copy image n times and (optionally), append.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Result is a list
 imrep(boats,3) \%>\% plot
 #Result is an image 

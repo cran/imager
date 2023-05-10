@@ -29,6 +29,7 @@ subim is an alias defined for backward-compatibility.
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 parrots <- load.example("parrots")
 imsub(parrots,x < 30) #Only the first 30 columns
 imsub(parrots,y < 30) #Only the first 30 rows

@@ -7,6 +7,7 @@
 #' @param x an array of logical values
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' #A test on an image returns a pixset
 #' boats > 250
 #' #Pixsets can be combined using the usual Boolean operators
@@ -41,6 +42,7 @@ is.pixset <- function(x) is(x,"pixset")
 #' @param x object to convert to pixset
 #' @param ... ignored
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' #When converting an image to a pixset, the default is to include all pixels with non-zero value 
 #' as.pixset(boats)
 #' #The above is equivalent to:
@@ -77,6 +79,7 @@ as.logical.pixset <- function(x,...) { class(x) <- "logical"; x }
 #' @param ... ignored
 #' @seealso where
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' 
 #' px <- boats > 250
 #' #Convert to array of logicals
@@ -136,6 +139,7 @@ check.pixset <- function(x)
 #'
 #' @param x a pixset
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' #All pixel locations with value greater than .99
 #' where(boats > .99) 
 #' @export
@@ -200,6 +204,7 @@ Ops.imager_array <- function(e1, e2)
 #' @param z depth of the rectangular structuring element (if x is an integer value)
 #' @param boundary are pixels beyond the boundary considered to have value TRUE or FALSE (default TRUE)
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' #A pixel set:
 #' a <- grayscale(boats) > .8
 #' plot(a)
@@ -252,6 +257,7 @@ grow <- function(px,x,y=x,z=x,boundary=TRUE)
 ##' @param px a pixset
 ##' @param ... parameters that define the structuring element to use, passed on to "grow" and "shrink"
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##  #A pixset
 ##' im <- load.example("birds") %>% grayscale
 ##' sub <- imsub(-im,y> 380) %>% threshold("85%")
@@ -282,6 +288,7 @@ fill <- function(px,...)
 
 #' @describeIn grow shrink pixset using erosion
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' #Sometimes boundary conditions matter
 #' im <- imfill(10,10)
 #' px <- px.all(im)
@@ -335,6 +342,7 @@ shrink <- function(px,x,y=x,z=x,boundary=TRUE)
 ##' @param y height (default 2*r+1)
 ##' @return a pixset
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' px.circle(20,350,350) %>% plot(interp=FALSE)
 ##' px.circle(3) %>% plot(interp=FALSE)
 ##' r <- 5
@@ -447,6 +455,7 @@ px.none <- function(im)
 #' @param depth boundary depth (default 1)
 #' @param high_connexity if FALSE, use 4-point neighbourhood. If TRUE, use 8-point.  (default FALSE)
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' px.diamond(10,30,30) %>% boundary %>% plot
 #' px.square(10,30,30) %>% boundary %>% plot
 #' px.square(10,30,30) %>% boundary(depth=3) %>% plot
@@ -472,6 +481,7 @@ boundary <- function(px,depth=1,high_connexity=FALSE)
 ##' @author Simon Barthelme
 ##' @seealso colorise, another way of highlighting stuff
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' #Select similar pixels around point (180,200)
 ##' px <- px.flood(boats,180,200,sigma=.08)
 ##' plot(boats)
@@ -505,6 +515,7 @@ highlight <- function(px,col="red",...)
 #' @param high_connexity Use 8-connexity (only for 2d images, default FALSE).
 #' @export
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' #Select part of a sail 
 #' px <- px.flood(boats,x=169,y=179,sigma=.2) 
 #' plot(boats)
@@ -533,6 +544,7 @@ px.flood <- function(im,x,y,z=1,sigma=0,high_connexity=FALSE)
 ##' @seealso label
 ##' @return a list of pixsets
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' px <- isoblur(grayscale(boats),5) > .75
 ##' plot(px)
 ##' spl <- split_connected(px)
@@ -658,6 +670,7 @@ display.pixset <- function(x,...) display(as.cimg(x),...)
 ##' @param px a pixset
 ##' @return a pixset object
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' im <- grayscale(boats)
 ##' px <- im > .85
 ##' plot(im)
@@ -732,6 +745,7 @@ crop.bbox <- function(im,px)
 ##' @param im an image
 ##' @return a pixset
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' im <- boats
 ##' im[1] <- NA
 ##' px.na(im)
@@ -751,6 +765,7 @@ px.na <- function(im)
 ##' @param alpha transparency (default 1, no transparency)
 ##' @return an image
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' im <- load.example("coins")
 ##' colorise(im,Xc(im) < 50,"blue") %>% plot
 ##' #Same thing with the formula interface
@@ -786,6 +801,7 @@ colorise <- function(im,px,col,alpha=1)
 ##' @return a pixset 
 ##' @author Simon Barthelme
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' im <- draw_circle(imfill(100,100),c(0,50,100),c(50,50,50),radius=10,color=1)
 ##' plot(im)
 ##' as.pixset(im) %>% px.remove_outer %>% plot

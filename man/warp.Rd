@@ -21,6 +21,7 @@ warp(im, warpfield, mode = 0L, interpolation = 1L, boundary_conditions = 0L)
 Warp image
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #Shift image via warp
 warp.x <- imfill(width(boats),height(boats),val=5)
 warp.y <- imfill(width(boats),height(boats),val=20)

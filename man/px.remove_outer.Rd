@@ -16,6 +16,7 @@ a pixset
 All pixels that belong to a connected region in contact with image boundaries are set to FALSE.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- draw_circle(imfill(100,100),c(0,50,100),c(50,50,50),radius=10,color=1)
 plot(im)
 as.pixset(im) \%>\% px.remove_outer \%>\% plot

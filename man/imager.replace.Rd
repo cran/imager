@@ -44,6 +44,7 @@ Note that cimg objects can also be treated as regular arrays and modified using 
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 boats.cp <- boats
 #Set the green channel in the boats image to 0
 G(boats.cp) <- 0

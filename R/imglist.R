@@ -7,6 +7,7 @@
 ##' @export
 ##' @seealso plot.imlist, display.imlist, as.data.frame.imlist
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' imlist(a=imfill(3,3),b=imfill(10,10)) 
 ##' imsplit(boats,"x",6) 
 ##' imsplit(boats,"x",6) %>% plot
@@ -73,6 +74,7 @@ ilcat <- function(a,b)
 ##' @return an image list
 ##' @author Simon Barthelme
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##'
 ##' l1 <- imlist(boats,grayscale(boats))
 ##' l2 <- imgradient(boats,"xy")
@@ -93,6 +95,7 @@ ci <- function(...)
 ##' @return a list
 ##' @export
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' list(a=boats,b=boats*2) %>% as.imlist
 as.imlist <- function(obj,...) UseMethod("as.imlist")
 
@@ -114,6 +117,7 @@ as.imlist.cimg <- function(obj,...) list(obj) %>% as.imlist.list
 ##' @param index Name of the column containing the index (or name) of the image in the list. Default: "im"
 ##' @param ... Passed on to as.data.frame.cimg
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' #Transform the image gradient into a data.frame
 ##' gr <- imgradient(boats,"xy") %>% setNames(c("dx","dy")) %>% as.data.frame
 ##' str(gr)
@@ -139,6 +143,7 @@ print.imlist <- function(x,...)
 ##' @param layout either a matrix (in the format defined by the layout command) or one of "row","col" or "rect". Default: "rect"
 ##' @param ... other parameters, to be passed to the plot command
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' imsplit(boats,"c") #Returns an image list
 ##' imsplit(boats,"c") %>% plot
 ##' imsplit(boats,"c") %>% plot(layout="row")
@@ -209,6 +214,7 @@ rect.layout <- function(n)
 #' @param x a list of cimg objects
 #' @param ... ignored
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' ##Not run: interactive only 
 #' ## imgradient(boats,"xy") %>% display
 
@@ -226,6 +232,7 @@ display.list <- function(x,...)
 ##' @author Simon Barthelme
 ##' @export
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' #Returns a list
 ##' imsplit(boats,"x",2) %>% purrr::map(~ isoblur(.,3))
 ##' #Returns an "imlist" object
@@ -272,6 +279,7 @@ pmap_il <- function(...)
 ##' @return either an image or an image list
 ##' @author Simon Barthelme
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' #Result is a list
 ##' imrep(boats,3) %>% plot
 ##' #Result is an image 

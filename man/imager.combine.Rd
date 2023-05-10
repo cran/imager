@@ -77,7 +77,11 @@ parrank(x, increasing = TRUE)
 These functions take a list of images and combine them by adding, multiplying, taking the parallel min or max, etc.
 The max. in absolute value of (x1,x2) is defined as x1 if (|x1| > |x2|), x2 otherwise. It's useful for example in getting the most extreme value while keeping the sign. 
 "parsort","parrank" and "parorder" aren't really reductions because they return a list of the same size. They perform a pixel-wise sort (resp. order and rank) across the list.
-parvar returns an unbiased estimate of the variance (as in the base var function). parsd returns the square root of parvar.
+}
+\details{
+parvar returns an unbiased estimate of the variance (as in the base var function). parsd returns the square root of parvar. 
+
+To correctly use multiple threads users should set \option{nthreads} in \code{\link{cimg.use.openmp}}. You also need to be careful that this is not higher than the value in the system environment variable OMP_THREAD_LIMIT (this can be checked with Sys.getenv('OMP_THREAD_LIMIT')). The OMP_THREAD_LIMIT thread limit usually needs to be correctly set before launching R, so using Sys.setenv once a session has started is not certain to work.
 }
 \section{Functions}{
 \itemize{
@@ -99,7 +103,7 @@ parvar returns an unbiased estimate of the variance (as in the base var function
 
 \item \code{enorm()}: Euclidean norm (i.e. sqrt(A^2 + B^2 + ...))
 
-\item \code{parmed()}: Median
+\item \code{parmed()}: Parallel Median over images
 
 \item \code{parvar()}: Variance
 
@@ -123,6 +127,7 @@ parvar returns an unbiased estimate of the variance (as in the base var function
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 im1 <- as.cimg(function(x,y) x,50,50)
 im2 <- as.cimg(function(x,y) y,50,50)
 im3 <- as.cimg(function(x,y) cos(x/10),50,50)

@@ -15,6 +15,7 @@ Pixsets can be turned back into logical arrays, but they come with a number of g
 They are created automatically whenever you run a test on an image (for example im > 0 returns a pixset).
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #A test on an image returns a pixset
 boats > 250
 #Pixsets can be combined using the usual Boolean operators

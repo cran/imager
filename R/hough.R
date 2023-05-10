@@ -12,6 +12,7 @@
 ##' @return either an image or a data.frame
 ##' @author Simon Barthelme
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##'
 ##' #Find the lines along the boundary of a square
 ##' px <- px.square(30,80,80) %>% boundary
@@ -68,6 +69,7 @@ hough_line <- function(im,ntheta=100,data.frame=FALSE,shift=TRUE)
 ##' @return nothing
 ##' @author Simon Barthelme
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' #Boring example, see ?hough_lines
 ##' plot(boats)
 ##' nfline(theta=0,rho=10,col="red")
@@ -101,6 +103,7 @@ nfline <- function(theta,rho,col,...)
 ##' @return a histogram of Hough scores, with the same dimension as the original image. 
 ##' @author Simon Barthelme
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' im <- load.example('coins')
 ##' px <- cannyEdges(im)
 ##' #Find circles of radius 20

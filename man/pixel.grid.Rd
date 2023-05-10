@@ -23,6 +23,7 @@ The pixel grid for image im gives the (x,y,z,c) coordinates of each successive p
 NB: coordinates start at (x=1,y=1), corresponding to the top left corner of the image, unless standardise == TRUE, in which case we use the usual Cartesian coordinates with origin at the center of the image and scaled such that x varies between -.5 and .5, and a y arrow pointing up
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- as.cimg(array(0,c(10,10))) #A 10x10 image
 pixel.grid(im) \%>\% head
 pixel.grid(dim=dim(im)) \%>\% head #Same as above

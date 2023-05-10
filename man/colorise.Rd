@@ -22,6 +22,7 @@ an image
 Paint all pixels in pixset px with the same colour
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- load.example("coins")
 colorise(im,Xc(im) < 50,"blue") \%>\% plot
 #Same thing with the formula interface

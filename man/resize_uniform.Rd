@@ -41,6 +41,7 @@ Resize image by a single scale factor. For non-uniform scaling and a wider range
 
 }}
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- load.example("parrots")
 imresize(im,1/4) #Quarter size
 map_il(2:4,~ imresize(im,1/.)) \%>\% imappend("x") \%>\% plot

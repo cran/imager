@@ -1,6 +1,8 @@
 library(imager)
 library(Rcpp)
 
+cimg.limit.openmp()
+
 test_that("load_and_save_videos",{
     if (imager:::has.ffmpeg())
     {

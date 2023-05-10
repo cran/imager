@@ -9,6 +9,7 @@
 #' @param boundary Boundary conditions. One of 0=dirichlet, 1=neumann, 2=periodic
 #' @seealso imwarp, for flexible image warping, which includes rotations as a special case 
 #' @examples
+#' \dontshow{cimg.limit.openmp()}
 #' imrotate(boats,30) %>% plot
 #' #Shift centre to (20,20)
 #' imrotate(boats,30,cx=20,cy=20) %>% plot 

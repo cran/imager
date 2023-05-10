@@ -24,6 +24,7 @@ an image
 This function crops pixels on each side of an image. This function is a kind of inverse (centred) padding, and is useful e.g. when you want to get only the valid part of a convolution
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 #These two versions are equivalent
 imfill(10,10) \%>\% crop.borders(nx=1,ny=1)
 imfill(10,10) \%>\% crop.borders(nPix=1)

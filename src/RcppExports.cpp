@@ -1602,6 +1602,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// set_omp_num_threads
+void set_omp_num_threads(int threads);
+RcppExport SEXP _imager_set_omp_num_threads(SEXP threadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type threads(threadsSEXP);
+    set_omp_num_threads(threads);
+    return R_NilValue;
+END_RCPP
+}
 // has_omp
 bool has_omp();
 RcppExport SEXP _imager_has_omp() {
@@ -1747,6 +1757,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_imager_checkcoords", (DL_FUNC) &_imager_checkcoords, 5},
     {"_imager_cimg_omp", (DL_FUNC) &_imager_cimg_omp, 0},
     {"_imager_set_cimg_omp", (DL_FUNC) &_imager_set_cimg_omp, 1},
+    {"_imager_set_omp_num_threads", (DL_FUNC) &_imager_set_omp_num_threads, 1},
     {"_imager_has_omp", (DL_FUNC) &_imager_has_omp, 0},
     {"_imager_px_split", (DL_FUNC) &_imager_px_split, 3},
     {NULL, NULL, 0}

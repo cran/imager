@@ -7,6 +7,7 @@
 ##' @param cubic if TRUE, use cubic interpolation. If FALSE, use linear (default FALSE)
 ##' @param extrapolate allow extrapolation (to values outside the image)
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##'
 ##' loc <- data.frame(x=runif(10,1,width(boats)),y=runif(10,1,height(boats))) #Ten random locations
 ##' interp(boats,loc)

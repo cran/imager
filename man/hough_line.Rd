@@ -25,6 +25,7 @@ The image form returns a histogram of scores in (rho,theta) space, where good ca
 If the 'shift' argument is true, then the image is assumed to start at x=1,y=1 (more convenient for plotting in R). If false, the image begins at x=0,y=0 and in both cases the origin is at the top left.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 
 #Find the lines along the boundary of a square
 px <- px.square(30,80,80) \%>\% boundary

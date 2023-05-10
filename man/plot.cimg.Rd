@@ -63,6 +63,7 @@ See examples for an explanation.
 If the image is one dimensional (i.e., a simple row or column image), then pixel values will be plotted as a line.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 plot(boats,main="Boats") 
 plot(boats,axes=FALSE,xlab="",ylab="")
 

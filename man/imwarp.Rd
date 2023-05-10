@@ -45,6 +45,7 @@ Note that 3D warps are possible as well.
 The mapping should be specified via the "map" argument, see examples.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 im <- load.example("parrots")
 #Shift image
 map.shift <- function(x,y) list(x=x+10,y=y+30)

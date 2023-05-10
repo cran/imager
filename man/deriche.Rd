@@ -21,6 +21,7 @@ deriche(im, sigma, order = 0L, axis = "x", neumann = FALSE)
 The Deriche filter is a fast approximation to a Gaussian filter (order = 0), or Gaussian derivatives (order = 1 or 2).
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 deriche(boats,sigma=2,order=0) \%>\% plot("Zeroth-order Deriche along x")
 deriche(boats,sigma=2,order=1) \%>\% plot("First-order Deriche along x")
 deriche(boats,sigma=2,order=1) \%>\% plot("Second-order Deriche along x")

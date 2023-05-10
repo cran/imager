@@ -21,6 +21,7 @@ vanvliet(im, sigma, order = 0L, axis = "x", neumann = FALSE)
 The Young-van Vliet filter is a fast approximation to a Gaussian filter (order = 0), or Gaussian derivatives (order = 1 or 2).
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 vanvliet(boats,sigma=2,order=0) \%>\% plot("Zeroth-order Young-van Vliet along x")
 vanvliet(boats,sigma=2,order=1) \%>\% plot("First-order Young-van Vliet along x")
 vanvliet(boats,sigma=2,order=1) \%>\% plot("Second-order Young-van Vliet along x")

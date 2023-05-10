@@ -20,6 +20,7 @@ The number of pixels along the x,y,z, and c axes is called (in that order), widt
 NB: Logical and integer values are automatically converted to type double. NAs are not supported by CImg, so you should manage them on the R end of things.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 cimg(array(1,c(10,10,5,3)))
 }
 \author{

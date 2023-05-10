@@ -6,6 +6,7 @@
 ##' @param stencil a stencil (data.frame with coordinates dx,dy,dz,dc)
 ##' @param ... centering locations (e.g. x=4,y=2)
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' stencil <- data.frame(dx=seq(-2,2,1),dy=seq(-2,2,1))
 ##' center.stencil(stencil,x=10,y=20)
 ##' @export
@@ -38,6 +39,7 @@ center.stencil <- function(stencil,...)
 ##' @param ... where to center, e.g. x = 100,y = 10,z=3,cc=1
 ##' @return pixel values in neighbourhood
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' #The following stencil defines a neighbourhood that
 ##' #includes the next pixel to the left (delta_x = -1) and the next pixel to the right (delta_x = 1)
 ##' stencil <- data.frame(dx=c(-1,1),dy=c(0,0))

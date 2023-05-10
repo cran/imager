@@ -17,6 +17,7 @@
 Press escape or close the window to exit. Note that you need X11 library to use this function.
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 ##Not run: interactive only 
 ##display(boats,TRUE) #Normalisation on 
 ##display(boats/2,TRUE) #Normalisation on, so same as above

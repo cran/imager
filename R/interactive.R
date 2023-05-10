@@ -12,6 +12,7 @@
 ##' @return Depending on the value of the output parameter. Either a vector of coordinates (output = "coord"), an image (output = "im"), a pixset (output = "pixset"), or a vector of values (output = "value"). grabLine and grabPoint support the "value" output mode and not the "im" output. 
 ##' @seealso display
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' ##Not run: interactive only 
 ##' ##grabRect(boats)
 ##' ##grabRect(boats,TRUE)
@@ -143,6 +144,7 @@ grabPoint <- function(im,output="coord")
 ##' @return an image, specifically the last image displayed
 ##' @author Simon Barthelme
 ##' @examples
+##' \dontshow{cimg.limit.openmp()}
 ##' #Implement a basic image gallery:
 ##' #press "right" and "left" to view each image in a list
 ##' gallery <- function(iml)

@@ -19,6 +19,7 @@ ilply(im, axis, fun, ...)
 Shorthand for imsplit followed by purrr::map
 }
 \examples{
+\dontshow{cimg.limit.openmp()}
 parrots <- load.example("parrots")
 ilply(parrots,"c",mean) #mean luminance per colour channel
 }

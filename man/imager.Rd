@@ -3,9 +3,37 @@
 \docType{package}
 \name{imager}
 \alias{imager}
+\alias{imager-package}
 \title{imager: an R library for image processing, based on CImg}
 \description{
 CImg by David Tschumperle is a C++ library for image processing. It provides most common functions for image manipulation and filtering, as well as some advanced algorithms. imager makes these functions accessible from R and adds many utilities for accessing and working with image data from R.
 You should install ImageMagick if you want support for image formats beyond PNG and JPEG, and ffmpeg if you need to work with videos (in which case you probably also want to take a look at experimental package imagerstreams on github).
 Package documentation is available at http://asgr.github.io/imager/.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://asgr.github.io/imager/}
+  \item \url{https://github.com/asgr/imager/}
+  \item Report bugs at \url{https://github.com/asgr/imager/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Aaron Robotham \email{aaron.robotham@uwa.edu.au}
+
+Authors:
+\itemize{
+  \item Simon Barthelme \email{simon.barthelme@gipsa-lab.fr}
+}
+
+Other contributors:
+\itemize{
+  \item David Tschumperle [contributor]
+  \item Jan Wijffels [contributor]
+  \item Haz Edine Assemlal [contributor]
+  \item Shota Ochi \email{shotaochi1990@gmail.com} [contributor]
+  \item Rodrigo Tobar [contributor]
+}
+
 }

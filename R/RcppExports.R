@@ -639,7 +639,7 @@ watershed <- function(im, priority, fill_lines = TRUE) {
 #'         The submitted code has then been modified to fit CImg coding style and constraints.
 #' @param im an image
 #' @param value Reference value.
-#' @param metric Type of metric. Can be <tt>{ 0=Chebyshev | 1=Manhattan | 2=Euclidean | 3=Squared-euclidean }</tt>.
+#' @param metric Type of metric. Can be 0=Chebyshev | 1=Manhattan | 2=Euclidean | 3=Squared-euclidean.
 #' @export
 #' @examples
 #' \dontshow{cimg.limit.openmp()}
@@ -705,8 +705,8 @@ reduce_list2 <- function(x, summary = 0L) {
     .Call(`_imager_reduce_list2`, x, summary)
 }
 
-reduce_med <- function(x, na_rm = FALSE) {
-    .Call(`_imager_reduce_med`, x, na_rm)
+reduce_med <- function(x, na_rm = FALSE, doquan = FALSE, prob = 0.5) {
+    .Call(`_imager_reduce_med`, x, na_rm, doquan, prob)
 }
 
 psort <- function(x, increasing = TRUE) {
@@ -841,9 +841,9 @@ resize <- function(im, size_x = -100L, size_y = -100L, size_z = -100L, size_c = 
 #'
 #' @param im an image
 #' @param warpfield Warping field. The (x,y,z) fields should be stacked along the colour coordinate. 
-#' @param mode Can be { 0=backward-absolute | 1=backward-relative | 2=forward-absolute | 3=forward-relative }
-#' @param interpolation Can be <tt>{ 0=nearest | 1=linear | 2=cubic }</tt>.
-#' @param boundary_conditions Boundary conditions. Can be <tt>{ 0=dirichlet | 1=neumann | 2=periodic }</tt>.
+#' @param mode Can be 0=backward-absolute | 1=backward-relative | 2=forward-absolute | 3=forward-relative
+#' @param interpolation Can be 0=nearest | 1=linear | 2=cubic.
+#' @param boundary_conditions Boundary conditions. Can be 0=dirichlet | 1=neumann | 2=periodic.
 #' @seealso imwarp for a user-friendly interface 
 #' @export
 #' @examples

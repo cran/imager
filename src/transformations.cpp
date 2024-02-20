@@ -256,9 +256,9 @@ NumericVector resize(NumericVector im, int size_x=-100,  int size_y=-100,
 //'
 //' @param im an image
 //' @param warpfield Warping field. The (x,y,z) fields should be stacked along the colour coordinate. 
-//' @param mode Can be { 0=backward-absolute | 1=backward-relative | 2=forward-absolute | 3=forward-relative }
-//' @param interpolation Can be <tt>{ 0=nearest | 1=linear | 2=cubic }</tt>.
-//' @param boundary_conditions Boundary conditions. Can be <tt>{ 0=dirichlet | 1=neumann | 2=periodic }</tt>.
+//' @param mode Can be 0=backward-absolute | 1=backward-relative | 2=forward-absolute | 3=forward-relative
+//' @param interpolation Can be 0=nearest | 1=linear | 2=cubic.
+//' @param boundary_conditions Boundary conditions. Can be 0=dirichlet | 1=neumann | 2=periodic.
 //' @seealso imwarp for a user-friendly interface 
 //' @export
 //' @examples

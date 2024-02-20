@@ -151,11 +151,12 @@ imsplit.recur <- function(im,spl,nb=-1)
 ##' The max. in absolute value of (x1,x2) is defined as x1 if (|x1| > |x2|), x2 otherwise. It's useful for example in getting the most extreme value while keeping the sign. 
 ##' "parsort","parrank" and "parorder" aren't really reductions because they return a list of the same size. They perform a pixel-wise sort (resp. order and rank) across the list.
 ##' 
-##' parvar returns an unbiased estimate of the variance (as in the base var function). parsd returns the square root of parvar. 
+##' parvar returns an unbiased estimate of the variance (as in the base var function). parsd returns the square root of parvar. parquan returns the specified quantile, and defines this in the same manner as the default R quantile function (type = 7). Using parmed and parquan with quan = 0.5 will return the same result, but parmed will be slightly faster (but only a few percent).
 ##' 
 ##' To correctly use multiple threads users should set \option{nthreads} in \code{\link{cimg.use.openmp}}. You also need to be careful that this is not higher than the value in the system environment variable OMP_THREAD_LIMIT (this can be checked with Sys.getenv('OMP_THREAD_LIMIT')). The OMP_THREAD_LIMIT thread limit usually needs to be correctly set before launching R, so using Sys.setenv once a session has started is not certain to work.
 ##' @name imager.combine
 ##' @param x a list of images
+##' @param prob probability level for parquan, default of 0.5 returns the median
 ##' @param na.rm ignore NAs (default FALSE)
 ##' @examples
 ##' \dontshow{cimg.limit.openmp()}
@@ -258,6 +259,16 @@ enorm <- function(x) check.reduce(x) %>% reduce_list(5)
 ##' @describeIn imager.combine Parallel Median over images
 ##' @export
 parmed <- function(x,na.rm=FALSE) check.reduce(x) %>% reduce_med(na_rm=na.rm)
+
+##' @describeIn imager.combine Parallel Quantile over images
+##' @export
+parquan <- function(x,prob=0.5,na.rm=FALSE)
+{
+    if(prob < 0 | prob > 1){
+        stop('prob must be between 0-1')
+    }
+    check.reduce(x) %>% reduce_med(na_rm=na.rm, doquan=TRUE, prob=prob)
+}
 
 ##' @describeIn imager.combine Variance
 ##' @export

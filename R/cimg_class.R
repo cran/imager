@@ -5,7 +5,7 @@
 #' Package documentation is available at http://asgr.github.io/imager/. 
 #' @docType package
 #' @name imager
-NULL
+"_PACKAGE"
 
 #' @useDynLib imager, .registration=TRUE
 #' @importFrom grDevices as.raster col2rgb dev.capture gray rgb contourLines xy.coords

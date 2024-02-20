@@ -303,7 +303,7 @@ NumericVector watershed(NumericVector im,NumericVector priority, bool fill_lines
 //'         The submitted code has then been modified to fit CImg coding style and constraints.
 //' @param im an image
 //' @param value Reference value.
-//' @param metric Type of metric. Can be <tt>{ 0=Chebyshev | 1=Manhattan | 2=Euclidean | 3=Squared-euclidean }</tt>.
+//' @param metric Type of metric. Can be 0=Chebyshev | 1=Manhattan | 2=Euclidean | 3=Squared-euclidean.
 //' @export
 //' @examples
 //' \dontshow{cimg.limit.openmp()}

@@ -239,6 +239,8 @@ static double _get_median(std::vector<double>::iterator begin, std::vector<doubl
   if (!na_rm && std::any_of(begin, end, R_IsNA))
     return NA_REAL;
   auto size = std::distance(begin, end);
+  if (size == 0)
+    return NA_REAL;
   auto n = size / 2;
   std::nth_element(begin, begin + n, end);
   auto value_in_middle = *(begin + n);
@@ -247,13 +249,57 @@ static double _get_median(std::vector<double>::iterator begin, std::vector<doubl
   return (value_in_middle + *std::max_element(begin, begin + n)) / 2;
 }
 
+static double _get_quantile(std::vector<double>::iterator begin, std::vector<double>::iterator end, double prob, bool na_rm)
+{
+  if (!na_rm && std::any_of(begin, end, R_IsNA))
+    return NA_REAL;
+  auto size = std::distance(begin, end);
+  if (size == 0)
+    return NA_REAL;
+  
+  if(prob == 1){ // just return the max element
+    return *std::max_element(begin, end);
+  }
+  
+  double size_prob = (double)(size - 1) * prob; // size if like R length, so 1 larger than the diff on the limits
+  std::size_t n = ceil(size_prob);  
+  
+  if(n == 0){ // just return the min element
+    return *std::min_element(begin, end);
+  }
+  
+  std::nth_element(begin, begin + n, end);
+  auto value_in_hi_bin = *(begin + n);
+  
+  double wgt = 1 - ((double)n - size_prob); // the brackets matter for ensuring the correct type conversion
+  
+  if(wgt == 1){
+    return value_in_hi_bin;
+  }
+  
+  auto value_in_lo_bin = *std::max_element(begin, begin + n);
+
+  return value_in_hi_bin * wgt + value_in_lo_bin * (1 - wgt);
+}
+
+
 // [[Rcpp::export]]
-NumericVector reduce_med(List x,bool na_rm=false)
+NumericVector reduce_med(List x, bool na_rm=false, bool doquan=false, double prob=0.5)
 {
   CImgList<double> L = sharedCImgList(x);
   CId out(L.at(0),false);
+  
+  if(doquan){ // ensure prob is between 0-1
+    if(prob < 0){
+      prob = 0;
+    }
+    if(prob > 1){
+      prob = 1;
+    }
+  }
+  
   int n = x.size();
-
+  
 #if cimg_use_openmp == 1
   int num_threads = omp_get_max_threads();
 #else
@@ -263,37 +309,41 @@ NumericVector reduce_med(List x,bool na_rm=false)
   vectors.reserve(num_threads);
   for (int i = 0; i < num_threads; i++)
     vectors.emplace_back(n);
-
+  
   cimg_pragma_openmp(parallel for schedule(static))
-  cimg_forX(out, x)
-  {
-#if cimg_use_openmp == 1
-    int thread_num = omp_get_thread_num();
-#else
-    int thread_num = 0;
-#endif
-    auto &vec = vectors[thread_num];
-    cimg_forYZC(out, y, z, c)
+    cimg_forX(out, x)
     {
-      std::vector<double>::iterator vec_end = vec.begin();
-      if (na_rm) {
-        for (auto &image: L) {
-          auto value = image(x, y, z, c);
-          if (!ISNAN(value)) {
-            *vec_end = value;
+#if cimg_use_openmp == 1
+      int thread_num = omp_get_thread_num();
+#else
+      int thread_num = 0;
+#endif
+      auto &vec = vectors[thread_num];
+      cimg_forYZC(out, y, z, c)
+      {
+        std::vector<double>::iterator vec_end = vec.begin();
+        if (na_rm) {
+          for (auto &image: L) {
+            auto value = image(x, y, z, c);
+            if (!ISNAN(value)) {
+              *vec_end = value;
+              vec_end++;
+            }
+          };
+        }
+        else {
+          for (auto &image: L) {
+            *vec_end = image(x, y, z, c);
             vec_end++;
           }
-        };
-      }
-      else {
-        for (auto &image: L) {
-          *vec_end = image(x, y, z, c);
-          vec_end++;
+        }
+        if(doquan){
+          out(x,y,z,c) = _get_quantile(vec.begin(), vec_end, prob, na_rm);
+        }else{
+          out(x,y,z,c) = _get_median(vec.begin(), vec_end, na_rm);
         }
       }
-      out(x,y,z,c) = _get_median(vec.begin(), vec_end, na_rm);
     }
-  }
   return wrap(out);
 }
 

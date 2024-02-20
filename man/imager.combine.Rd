@@ -12,6 +12,7 @@
 \alias{parmin}
 \alias{enorm}
 \alias{parmed}
+\alias{parquan}
 \alias{parvar}
 \alias{parsd}
 \alias{parall}
@@ -44,6 +45,8 @@ enorm(x)
 
 parmed(x, na.rm = FALSE)
 
+parquan(x, prob = 0.5, na.rm = FALSE)
+
 parvar(x, na.rm = FALSE)
 
 parsd(x, na.rm = FALSE)
@@ -71,6 +74,8 @@ parrank(x, increasing = TRUE)
 
 \item{w}{weights (must be the same length as the list)}
 
+\item{prob}{probability level for parquan, default of 0.5 returns the median}
+
 \item{increasing}{if TRUE, sort in increasing order (default TRUE)}
 }
 \description{
@@ -79,7 +84,7 @@ The max. in absolute value of (x1,x2) is defined as x1 if (|x1| > |x2|), x2 othe
 "parsort","parrank" and "parorder" aren't really reductions because they return a list of the same size. They perform a pixel-wise sort (resp. order and rank) across the list.
 }
 \details{
-parvar returns an unbiased estimate of the variance (as in the base var function). parsd returns the square root of parvar. 
+parvar returns an unbiased estimate of the variance (as in the base var function). parsd returns the square root of parvar. parquan returns the specified quantile, and defines this in the same manner as the default R quantile function (type = 7). Using parmed and parquan with quan = 0.5 will return the same result, but parmed will be slightly faster (but only a few percent).
 
 To correctly use multiple threads users should set \option{nthreads} in \code{\link{cimg.use.openmp}}. You also need to be careful that this is not higher than the value in the system environment variable OMP_THREAD_LIMIT (this can be checked with Sys.getenv('OMP_THREAD_LIMIT')). The OMP_THREAD_LIMIT thread limit usually needs to be correctly set before launching R, so using Sys.setenv once a session has started is not certain to work.
 }
@@ -104,6 +109,8 @@ To correctly use multiple threads users should set \option{nthreads} in \code{\l
 \item \code{enorm()}: Euclidean norm (i.e. sqrt(A^2 + B^2 + ...))
 
 \item \code{parmed()}: Parallel Median over images
+
+\item \code{parquan()}: Parallel Quantile over images
 
 \item \code{parvar()}: Variance
 

@@ -9,6 +9,8 @@
 #error "The file 'Rcpp.h' should not be included. Please correct to include only 'imager.h'."
 #endif
 
+#include "CImg.h"
+
 #include <R.h>
 #include <Rcpp.h>
 
@@ -24,7 +26,6 @@
 #define cimg_test_abort2() Rcpp::checkUserInterrupt()
 #endif // #ifdef cimg_use_openmp
 
-#include "CImg.h"
 #undef _X
 #undef _Y
 #undef _Z

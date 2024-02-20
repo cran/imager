@@ -1207,14 +1207,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // reduce_med
-NumericVector reduce_med(List x, bool na_rm);
-RcppExport SEXP _imager_reduce_med(SEXP xSEXP, SEXP na_rmSEXP) {
+NumericVector reduce_med(List x, bool na_rm, bool doquan, double prob);
+RcppExport SEXP _imager_reduce_med(SEXP xSEXP, SEXP na_rmSEXP, SEXP doquanSEXP, SEXP probSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< List >::type x(xSEXP);
     Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
-    rcpp_result_gen = Rcpp::wrap(reduce_med(x, na_rm));
+    Rcpp::traits::input_parameter< bool >::type doquan(doquanSEXP);
+    Rcpp::traits::input_parameter< double >::type prob(probSEXP);
+    rcpp_result_gen = Rcpp::wrap(reduce_med(x, na_rm, doquan, prob));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1728,7 +1730,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_imager_reduce_minmax", (DL_FUNC) &_imager_reduce_minmax, 3},
     {"_imager_reduce_list", (DL_FUNC) &_imager_reduce_list, 2},
     {"_imager_reduce_list2", (DL_FUNC) &_imager_reduce_list2, 2},
-    {"_imager_reduce_med", (DL_FUNC) &_imager_reduce_med, 2},
+    {"_imager_reduce_med", (DL_FUNC) &_imager_reduce_med, 4},
     {"_imager_psort", (DL_FUNC) &_imager_psort, 2},
     {"_imager_porder", (DL_FUNC) &_imager_porder, 2},
     {"_imager_prank", (DL_FUNC) &_imager_prank, 2},

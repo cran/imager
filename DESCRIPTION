@@ -1,7 +1,7 @@
 Package: imager
 Type: Package
 Title: Image Processing Library Based on 'CImg'
-Version: 0.45.2
+Version: 0.45.8
 Authors@R: c(person("Simon","Barthelme",email="simon.barthelme@gipsa-lab.fr",role=c("aut")),
  person("David","Tschumperle",role=c("ctb")),
  person("Jan","Wijffels",role=c("ctb")),
@@ -30,7 +30,7 @@ Suggests: knitr, rmarkdown,ggplot2,dplyr,scales,
 VignetteBuilder: knitr
 Encoding: UTF-8
 NeedsCompilation: yes
-Packaged: 2023-05-09 13:55:42 UTC; rtobar
+Packaged: 2024-02-20 07:02:27 UTC; aaron
 Author: Simon Barthelme [aut],
   David Tschumperle [ctb],
   Jan Wijffels [ctb],
@@ -40,4 +40,4 @@ Author: Simon Barthelme [aut],
   Rodrigo Tobar [ctb]
 Maintainer: Aaron Robotham <aaron.robotham@uwa.edu.au>
 Repository: CRAN
-Date/Publication: 2023-05-10 07:40:12 UTC
+Date/Publication: 2024-02-20 11:30:02 UTC

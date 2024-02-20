@@ -1,6 +1,6 @@
 ## ----init,echo=FALSE----------------------------------------------------------
 knitr::opts_chunk$set(warning=FALSE, message=FALSE, cache=FALSE, 
-               comment=NA, verbose=TRUE, fig.width=4, fig.height=4,dev='jpeg',dev.args=list(quality=25))
+               comment=NA, verbose=TRUE, fig.width=4, fig.height=4,dev='jpeg',dev.args=list(quality=25, type="cairo"))
 
 ## -----------------------------------------------------------------------------
 library(imager)

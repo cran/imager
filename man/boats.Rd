@@ -8,7 +8,7 @@
 an image of class cimg
 }
 \source{
-\url{ http://r0k.us/graphics/kodak/kodim09.html }
+http://r0k.us/graphics/kodak/kodim09.html
 }
 \usage{
 boats

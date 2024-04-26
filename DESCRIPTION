@@ -1,7 +1,7 @@
 Package: imager
 Type: Package
 Title: Image Processing Library Based on 'CImg'
-Version: 0.45.8
+Version: 1.0.1
 Authors@R: c(person("Simon","Barthelme",email="simon.barthelme@gipsa-lab.fr",role=c("aut")),
  person("David","Tschumperle",role=c("ctb")),
  person("Jan","Wijffels",role=c("ctb")),
@@ -16,21 +16,21 @@ Description: Fast image processing for images in up to 4 dimensions (two spatial
     package wraps 'CImg', <http://cimg.eu>, a simple, modern C++ library for image
     processing.
 License: LGPL-3
-Imports: Rcpp (>=
-        0.11.5),methods,stringr,png,jpeg,readbitmap,grDevices,purrr,downloader,igraph
-Depends: R (>= 2.10.0),magrittr
+Imports: Rcpp (>= 1.0.0), methods, stringr, png, jpeg, readbitmap,
+        grDevices, purrr, downloader, igraph
+Depends: R (>= 4.0.0), magrittr
 URL: https://asgr.github.io/imager/, https://github.com/asgr/imager/
 BugReports: https://github.com/asgr/imager/issues
-SystemRequirements: fftw3,libtiff,X11
+SystemRequirements: fftw3, libtiff, X11
 LinkingTo: Rcpp
 LazyData: true
 RoxygenNote: 7.2.3
-Suggests: knitr, rmarkdown,ggplot2,dplyr,scales,
-        testthat,raster,spatstat.geom,magick,Cairo
+Suggests: knitr, rmarkdown, ggplot2, dplyr, scales, testthat, raster,
+        spatstat.geom, magick, Cairo
 VignetteBuilder: knitr
 Encoding: UTF-8
 NeedsCompilation: yes
-Packaged: 2024-02-20 07:02:27 UTC; aaron
+Packaged: 2024-04-26 09:02:28 UTC; aaron
 Author: Simon Barthelme [aut],
   David Tschumperle [ctb],
   Jan Wijffels [ctb],
@@ -40,4 +40,4 @@ Author: Simon Barthelme [aut],
   Rodrigo Tobar [ctb]
 Maintainer: Aaron Robotham <aaron.robotham@uwa.edu.au>
 Repository: CRAN
-Date/Publication: 2024-02-20 11:30:02 UTC
+Date/Publication: 2024-04-26 10:40:03 UTC

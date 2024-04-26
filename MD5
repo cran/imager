@@ -1,4 +1,4 @@
-ad158d2fcfa36dd7fac947f5a8c094b8 *DESCRIPTION
+33feec3c641323eb2a0d04a23b8414af *DESCRIPTION
 93d0f57dd3a70bef0e527d3142dbd86e *NAMESPACE
 47f3c577210aad89d50795462f54d4b5 *NEWS
 18aaf4dbab2744bf1bbb776060c26158 *NEWS.md
@@ -8,7 +8,7 @@ a6701f9cfbb6c01a231b4e47b84fe57f *R/basegraphics.R
 4ada62c8935d38a7ae780f9318ccf774 *R/cimg_class.R
 486a5ebdc4622fe58f3f39d29461a69f *R/conversions.R
 d04d980d68731a7efb24fcadaa0e9445 *R/coordinates.R
-08aa2b2c82bc1739bc3a722bc29fe81e *R/datasets.R
+bb196e65c4698741b87b3e1d74f25e5e *R/datasets.R
 6aafb9f7318679ae7f419b0fe1b55f87 *R/drawing.R
 6e6c0556d896704e7d98a004d55c4f4f *R/filtering.R
 69963859a6a41864852ccea693ea4d34 *R/graphs.R
@@ -34,16 +34,16 @@ f628016e2fec2f322835a23c5191f3b3 *R/transformations.R
 4f97ce3dc62ddc04bc68301e22723dca *data/boats.rda
 bfe91763a35745fe73101072549a0760 *inst/doc/gettingstarted.R
 bdc2d39a4e8982aeb90171bab75ae342 *inst/doc/gettingstarted.Rmd
-44377047060ef252fb0ef96f0da85227 *inst/doc/gettingstarted.html
+514f53776787c136e11c74ff9a6f7a36 *inst/doc/gettingstarted.html
 9a7b005be257fe4f50bdeeade38446a2 *inst/doc/pixsets.R
 5dd1757ccaf399d8f1118dc588a126a0 *inst/doc/pixsets.Rmd
-d2a3824b93476da98e0fc89133b77b13 *inst/doc/pixsets.html
+dec9a96b384623e56943688de9cc1129 *inst/doc/pixsets.html
 ed59819ea84d02aae563ae9d421e1235 *inst/extdata/HubbleDeepField.jpg
 05e04a3bc5a858c40e001cc65b853dfc *inst/extdata/Leonardo_Birds.jpg
 1ff4ed9a8af95f958db61e079257cf78 *inst/extdata/coins.png
 7ad6e497bb7da372d579ddfe904c279f *inst/extdata/parrots.png
 227d8d140c00d188d8043455c89a3b6a *inst/extdata/tennis_sif.mp4
-7a0c899928dfc24eb4082262240b6af4 *inst/include/CImg.h
+5e2a990efa194dff86ba946116163e1e *inst/include/CImg.h
 8cb05a30e373b683455cd61d6bdc2abb *inst/include/NOTE_CImg
 ba5d6047026772dab0a538ea4a5a0934 *inst/include/imager.h
 fe7c92e38433e248062b71d5194f39dd *inst/include/plugins/inpaint.h
@@ -69,7 +69,7 @@ d94c2ee7190b5868d727444653f9aeef *man/at.Rd
 019c8c561ed63a426ee4374ffa1c4ab2 *man/autocrop.Rd
 139abecadead8b716e8a1706fcf7f8ff *man/bbox.Rd
 a273bcdc323731d56f19d52e7766173b *man/blur_anisotropic.Rd
-2abe6ff4ff4931eeed459ba15f5cf2ad *man/boats.Rd
+21de22789c9550b59fd85b09e315307a *man/boats.Rd
 91d8a4d67d4e68bcb458b18767785fc7 *man/boundary.Rd
 7cfd528ade59343a4e313a76ae6c80cf *man/boxblur.Rd
 29776578f410bc70a832f3ebaa29abe4 *man/boxblur_xy.Rd
@@ -198,8 +198,8 @@ ab5a017ce0b43d6a37d6df7b0a63faea *man/split_connected.Rd
 4baec24f66e6279e27a12ee1848b727d *man/warp.Rd
 eb68db8feaeee45d5eb31d038acb237f *man/watershed.Rd
 68cca6e98ee86164b507c7c7e1c1a573 *man/where.Rd
-c72bd5bd97c4e962ecdb9acd98a0ca90 *src/Makevars.in
-14b5caaa148d5a85176a209a2d9fad47 *src/Makevars.ucrt
+1834ec734938ec5982b528955b66f93e *src/Makevars.in
+461e3011856ad335682a6eb6671af933 *src/Makevars.ucrt
 d8f1aa4d8feb32a1bf10527b7e0e92e3 *src/Makevars.win
 2d34e4d7e26f2901e779350f2d1201c0 *src/RcppExports.cpp
 cac489a7495799d378cf0c10c8db3ebd *src/colourspace.cpp
@@ -219,7 +219,7 @@ de25050d0e8b09f994a963d878e4ea44 *src/reductions.cpp
 2d20dedf14f336b099ab3f876375f8eb *src/wrappers.cpp
 149ebd2988c3c72a1f7ef6f6e810dfd6 *src/wrappers_cimglist.h
 5ea1f44772fa8807c7f0c181c26aca5e *tests/testthat.R
-075b8f3d3a1bf328a3cafc576d6a96ca *tests/testthat/test_cpp_api.R
+0082278fc66e36115fcb81b3c951e465 *tests/testthat/test_cpp_api.R
 e55dae45a8449fb3e34e0f7e537831f2 *tests/testthat/test_load_save_images.R
 46f77e7978299806a3752ea4ea0be2e0 *tests/testthat/test_load_save_videos.R
 c58473c8a19c13013cb9befe4153896a *tests/testthat/test_reductions.R

@@ -1,4 +1,4 @@
-33feec3c641323eb2a0d04a23b8414af *DESCRIPTION
+4506940644ce7cae6ab1a8e4c1bfe946 *DESCRIPTION
 93d0f57dd3a70bef0e527d3142dbd86e *NAMESPACE
 47f3c577210aad89d50795462f54d4b5 *NEWS
 18aaf4dbab2744bf1bbb776060c26158 *NEWS.md
@@ -34,17 +34,17 @@ f628016e2fec2f322835a23c5191f3b3 *R/transformations.R
 4f97ce3dc62ddc04bc68301e22723dca *data/boats.rda
 bfe91763a35745fe73101072549a0760 *inst/doc/gettingstarted.R
 bdc2d39a4e8982aeb90171bab75ae342 *inst/doc/gettingstarted.Rmd
-514f53776787c136e11c74ff9a6f7a36 *inst/doc/gettingstarted.html
+987245e4c73072dc869a5aff0e2d4f9f *inst/doc/gettingstarted.html
 9a7b005be257fe4f50bdeeade38446a2 *inst/doc/pixsets.R
 5dd1757ccaf399d8f1118dc588a126a0 *inst/doc/pixsets.Rmd
-dec9a96b384623e56943688de9cc1129 *inst/doc/pixsets.html
+06c06b2f1dc54c2c28e05257dd65f4f5 *inst/doc/pixsets.html
 ed59819ea84d02aae563ae9d421e1235 *inst/extdata/HubbleDeepField.jpg
 05e04a3bc5a858c40e001cc65b853dfc *inst/extdata/Leonardo_Birds.jpg
 1ff4ed9a8af95f958db61e079257cf78 *inst/extdata/coins.png
 7ad6e497bb7da372d579ddfe904c279f *inst/extdata/parrots.png
 227d8d140c00d188d8043455c89a3b6a *inst/extdata/tennis_sif.mp4
-5e2a990efa194dff86ba946116163e1e *inst/include/CImg.h
-8cb05a30e373b683455cd61d6bdc2abb *inst/include/NOTE_CImg
+f666f2429e22b2b637db7260031527f4 *inst/include/CImg.h
+7130fc77316b423212a3e5a3fb82ecf3 *inst/include/NOTE_CImg
 ba5d6047026772dab0a538ea4a5a0934 *inst/include/imager.h
 fe7c92e38433e248062b71d5194f39dd *inst/include/plugins/inpaint.h
 5e4b69ffc9c4c76640e5baaabb42ab64 *inst/include/wrappers.h
@@ -198,7 +198,7 @@ ab5a017ce0b43d6a37d6df7b0a63faea *man/split_connected.Rd
 4baec24f66e6279e27a12ee1848b727d *man/warp.Rd
 eb68db8feaeee45d5eb31d038acb237f *man/watershed.Rd
 68cca6e98ee86164b507c7c7e1c1a573 *man/where.Rd
-1834ec734938ec5982b528955b66f93e *src/Makevars.in
+c72bd5bd97c4e962ecdb9acd98a0ca90 *src/Makevars.in
 461e3011856ad335682a6eb6671af933 *src/Makevars.ucrt
 d8f1aa4d8feb32a1bf10527b7e0e92e3 *src/Makevars.win
 2d34e4d7e26f2901e779350f2d1201c0 *src/RcppExports.cpp
@@ -213,7 +213,7 @@ a7b2b20f957ac1c34ca75cce941d2e5e *src/hough.cpp
 6dfc8eb74f79b9765b727089aca62651 *src/interact.cpp
 42787e1efa685feb44a956efe47fb7ba *src/interpolation.cpp
 7d5fde88991e37995659bf3adf5b79c9 *src/morphology.cpp
-de25050d0e8b09f994a963d878e4ea44 *src/reductions.cpp
+5dc8a68764ca064ab77c30e98b20ff42 *src/reductions.cpp
 2509026904af08a4b40cfddf4fa0daba *src/transformations.cpp
 1c2aa38b7ee10f89cb48d8b79402d92b *src/utils.cpp
 2d20dedf14f336b099ab3f876375f8eb *src/wrappers.cpp
